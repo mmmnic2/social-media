@@ -1,23 +1,24 @@
+import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 import React from "react";
 const stories = [
   {
-    videoURl: "public/image/image1.png",
+    videoURl: "/image/image1.png",
     username: "Your Story",
   },
   {
-    videoURl: "public/image/image1.png",
+    videoURl: "/image/image1.png",
     username: "Your Story",
   },
   {
-    videoURl: "public/image/image1.png",
+    videoURl: "/image/image1.png",
     username: "Your Story",
   },
   {
-    videoURl: "public/image/image1.png",
+    videoURl: "/image/image1.png",
     username: "Your Story",
   },
   {
-    videoURl: "public/image/image1.png",
+    videoURl: "/image/image1.png",
     username: "Your Story",
   },
 ];
@@ -27,7 +28,12 @@ const Stories = () => {
       {stories.map((story, i) => (
         <div key={i} className="story">
           <div className="profile-photo">
-            <img src={story.videoURl} alt="" />
+            <SocialAvatar
+              width="100%"
+              height="100%"
+              imgUrl="abc"
+              alt="Lan Lan"
+            />
           </div>
           <p className="name">{story.username}</p>
         </div>

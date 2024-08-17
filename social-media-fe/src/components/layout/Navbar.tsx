@@ -14,7 +14,10 @@ const Navbar = () => {
             Create
           </label>
           <div className="profile-photo">
-            <img src="/image/image3.png" alt="avatar" />
+            <img
+              src="https://mtv.vn/uploads/2023/02/25/meo-gg.jpg"
+              alt="avatar"
+            />
           </div>
         </div>
       </div>

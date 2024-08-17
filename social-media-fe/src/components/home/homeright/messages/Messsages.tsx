@@ -1,3 +1,4 @@
+import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 import React from "react";
 
 const Messsages = () => {
@@ -24,31 +25,13 @@ const Messsages = () => {
       </div>
       {/* -----------Messages----------- */}
       <div className="message">
-        <div className="profile-photo">
-          <img src="/public/image/image1.png" alt="" />
-        </div>
-        <div className="message-body">
-          <h5>Lan Lan</h5>
-          <p className="text-muted">How are you?</p>
-        </div>
-      </div>
-
-      {/* ----------FRIEND REQUEST -------------- */}
-      <div className="friend-requests">
-        <h4>Requests</h4>
-        <div className="request">
-          <div className="info">
-            <img src="public/image/image1.png" alt="" />
-          </div>
-          <div>
-            <h5>Nhi Nhi</h5>
-            <p className="text-muted">8 mutual friends</p>
-          </div>
-        </div>
-        <div className="action">
-          <button className="btn btn-primary">Accept</button>
-          <button className="btn">Decline</button>
-        </div>
+        <AvatarWithInfo
+          imgUrl="abac"
+          alt="Lan Lan"
+          title="Lan Lan"
+          subtitle="How are you?"
+          status="online"
+        />
       </div>
     </div>
   );

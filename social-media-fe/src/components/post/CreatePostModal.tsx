@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
-import AvatarSocial from "../common/avatar/AvatarSocial";
+import AvatarSocial from "../common/avatar/SocialAvatar";
 import { useCreatePost } from "@/hooks/api-hooks/post-hooks/usePost";
 import { useQueryClient } from "react-query";
 import LoadingOverlay from "../common/loading/LoadingOverlay";
@@ -98,11 +98,11 @@ const CreatePostModal = ({
           <form onSubmit={formik.handleSubmit}>
             <div className="flex flex-col space-y-4">
               <div className="">
-                <AvatarSocial
+                {/* <AvatarSocial
                   title="Lan Lan"
                   subtitle="@lanlan"
                   imgUrl="https://png.pngtree.com/png-clipart/20210608/ourlarge/pngtree-dark-gray-simple-avatar-png-image_3418404.jpg"
-                />
+                /> */}
               </div>
               <TextField
                 variant="outlined"

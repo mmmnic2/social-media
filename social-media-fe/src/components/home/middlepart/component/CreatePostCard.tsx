@@ -1,11 +1,10 @@
+import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 import React from "react";
 
 const CreatePostCard = () => {
   return (
     <form className="create-post">
-      <div className="profile-photo">
-        <img src="./image/image1.png" alt="" />
-      </div>
+      <SocialAvatar imgUrl="abc" alt="Lan Lan" />
       <input
         type="text"
         placeholder="What do you think, Lan Lan?"
