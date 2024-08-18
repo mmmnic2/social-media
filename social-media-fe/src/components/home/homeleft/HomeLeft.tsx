@@ -7,6 +7,7 @@ import MessageIcon from "@mui/icons-material/Message";
 import GroupIcon from "@mui/icons-material/Group";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import * as React from "react";
+import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 
 const navigationMenu = [
   {
@@ -59,13 +60,7 @@ const HomeLeft = () => {
   return (
     <div className="left">
       <a className="profile">
-        <div className="profile-photo">
-          <img src="./image/image1.png" alt="avatar" />
-        </div>
-        <div className="handle">
-          <h4>Lan Lan</h4>
-          <p className="text-muted">@ndhlan</p>
-        </div>
+        <AvatarWithInfo imgUrl="abc" alt="Lan Lan" title="Lan" subtitle="@lanlan"/>
       </a>
 
       <div className="sidebar">

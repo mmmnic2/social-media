@@ -1,7 +1,39 @@
+@import url(https://unicons.iconscout.com/release/v4.0.8/css/line.css);
+
 .hideScrollbar::-webkit-scrollbar {
   width: 0px;
   display: none;
   height: 0;
+}
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  outline: 0;
+  text-decoration: none;
+  list-style: none;
+  box-sizing: border-box;
+}
+:root {
+  --color-dark: hsl(252, 30%, 17%);
+  --color-light: hsl(252, 30%, 95%);
+  --color-white: hsl(252, 30%, 100%);
+  --color-primary: hsl(252, 75%, 60%);
+  --color-secondary: hsl(252, 100%, 90%);
+  --color-success: hsl(120, 95%, 65%);
+  --color-danger: hsl(0, 95%, 65%);
+  --color-black: hsl(252, 30%, 10%);
+  --color-gray: hsl(252, 15%, 65%);
+  --border-radius: 2rem;
+  --card-border-radius: 1rem;
+  --btn-padding: 0.6rem 2rem;
+  --search-padding: 0.6rem 1rem;
+  --card-padding: 1rem;
+
+  --sticky-top-left: 5.4rem;
+  --sticky-top-right: -18rem;
 }
 
 @tailwind base;
