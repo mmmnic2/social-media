@@ -57,7 +57,7 @@ const SearchUser = () => {
 
   return (
     <div>
-      <div className="relative py-2  ">
+      <div className="relative py-2">
         <TextField
           onChange={handleSearchUser}
           value={username}
@@ -75,6 +75,9 @@ const SearchUser = () => {
             borderRadius: "25px", // Tùy chỉnh border radius ở đây
             "& .MuiOutlinedInput-root": {
               borderRadius: "25px", // Áp dụng border radius cho input bên trong
+            },
+            "& .MuiOutlinedInput-root input": {
+              padding: "10px 14px",
             },
           }}
         />

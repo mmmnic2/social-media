@@ -21,11 +21,14 @@
   --color-light: hsl(252, 30%, 95%);
   --color-white: hsl(252, 30%, 100%);
   --color-primary: hsl(252, 75%, 60%);
-  --color-secondary: hsl(252, 100%, 90%);
+  --color-secondary: hsl(272, 75%, 70%);
+  --color-background: hsl(252, 20%, 85%);
+  --color-text: hsl(252, 10%, 20%);
   --color-success: hsl(120, 95%, 65%);
   --color-danger: hsl(0, 95%, 65%);
   --color-black: hsl(252, 30%, 10%);
-  --color-gray: hsl(252, 15%, 65%);
+  --color-gray: hsl(252, 15%, 50%);
+  --color-dark-gray: hsl(252, 15%, 30%);
   --border-radius: 2rem;
   --card-border-radius: 1rem;
   --btn-padding: 0.6rem 2rem;
@@ -34,6 +37,12 @@
 
   --sticky-top-left: 5.4rem;
   --sticky-top-right: -18rem;
+}
+
+body {
+  color: var(--color-text);
+  background: var(--color-light);
+  overflow-x: hidden;
 }
 
 @tailwind base;

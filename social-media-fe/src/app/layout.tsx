@@ -4,7 +4,7 @@ import "../styles/globals.css";
 import Providers from "@/components/layout/Providers";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
-const inter = Nunito({ subsets: ['vietnamese', 'latin'], weight: ['600', '700', '800']});
+const nunito = Nunito({ subsets: ['vietnamese', 'latin'], weight: ['600', '700', '800']});
 
 export const metadata: Metadata = {
   title: "Social Media",
@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={nunito.className}>
         <Providers>{children}</Providers>
       </body>
     </html>

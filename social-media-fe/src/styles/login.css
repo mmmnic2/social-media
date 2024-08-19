@@ -1,12 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+/* @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
 
-*,
-*::before,
-*::after {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
-}
 
 /* main {
   font-family: "Poppins", sans-serif;
@@ -15,7 +8,8 @@ main {
   width: 100%;
   min-height: 100vh;
   overflow: hidden;
-  background-color: #ff8c6b;
+  /* background-color: var(--color-background); */
+  background: linear-gradient(135deg, hsl(252, 75%, 70%), hsl(252, 75%, 80%));
   padding: 2rem;
   display: flex;
   align-items: center;
@@ -27,9 +21,13 @@ main {
   width: 100%;
   max-width: 1020px;
   height: 640px;
-  background-color: #fff;
+  /* background-color: #fff; */
   border-radius: 3.3rem;
-  box-shadow: 0 60px 40px -30px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0 60px 40px -30px rgba(0, 0, 0, 0.2); */
+  background-color: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  padding: 20px;
 }
 
 .inner-box {
@@ -89,18 +87,18 @@ form.sign-up-form {
 .heading h2 {
   font-size: 2rem;
   font-weight: 600;
-  color: #151111;
+  color: var(--color-primary);
 }
 
 .heading h6 {
-  color: #baba;
+  color: var(--color-secondary);
   font-weight: 500;
   font-size: 0.9rem;
   display: inline;
 }
 
 .toggle {
-  color: #151111;
+  color: var(--color-text);
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 500;
@@ -108,7 +106,7 @@ form.sign-up-form {
 }
 
 .toggle:hover {
-  color: #8371fd;
+  color: var(--color-primary);
 }
 
 .input-wrap {
@@ -121,21 +119,22 @@ form.sign-up-form {
   display: inline-block;
   width: 100%;
   height: 43px;
-  background-color: #151111;
-  color: #fff;
+  background-color: var(--color-primary);
+  color: var(--color-white);
   border: none;
   cursor: pointer;
   border-radius: 0.8rem;
   font-size: 0.8rem;
   margin-bottom: 2rem;
-  transition: 0.3s;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 }
 
 .sign-btn:hover {
-  background-color: #8371fd;
+  background-color: var(--color-secondary);
+  transform: scale(1.05);
 }
 .text {
-  color: #bbb;
+  color: var(--color-secondary);
   font-size: 0.9rem;
 }
 
@@ -164,12 +163,16 @@ form.sign-up-form {
   height: 40px;
 }
 
+.social-icons a{
+  color: var(--color-primary);
+}
+
 .social-icons a:hover {
-  background-color: #8371fd;
-  transition: 0.4s;
+  background-color: var(--color-primary);
+  transition: background-color 0.3s ease;
 }
 .social-icons a:hover i {
-  color: #fff;
+  color: var(--color-white);
 }
 
 main.sign-up-mode form.sign-in-form {
