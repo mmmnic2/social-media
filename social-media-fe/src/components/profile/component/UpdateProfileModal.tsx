@@ -1,13 +1,13 @@
-import * as React from "react";
+import { Avatar, IconButton, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
-import { useDispatch, useSelector } from "react-redux";
+import Typography from "@mui/material/Typography";
 import { useFormik } from "formik";
-import { Avatar, IconButton, TextField } from "@mui/material";
-import { useUpdateUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
+import * as React from "react";
 import { useQueryClient } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
+import { useUpdateUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
 import { updateUserInfo } from "@/redux/user";
 const style = {
   position: "absolute" as "absolute",

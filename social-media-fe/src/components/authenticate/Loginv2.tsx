@@ -1,9 +1,4 @@
 "use client";
-import { useLogin } from "@/hooks/api-hooks/auth-hooks/useAuth";
-import { useGetUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
-import { loginSuccess } from "@/redux/auth";
-import store from "@/redux/store";
-import { setUserInfo } from "@/redux/user";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
   Divider,
@@ -14,10 +9,15 @@ import {
   InputLabel,
   TextField,
 } from "@mui/material";
+import makeStyles from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import makeStyles from "@mui/material";
+import { useLogin } from "@/hooks/api-hooks/auth-hooks/useAuth";
+import { useGetUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
+import { loginSuccess } from "@/redux/auth";
+import store from "@/redux/store";
+import { setUserInfo } from "@/redux/user";
 
 const Loginv2 = () => {
   // const router = useRouter();
@@ -75,7 +75,7 @@ const Loginv2 = () => {
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };

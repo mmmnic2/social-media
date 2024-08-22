@@ -1,3 +1,4 @@
+/* eslint-disable import/order */
 "use client";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import {
@@ -53,13 +54,14 @@ const Register1 = () => {
     message: "",
   });
   const handleSubmit = (values: typeof initialValues) => {
+    console.log(values);
     handleRegister(values, {
       onSuccess: (data: {
         firstName: string;
         lastName: string;
-        gender: string;
-        password: string;
         email: string;
+        password: string;
+        gender: string;
       }) => {
         setNotification({
           isOpen: true,
@@ -72,7 +74,7 @@ const Register1 = () => {
         setNotification({
           isOpen: true,
           status: "error",
-          message: "Login failure!",
+          message: "Register failure!",
         });
       },
     });

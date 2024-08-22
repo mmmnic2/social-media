@@ -41,6 +41,4 @@ export const parseTime = (createPostTime: any) => {
   return display;
 };
 
-export const isUserLiked = (postId: number, userId: number) => {
-  
-};
+export const isUserLiked = (postId: number, userId: number) => {};

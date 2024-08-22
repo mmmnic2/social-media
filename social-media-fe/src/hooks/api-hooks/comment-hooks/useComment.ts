@@ -6,8 +6,8 @@ import {
   getByPostId,
   getAllComments,
 } from "@/api/comment";
-import store from "@/redux/store";
 import { setAllComments } from "@/redux/comment/comment";
+import store from "@/redux/store";
 export const useCreateComment = () => {
   return useMutation(createComment);
 };

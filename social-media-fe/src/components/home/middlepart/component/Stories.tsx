@@ -1,8 +1,9 @@
-import SocialAvatar from "@/components/common/avatar/SocialAvatar";
+/* eslint-disable import/order */
 import React from "react";
-import Carousel from 'react-multi-carousel';
-import 'react-multi-carousel/lib/styles.css';
-import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
+import Carousel from "react-multi-carousel";
+import SocialAvatar from "@/components/common/avatar/SocialAvatar";
+import "react-multi-carousel/lib/styles.css";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 const stories = [
   {
@@ -47,21 +48,30 @@ const Stories = () => {
     mobile: {
       breakpoint: { max: 464, min: 0 },
       items: 1,
-    }
+    },
   };
 
   return (
     <div className="stories">
-    <Carousel responsive={responsive} {...settings} itemClass="carousel-item-padding">
-      <div className="create-story-card">
-        <div className="create-story-card img">
-        <SocialAvatar imgUrl="abc" alt="Lan Lan" width="100%" height="100%"/>
+      <Carousel
+        responsive={responsive}
+        {...settings}
+        itemClass="carousel-item-padding"
+      >
+        <div className="create-story-card">
+          <div className="create-story-card img">
+            <SocialAvatar
+              imgUrl="abc"
+              alt="Lan Lan"
+              width="100%"
+              height="100%"
+            />
+          </div>
+          <p className="create-story-card title">
+            <AddCircleOutlineIcon />
+            <span>Create story</span>
+          </p>
         </div>
-        <p className="create-story-card title">
-          <AddCircleOutlineIcon />
-          <span>Create story</span>
-        </p>
-      </div>
         {stories.map((story, i) => (
           <div key={i} className="story">
             <div className="profile-photo">

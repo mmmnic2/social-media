@@ -1,4 +1,5 @@
 "use client";
+import SearchIcon from "@mui/icons-material/Search";
 import {
   Avatar,
   Card,
@@ -8,9 +9,8 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import SearchIcon from "@mui/icons-material/Search";
-import { useSearchUser } from "@/hooks/api-hooks/user-hooks/useUser";
 import { useCreateChat } from "@/hooks/api-hooks/chat-hooks/useChat";
+import { useSearchUser } from "@/hooks/api-hooks/user-hooks/useUser";
 import { setChatSelected } from "@/redux/chat/chat";
 const SearchUser = () => {
   const [username, setUsername] = useState("");
@@ -38,7 +38,7 @@ const SearchUser = () => {
             },
           });
         }
-      }, 1500)
+      }, 1500),
     );
   };
   const handleClick = (id: number) => {
@@ -62,7 +62,7 @@ const SearchUser = () => {
           onChange={handleSearchUser}
           value={username}
           variant="outlined"
-          placeholder="Search..."
+          placeholder="Find your friend"
           fullWidth
           InputProps={{
             startAdornment: (

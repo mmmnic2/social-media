@@ -1,9 +1,8 @@
 "use client";
 // components/LoadingOverlay.tsx
-import React from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-
 import { Backdrop } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
+import React from "react";
 
 const LoadingOverlay = ({ isLoading }: { isLoading: boolean }) => {
   return (

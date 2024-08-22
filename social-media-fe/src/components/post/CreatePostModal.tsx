@@ -1,7 +1,5 @@
-import { useState } from "react";
-import Box from "@mui/material/Box";
-import { useFormik } from "formik";
-import Modal from "@mui/material/Modal";
+import ImageIcon from "@mui/icons-material/Image";
+import VideocamIcon from "@mui/icons-material/Videocam";
 import {
   Avatar,
   Backdrop,
@@ -10,14 +8,16 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import ImageIcon from "@mui/icons-material/Image";
-import VideocamIcon from "@mui/icons-material/Videocam";
-import AvatarSocial from "../common/avatar/SocialAvatar";
-import { useCreatePost } from "@/hooks/api-hooks/post-hooks/usePost";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import { useFormik } from "formik";
+import { useState } from "react";
 import { useQueryClient } from "react-query";
-import LoadingOverlay from "../common/loading/LoadingOverlay";
 import { useSelector } from "react-redux";
+import { useCreatePost } from "@/hooks/api-hooks/post-hooks/usePost";
 import { refetchAllPostSelector } from "@/redux/post/selectors";
+import AvatarSocial from "../common/avatar/SocialAvatar";
+import LoadingOverlay from "../common/loading/LoadingOverlay";
 const style = {
   position: "absolute",
   top: "50%",

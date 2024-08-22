@@ -1,26 +1,31 @@
 "use client";
-import { useLogin } from "@/hooks/api-hooks/auth-hooks/useAuth";
-import { useGetUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
-import { loginSuccess } from "@/redux/auth";
-import store from "@/redux/store";
-import { setUserInfo } from "@/redux/user";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { LoadingButton } from "@mui/lab";
 import {
+  Button,
   Divider,
   FormControl,
   IconButton,
   Input,
   InputAdornment,
   InputLabel,
+  Snackbar,
+  SnackbarCloseReason,
   TextField,
 } from "@mui/material";
-import Link from "next/link";
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import * as Yup from "yup";
+import { useLogin } from "@/hooks/api-hooks/auth-hooks/useAuth";
+import { useGetUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
+import { loginSuccess } from "@/redux/auth";
+import store from "@/redux/store";
+import { setUserInfo } from "@/redux/user";
 import LoadingOverlay from "../common/loading/LoadingOverlay";
-import { LoadingButton } from "@mui/lab";
+import { useSnackbar } from "../common/snackbar/Snackbar";
+
 const initualValues = {
   email: "",
   password: "",
@@ -33,10 +38,12 @@ const validitionSchema = Yup.object().shape({
 });
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const { showSnackbar } = useSnackbar();
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>
+    event: React.MouseEvent<HTMLButtonElement>,
   ) => {
     event.preventDefault();
   };
@@ -53,10 +60,12 @@ const Login = () => {
     isSuccess: getUserProfileSuccess,
     isLoading,
   } = useGetUserProfile(data?.accessToken);
+
   useEffect(() => {
     if (getUserProfileSuccess) {
+      showSnackbar("Login Success", "success");
       store.dispatch(setUserInfo(userData));
-      router.push("/");
+      router.push("/test");
     }
   }, [getUserProfileSuccess, userData, router]);
 
@@ -64,6 +73,7 @@ const Login = () => {
     router.push("/register");
   };
   const handleSubmit = (values: { email: string; password: string }) => {
+    console.log({ values });
     handleLogin(values, {
       onSuccess: (data: {
         accessToken: string;
@@ -98,14 +108,7 @@ const Login = () => {
         validationSchema={validitionSchema}
         initialValues={initualValues}
       >
-        {({
-          handleSubmit,
-          handleChange,
-          values,
-          isSubmitting,
-          errors,
-          touched,
-        }) => (
+        {({ handleSubmit, handleChange, isValid, dirty }) => (
           <Form
             onSubmit={handleSubmit}
             action="submit"
@@ -146,11 +149,11 @@ const Login = () => {
                   onChange={handleChange}
                   fullWidth
                 />
-                {/* <ErrorMessage
-                name="email"
-                component="div"
-                className="text-red-500"
-              /> */}
+                <ErrorMessage
+                  name="email"
+                  component="div"
+                  className="form-errors"
+                />
               </div>
 
               <div className="input-wrap">
@@ -196,9 +199,20 @@ const Login = () => {
                     }
                   />
                 </FormControl>
+                <ErrorMessage
+                  name="password"
+                  component="div"
+                  className="form-errors"
+                />
               </div>
 
-              <input type="submit" value="Sign in" className="sign-btn" />
+              <Button
+                type="submit"
+                disabled={!isValid || !dirty}
+                className="sign-btn"
+              >
+                Sign in
+              </Button>
 
               <p className="text">
                 Forgotten your password?

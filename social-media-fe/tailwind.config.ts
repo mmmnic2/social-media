@@ -1,3 +1,4 @@
+/* eslint-disable import/no-default-export */
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -14,7 +15,7 @@ const config: Config = {
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       boxShadow: {
-        'custom-shadow': 'rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px',
+        "custom-shadow": "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
       },
     },
   },

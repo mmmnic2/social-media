@@ -1,10 +1,10 @@
 "use client";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import SendSharpIcon from "@mui/icons-material/SendSharp";
 import { Avatar, Card, CardHeader, IconButton } from "@mui/material";
 import { useState, useEffect } from "react";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import SendSharpIcon from "@mui/icons-material/SendSharp";
 import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 const UserChatCard = ({
@@ -14,7 +14,7 @@ const UserChatCard = ({
 }: {
   chat: any;
   handleSelectUserChat: (chat: any) => void;
-  isSelected: boolean
+  isSelected: boolean;
 }) => {
   const dispatch = useDispatch();
   const [userChat, setUserChat] = useState({});
@@ -31,7 +31,7 @@ const UserChatCard = ({
       setUserChat(parseUserLogin);
     } else {
       setUserChat(
-        chat?.memberList?.find((member: any) => member.id !== userLogin.id)
+        chat?.memberList?.find((member: any) => member.id !== userLogin.id),
       );
     }
   }, [chat, userLogin]);
@@ -57,8 +57,18 @@ const UserChatCard = ({
     //     subheader={"new message"}
     //   />
     // </Card>
-    <div className={`${isSelected && "bg-[--color-background] border-r-2 border-[--color-primary]"} py-2 pl-5 cursor-pointer`} onClick={() => {handleSelectUserChat(chat)}}>
-      <AvatarWithInfo imgUrl="abc" alt="Lan Lan" title={userChat?.firstName + " " + userChat?.lastName} subtitle={"new message"}/>
+    <div
+      className={`${isSelected && "bg-[--color-background] border-r-2 border-[--color-primary]"} py-2 pl-5 cursor-pointer`}
+      onClick={() => {
+        handleSelectUserChat(chat);
+      }}
+    >
+      <AvatarWithInfo
+        imgUrl="abc"
+        alt="Lan Lan"
+        title={userChat?.firstName + " " + userChat?.lastName}
+        subtitle={"new message"}
+      />
     </div>
   );
 };

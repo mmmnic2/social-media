@@ -1,4 +1,11 @@
 "use client";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import ShareIcon from "@mui/icons-material/Share";
+import SmsIcon from "@mui/icons-material/Sms";
 import {
   Avatar,
   Card,
@@ -12,24 +19,17 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { useState, useEffect } from "react";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import ShareIcon from "@mui/icons-material/Share";
 import { red } from "@mui/material/colors";
-import SmsIcon from "@mui/icons-material/Sms";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import CreateCommentCard from "../comment/CreateCommentCard";
-import CommentCard from "../comment/CommentCard";
-import { parseTime } from "@/utils/utils";
+import { useState, useEffect } from "react";
+import { useQueryClient } from "react-query";
 import { useDispatch, useSelector } from "react-redux";
+import { useGetCommentByPostId } from "@/hooks/api-hooks/comment-hooks/useComment";
 import { useLikePost } from "@/hooks/api-hooks/post-hooks/usePost";
 import { refetchAllPostSelector } from "@/redux/post/selectors";
-import { useQueryClient } from "react-query";
-import { useGetCommentByPostId } from "@/hooks/api-hooks/comment-hooks/useComment";
 import { refetchPostByUserSelector } from "@/redux/post/selectors";
+import { parseTime } from "@/utils/utils";
+import CommentCard from "../comment/CommentCard";
+import CreateCommentCard from "../comment/CreateCommentCard";
 const PostCard = ({ post }: { post: any }) => {
   const dispatch = useDispatch();
   // const getCommentByPostId = commentSelectedSelector();

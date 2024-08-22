@@ -1,6 +1,6 @@
+import AddIcon from "@mui/icons-material/Add";
 import { Avatar } from "@mui/material";
 import React from "react";
-import AddIcon from "@mui/icons-material/Add";
 const StoryCircle = () => {
   return (
     <div>

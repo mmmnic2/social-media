@@ -1,19 +1,19 @@
 "use client";
-import HomeIcon from "@mui/icons-material/Home";
-import ExploreIcon from "@mui/icons-material/Explore";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MessageIcon from "@mui/icons-material/Message";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import GroupIcon from "@mui/icons-material/Group";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Link from "next/link";
-import { Avatar, Button, Card, Divider, Menu, MenuItem } from "@mui/material";
-import * as React from "react";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import ExploreIcon from "@mui/icons-material/Explore";
+import GroupIcon from "@mui/icons-material/Group";
+import HomeIcon from "@mui/icons-material/Home";
+import ListAltIcon from "@mui/icons-material/ListAlt";
+import MessageIcon from "@mui/icons-material/Message";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import NotificationsIcon from "@mui/icons-material/Notifications";
+import { Avatar, Button, Card, Divider, Menu, MenuItem } from "@mui/material";
+import Link from "next/link";
+import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { logout } from "@/redux/auth";
 import { useLogout } from "@/hooks/api-hooks/auth-hooks/useAuth";
+import { logout } from "@/redux/auth";
 const navigationMenu = [
   {
     tilte: "Home",

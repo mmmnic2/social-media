@@ -1,9 +1,9 @@
 "use client";
 import React from "react";
 import { useSelector } from "react-redux";
+import PostCardV2 from "@/components/post/PostCardV2";
 import CreatePostCard from "./component/CreatePostCard";
 import Stories from "./component/Stories";
-import PostCardV2 from "@/components/post/PostCardV2";
 const arrUser = [1, 1, 1, 1, 1];
 
 const MiddlePartV2 = () => {

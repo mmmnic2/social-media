@@ -1,5 +1,5 @@
-import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 import React from "react";
+import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 
 const Messsages = () => {
   return (

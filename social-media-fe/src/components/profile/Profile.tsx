@@ -1,16 +1,16 @@
 "use client";
 import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import React, { useState, useEffect } from "react";
-import PostCard from "../post/PostCard";
-import UserReelCard from "../reels/UserReelCard";
+import { useDispatch } from "react-redux";
+import { useGetPostByUserId } from "@/hooks/api-hooks/post-hooks/usePost";
 import {
   useGetUserById,
   useGetUserProfile,
 } from "@/hooks/api-hooks/user-hooks/useUser";
-import { useGetPostByUserId } from "@/hooks/api-hooks/post-hooks/usePost";
-import UpdateProfileModal from "./component/UpdateProfileModal";
 import { setRefetchPostByUser } from "@/redux/post/post";
-import { useDispatch } from "react-redux";
+import PostCard from "../post/PostCard";
+import UserReelCard from "../reels/UserReelCard";
+import UpdateProfileModal from "./component/UpdateProfileModal";
 const properties = [
   { value: "post", name: "Post" },
   { value: "reels", name: "Reels" },

@@ -1,11 +1,11 @@
 "use client";
-import HomeIcon from "@mui/icons-material/Home";
-import ExploreIcon from "@mui/icons-material/Explore";
-import ControlPointIcon from "@mui/icons-material/ControlPoint";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import MessageIcon from "@mui/icons-material/Message";
-import GroupIcon from "@mui/icons-material/Group";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import ControlPointIcon from "@mui/icons-material/ControlPoint";
+import ExploreIcon from "@mui/icons-material/Explore";
+import GroupIcon from "@mui/icons-material/Group";
+import HomeIcon from "@mui/icons-material/Home";
+import MessageIcon from "@mui/icons-material/Message";
+import NotificationsIcon from "@mui/icons-material/Notifications";
 import * as React from "react";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 
@@ -60,7 +60,12 @@ const HomeLeft = () => {
   return (
     <div className="left">
       <a className="profile">
-        <AvatarWithInfo imgUrl="abc" alt="Lan Lan" title="Lan" subtitle="@lanlan"/>
+        <AvatarWithInfo
+          imgUrl="abc"
+          alt="Lan Lan"
+          title="Lan"
+          subtitle="@lanlan"
+        />
       </a>
 
       <div className="sidebar">

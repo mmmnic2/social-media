@@ -1,5 +1,5 @@
-import { createSlice } from "@reduxjs/toolkit";
 import { access } from "fs";
+import { createSlice } from "@reduxjs/toolkit";
 const initialState: {
   accessToken: null | string;
   refreshToken: null | string;

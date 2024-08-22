@@ -8,8 +8,8 @@ import {
   likePost,
   savePost,
 } from "@/api/post";
-import store from "@/redux/store";
 import { setAllPost, setRefetchAllPost } from "@/redux/post/post";
+import store from "@/redux/store";
 export const useGetPostByUserId = (userId: number | string) => {
   return useQuery(["post_user", userId], () => getPostByUserId(userId));
 };

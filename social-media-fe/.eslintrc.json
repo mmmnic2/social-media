@@ -1,3 +1,33 @@
 {
-  "extends": "next/core-web-vitals"
+  "extends": ["next", "plugin:prettier/recommended"],
+  "plugins": ["import"],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["@mui/*/*/*"]
+      }
+    ],
+    "import/order": [
+      "error",
+      {
+        "groups": [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "index"
+        ],
+        "alphabetize": {
+          "order": "asc",
+          "caseInsensitive": true
+        }
+      }
+    ],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/no-named-as-default": "warn",
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "linebreak-style": "off"
+  }
 }

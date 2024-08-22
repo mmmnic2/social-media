@@ -1,19 +1,19 @@
 "use client";
+import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
+import CallIcon from "@mui/icons-material/Call";
+import SendSharpIcon from "@mui/icons-material/SendSharp";
+import VideocamIcon from "@mui/icons-material/Videocam";
 import { Avatar, IconButton } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
-import CallIcon from "@mui/icons-material/Call";
-import VideocamIcon from "@mui/icons-material/Videocam";
-import AddPhotoAlternateIcon from "@mui/icons-material/AddPhotoAlternate";
-import ChatMessage from "./ChatMessage";
 import { useSelector } from "react-redux";
-import { chatSelectedSelector } from "@/redux/chat/selectors";
-import SendSharpIcon from "@mui/icons-material/SendSharp";
+import { useDispatch } from "react-redux";
 import {
   useCreateMessage,
   useGetMessageByChat,
 } from "@/hooks/api-hooks/message-hooks/useMessage";
-import { useDispatch } from "react-redux";
+import { chatSelectedSelector } from "@/redux/chat/selectors";
 import { setAllMessages } from "@/redux/message/message";
+import ChatMessage from "./ChatMessage";
 
 const ChatPanel = ({
   sendMessageToServer,
@@ -63,8 +63,8 @@ const ChatPanel = ({
     } else {
       setUserChat(
         currentChat?.memberList?.find(
-          (member: any) => member.id !== userLogin.id
-        )
+          (member: any) => member.id !== userLogin.id,
+        ),
       );
     }
   }, [currentChat, userLogin]);

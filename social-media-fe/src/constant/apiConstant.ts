@@ -1,9 +1,8 @@
+import { error } from "console";
 import axios from "axios";
 import store from "@/redux/store";
-import { error } from "console";
-const BASE_URL = "http://localhost:8080";
 const instance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
 });
 instance.interceptors.request.use(
   (config) => {
@@ -15,6 +14,6 @@ instance.interceptors.request.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
+  },
 );
 export default instance;

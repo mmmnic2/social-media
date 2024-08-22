@@ -1,8 +1,8 @@
-import { login, logout, register } from "@/api/auth";
-import { useMutation } from "react-query";
-import { logout as logoutState } from "@/redux/auth";
-import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
+import { useMutation } from "react-query";
+import { useDispatch } from "react-redux";
+import { login, logout, register } from "@/api/auth";
+import { logout as logoutState } from "@/redux/auth";
 export const useLogin = () => {
   return useMutation("login", login);
 };

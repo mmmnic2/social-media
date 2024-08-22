@@ -11,7 +11,6 @@ const chatState = createSlice({
     setChatSelected(state, { payload }) {
       state.chatSelected = payload;
     },
-    
   },
 });
 

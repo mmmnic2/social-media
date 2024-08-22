@@ -1,5 +1,5 @@
-import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 import React from "react";
+import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 
 const CreatePostCard = () => {
   return (

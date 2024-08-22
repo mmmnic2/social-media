@@ -1,13 +1,13 @@
 import { combineReducers } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
+import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import authReducer from "./auth";
-import userReducer from "./user";
-import commentReducer from "./comment/comment";
-import postReducer from "./post/post";
 import chatReducer from "./chat/chat";
+import commentReducer from "./comment/comment";
 import messageReducer from "./message/message";
-import { persistStore, persistReducer } from "redux-persist";
-import { configureStore } from "@reduxjs/toolkit";
+import postReducer from "./post/post";
+import userReducer from "./user";
 const persistConfig = {
   key: "root",
   storage,

@@ -1,16 +1,16 @@
 "use client";
 import { Avatar, Grid, IconButton } from "@mui/material";
+import { Stomp, Client } from "@stomp/stompjs";
 import { useEffect, useState } from "react";
-import { useGetChatsByUser } from "@/hooks/api-hooks/chat-hooks/useChat";
-import SidebarChat from "./component/SidebarChat";
-import ChatPanel from "./component/ChatPanel";
 import { useDispatch, useSelector } from "react-redux";
+import SockJS from "sockjs-client";
+import { useGetChatsByUser } from "@/hooks/api-hooks/chat-hooks/useChat";
 import { setAllChats } from "@/redux/chat/chat";
 import { chatSelectedSelector } from "@/redux/chat/selectors";
-import ChatNotFound from "./component/ChatNotFound";
-import SockJS from "sockjs-client";
-import { Stomp, Client } from "@stomp/stompjs";
 import { addMessage } from "@/redux/message/message";
+import ChatNotFound from "./component/ChatNotFound";
+import ChatPanel from "./component/ChatPanel";
+import SidebarChat from "./component/SidebarChat";
 const Message = () => {
   const { data: allChats, isLoading } = useGetChatsByUser();
   const currentChat = useSelector(chatSelectedSelector);
@@ -32,7 +32,7 @@ const Message = () => {
     if (stompClient && Object.keys(currentChat).length > 0) {
       stompClient.subscribe(
         `/user/${currentChat?.chatId}/private`,
-        onMessageReceive
+        onMessageReceive,
       );
     }
   }, [currentChat, stompClient]);

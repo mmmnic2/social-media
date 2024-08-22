@@ -1,13 +1,13 @@
 "use client";
-import { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
+import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { useGetAllComment } from "@/hooks/api-hooks/comment-hooks/useComment";
+import { useGetAllPosts } from "@/hooks/api-hooks/post-hooks/usePost";
+import { setAllComments, setRefetchAllComment } from "@/redux/comment/comment";
+import { setAllPost, setRefetchAllPost } from "@/redux/post/post";
 import HomeRight from "./homeright/HomeRight";
 import MiddlePart from "./middlepart/MiddlePart";
-import { useGetAllPosts } from "@/hooks/api-hooks/post-hooks/usePost";
-import { useDispatch } from "react-redux";
-import { setAllPost, setRefetchAllPost } from "@/redux/post/post";
-import { setAllComments, setRefetchAllComment } from "@/redux/comment/comment";
-import { useGetAllComment } from "@/hooks/api-hooks/comment-hooks/useComment";
 const HomePage = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);

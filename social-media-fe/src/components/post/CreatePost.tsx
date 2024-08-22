@@ -1,11 +1,11 @@
-import { Avatar, Card, IconButton } from "@mui/material";
+import ArticleIcon from "@mui/icons-material/Article";
 import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
-import ArticleIcon from "@mui/icons-material/Article";
-import CreatePostModal from "./CreatePostModal";
+import { Avatar, Card, IconButton } from "@mui/material";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { setRefetchAllComment } from "@/redux/comment/comment";
+import CreatePostModal from "./CreatePostModal";
 const benefitList = [
   {
     title: "Media",

@@ -1,6 +1,5 @@
 /* @import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"); */
 
-
 .container {
   width: 80%;
   margin: 0 auto;
@@ -234,7 +233,7 @@ main .container .left .profile {
   max-height: 15rem;
 }
 .stories .carousel-item-padding {
-  padding-right: 0.3rem; 
+  padding-right: 0.3rem;
 }
 
 .stories .react-multi-carousel-item {
@@ -301,39 +300,39 @@ main .container .left .profile {
   border-radius: 50%;
 }
 
-.create-story-card{
+.create-story-card {
   display: flex;
   flex-direction: column;
 }
 
-.create-story-card .img{
+.create-story-card .img {
   flex-basis: 75%;
 }
 
-.create-story-card .img > div{
+.create-story-card .img > div {
   border-radius: 0%;
   border-top-left-radius: 1rem;
   border-top-right-radius: 1rem;
 }
 
-.create-story-card .title{
+.create-story-card .title {
   flex-basis: 25%;
   background-color: white;
   border-bottom-left-radius: 1rem;
   border-bottom-right-radius: 1rem;
   position: relative;
 }
-.create-story-card .title svg{
+.create-story-card .title svg {
   color: var(--color-primary);
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
   top: -14px;
 }
-.create-story-card .title span{
+.create-story-card .title span {
   margin: auto;
 }
-.create-story-card .title::before{
+.create-story-card .title::before {
   content: "";
   background-color: white;
   width: 1.7rem;

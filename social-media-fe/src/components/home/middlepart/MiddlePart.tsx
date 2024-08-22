@@ -1,10 +1,10 @@
 "use client";
-import { Avatar, Card, IconButton } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import StoryCircle from "./component/StoryCircle";
-import PostCard from "@/components/post/PostCard";
-import CreatePost from "@/components/post/CreatePost";
+import { Avatar, Card, IconButton } from "@mui/material";
 import { useSelector } from "react-redux";
+import CreatePost from "@/components/post/CreatePost";
+import PostCard from "@/components/post/PostCard";
+import StoryCircle from "./component/StoryCircle";
 const arrUser = [1, 1, 1, 1, 1];
 
 const MiddlePart = () => {

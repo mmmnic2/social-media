@@ -1,21 +1,21 @@
 "use client";
 
-import React, { useState } from "react";
-import SocialAvatar from "../common/avatar/SocialAvatar";
-import { IconButton } from "@mui/material";
+import BookmarkIcon from "@mui/icons-material/Bookmark";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
 import SmsIcon from "@mui/icons-material/Sms";
-import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
-import BookmarkIcon from "@mui/icons-material/Bookmark";
-import { useLikePost } from "@/hooks/api-hooks/post-hooks/usePost";
+import { IconButton } from "@mui/material";
+import React, { useState } from "react";
 import { useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
+import { useLikePost } from "@/hooks/api-hooks/post-hooks/usePost";
 import {
   refetchAllPostSelector,
   refetchPostByUserSelector,
 } from "@/redux/post/selectors";
+import SocialAvatar from "../common/avatar/SocialAvatar";
 
 const PostCardV2 = ({ post }: { post: any }) => {
   const [isLiked, setIsLiked] = useState(post?.currentUserLikePost);

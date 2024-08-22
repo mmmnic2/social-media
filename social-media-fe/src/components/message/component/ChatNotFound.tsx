@@ -1,5 +1,5 @@
-import React from "react";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
+import React from "react";
 const ChatNotFound = () => {
   return (
     <div className="h-full space-y-5 flex flex-col justify-center items-center">

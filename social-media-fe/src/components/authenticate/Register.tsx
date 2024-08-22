@@ -1,5 +1,4 @@
 "use client";
-import { useRegister } from "@/hooks/api-hooks/auth-hooks/useAuth";
 import {
   Button,
   Card,
@@ -12,9 +11,10 @@ import {
   Radio,
 } from "@mui/material";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import { useRouter, usePathname } from "next/navigation";
 import { useState } from "react";
 import * as Yup from "yup";
-import { useRouter, usePathname } from "next/navigation";
+import { useRegister } from "@/hooks/api-hooks/auth-hooks/useAuth";
 const initialValues = {
   firstName: "",
   lastName: "",

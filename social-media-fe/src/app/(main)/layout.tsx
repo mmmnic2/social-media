@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material";
-import Sidebar from "@/components/layout/Sidebar";
 import HomeRight from "@/components/home/homeright/HomeRight";
+import Sidebar from "@/components/layout/Sidebar";
 const MainLayout = ({
   children, // will be a page or nested layout
 }: {

@@ -3,8 +3,13 @@ import { Nunito } from "next/font/google";
 import "../styles/globals.css";
 import Providers from "@/components/layout/Providers";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+// eslint-disable-next-line import/order
+import { SnackbarProvider } from "@/components/common/snackbar/Snackbar";
 
-const nunito = Nunito({ subsets: ['vietnamese', 'latin'], weight: ['600', '700', '800']});
+const nunito = Nunito({
+  subsets: ["vietnamese", "latin"],
+  weight: ["600", "700", "800"],
+});
 
 export const metadata: Metadata = {
   title: "Social Media",
@@ -19,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={nunito.className}>
-        <Providers>{children}</Providers>
+        <Providers>
+          <SnackbarProvider>{children}</SnackbarProvider>
+        </Providers>
       </body>
     </html>
   );
