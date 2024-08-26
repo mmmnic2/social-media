@@ -4,7 +4,7 @@ import FriendRequests from "./requests/FriendRequest";
 
 const HomeRightV2 = () => {
   return (
-    <div className="right">
+    <div className="right mt-4">
       <Messsages />
       <FriendRequests />
     </div>

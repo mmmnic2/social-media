@@ -9,6 +9,19 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      colors: {
+        "primary": "hsl(252, 75%, 60%)",
+        "secondary": "hsl(272, 75%, 70%)",
+        "dark": "hsl(252, 30%, 17%)",
+        "light": "hsl(252, 30%, 95%)",
+        "gray": "hsl(252, 15%, 50%)",
+        "dark-gray": "hsl(252, 15%, 30%)",
+        "background": "hsl(252, 20%, 85%)",
+        "danger": "hsl(0, 95%, 65%)",
+        "success": "hsl(120, 95%, 65%)",
+        "text-primary": "hsl(252, 10%, 20%)",
+        "active-background": "hsl(240, 100%, 90%)"
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
@@ -17,6 +30,22 @@ const config: Config = {
       boxShadow: {
         "custom-shadow": "rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px",
       },
+      borderRadius: {
+        "card": "1rem",
+        'lg': '2rem',
+      },
+      padding: {
+        "btn": "0.6rem 2rem",
+        "search": "0.6rem 1rem",
+        "card": "1rem",
+      },
+      inset: {
+        "sticky-top-left": "5.4rem",
+        "sticky-top-right": "-18rem",
+      },
+      zIndex:{
+        "10000": "10000"
+      }
     },
   },
   plugins: [],

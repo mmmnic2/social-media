@@ -39,12 +39,18 @@
   --sticky-top-right: -18rem;
 }
 
-body {
+/* body {
   color: var(--color-text);
   background: var(--color-light);
   overflow-x: hidden;
-}
+} */
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply text-text-primary;
+  }
+}
