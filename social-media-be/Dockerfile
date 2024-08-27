@@ -4,7 +4,7 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime && echo Asia/Ho_
 WORKDIR /app
 COPY target/socialmedia-0.0.1-SNAPSHOT.jar app.jar
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["java","-jar","target/myapp.jar"]
 
 
 #FROM openjdk:17
