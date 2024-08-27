@@ -44,13 +44,19 @@ const AuthLayout = ({
   };
 
   return (
-    <main className={`w-full min-h-screen overflow-hidden bg-gradient-to-r from-primary to-secondary flex items-center justify-center p-8`}>
+    <main
+      className={`w-full min-h-screen overflow-hidden bg-gradient-to-r from-primary to-secondary flex items-center justify-center p-8`}
+    >
       <div className="relative w-full max-w-4xl h-[640px] bg-white bg-opacity-80 shadow-lg rounded-xl p-5">
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className={`absolute w-[45%] h-full grid ${currentPath === "/register" ? "right-0" : "left-0"} transition-all duration-700 ease-in-out`}>
+          <div
+            className={`absolute w-[45%] h-full grid ${currentPath === "/register" ? "right-0" : "left-0"} transition-all duration-700 ease-in-out`}
+          >
             {children}
           </div>
-          <div className={`absolute w-[55%] h-full bg-white rounded-xl ${currentPath === "/register" ? "left-0" : "right-0"} grid grid-rows-[auto,1fr] p-8 overflow-hidden transition-all duration-700 ease-in-out`}>
+          <div
+            className={`absolute w-[55%] h-full bg-white rounded-xl ${currentPath === "/register" ? "left-0" : "right-0"} grid grid-rows-[auto,1fr] p-8 overflow-hidden transition-all duration-700 ease-in-out`}
+          >
             <div className="relative w-full h-[450px] overflow-hidden bg-background">
               <img
                 src="./image/image1.png"
@@ -74,9 +80,13 @@ const AuthLayout = ({
                   className="flex flex-col items-center justify-center transition-transform duration-500"
                   style={{ transform: translateValue }}
                 >
-                  <h2 className="text-2xl font-semibold">Create your own social media</h2>
+                  <h2 className="text-2xl font-semibold">
+                    Create your own social media
+                  </h2>
                   <h2 className="text-2xl font-semibold">Freedom</h2>
-                  <h2 className="text-2xl font-semibold">Invite your friend to join</h2>
+                  <h2 className="text-2xl font-semibold">
+                    Invite your friend to join
+                  </h2>
                 </div>
               </div>
               <div className="flex items-center justify-center space-x-1">

@@ -1,6 +1,12 @@
-import React from 'react';
-import { FormControl, FormControlLabel, Radio, RadioGroup, FormHelperText } from '@mui/material';
-import { Field, FieldProps } from 'formik';
+import {
+  FormControl,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  FormHelperText,
+} from "@mui/material";
+import { Field, FieldProps } from "formik";
+import React from "react";
 
 interface RadioButtonFieldProps {
   options: { value: string; label: string }[];
@@ -8,13 +14,17 @@ interface RadioButtonFieldProps {
   name: string;
 }
 
-const RadioButtonField: React.FC<RadioButtonFieldProps> = ({ options, isError, name }) => {
+const RadioButtonField: React.FC<RadioButtonFieldProps> = ({
+  options,
+  isError,
+  name,
+}) => {
   return (
     <Field name={name}>
       {({ field, form }: FieldProps) => {
         const { value, onChange, onBlur } = field;
         // const error = form.touched[name] && form.errors[name];
-        
+
         return (
           <FormControl component="fieldset" error={isError}>
             <RadioGroup
@@ -24,7 +34,7 @@ const RadioButtonField: React.FC<RadioButtonFieldProps> = ({ options, isError, n
               onChange={onChange}
               onBlur={onBlur}
             >
-              {options.map(option => (
+              {options.map((option) => (
                 <FormControlLabel
                   key={option.value}
                   value={option.value}

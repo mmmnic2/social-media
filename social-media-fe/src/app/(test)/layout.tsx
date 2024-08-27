@@ -1,10 +1,10 @@
 import "@/styles/main.css";
 import { Metadata } from "next";
 import HomeLeft from "@/components/home/homeleft/HomeLeft";
+import HomeLeftV2 from "@/components/home/homeleft/HomeLeftV2";
 import HomeRightV2 from "@/components/home/homeright/HomeRightV2";
 import Navbar from "@/components/layout/Navbar";
 import NavbarV2 from "@/components/layout/NavbarV2";
-import HomeLeftV2 from "@/components/home/homeleft/HomeLeftV2";
 
 export const metadata: Metadata = {
   title: "Social Media | Home",
