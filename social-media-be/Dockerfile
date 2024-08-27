@@ -1,5 +1,5 @@
 #FROM openjdk:17
-FROM openjdk:17-jdk-slim
+FROM openjdk:17
 RUN ln -snf /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime && echo Asia/Ho_Chi_Minh > /etc/timezone
 WORKDIR /app
 COPY target/socialmedia-0.0.1-SNAPSHOT.jar app.jar
