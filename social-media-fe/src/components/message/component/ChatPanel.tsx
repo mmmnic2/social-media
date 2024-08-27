@@ -15,12 +15,19 @@ import { chatSelectedSelector } from "@/redux/chat/selectors";
 import { setAllMessages } from "@/redux/message/message";
 import ChatMessage from "./ChatMessage";
 
+interface parseUserLoginProp {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 const ChatPanel = ({
   sendMessageToServer,
 }: {
   sendMessageToServer: Function;
 }) => {
-  const [userChat, setUserChat] = useState();
+  const [userChat, setUserChat] = useState<parseUserLoginProp>();
   const currentChat = useSelector(chatSelectedSelector);
   const userLogin = useSelector((state: any) => state.user);
   const [selectedImage, setSelectedImage] = useState();
@@ -28,7 +35,7 @@ const ChatPanel = ({
   const [message, setMessage] = useState("");
   const { mutate: handleCreateMessage } = useCreateMessage();
   const dispatch = useDispatch();
-  const chatContainerRef = useRef(null);
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   //gọi api để lấy allmessage by chatId => lưu vào state
   const {
     data: allMessage,
@@ -53,7 +60,7 @@ const ChatPanel = ({
   //parse user
   useEffect(() => {
     if (currentChat?.memberList?.length === 1) {
-      let parseUserLogin: any = {
+      let parseUserLogin: parseUserLoginProp = {
         id: userLogin.id,
         firstName: userLogin.first_name,
         lastName: userLogin.last_name,
@@ -63,8 +70,8 @@ const ChatPanel = ({
     } else {
       setUserChat(
         currentChat?.memberList?.find(
-          (member: any) => member.id !== userLogin.id,
-        ),
+          (member: any) => member.id !== userLogin.id
+        )
       );
     }
   }, [currentChat, userLogin]);
