@@ -45,19 +45,21 @@ const PostCardV2 = ({ post }: { post: any }) => {
   };
 
   return (
-    <div className="feed">
+    <div className="feed bg-white rounded-xl py-2 px-4 mb-4">
       {/* ======== POST CARD HEADER========== */}
       <div className="head">
-        <div className="user">
-          <SocialAvatar imgUrl="abc" alt="Lan Lan" />
-          <div className="ingo">
-            <h3>Lan Lan</h3>
-            <small>15 MINUTES AGO</small>
+        <div className="user flex items-center justify-between">
+          <div className="ingo flex items-center gap-2">
+            <SocialAvatar imgUrl="abc" alt="Lan Lan" />
+            <div>
+              <h3 className="font-bold">Lan Lan</h3>
+              <small className="text-xs">15 MINUTES AGO</small>
+            </div>
           </div>
+          <span className="edit">
+            <i className="uil uil-ellipsis-h"></i>
+          </span>
         </div>
-        <span className="edit">
-          <i className="uil uil-ellipsis-h"></i>
-        </span>
       </div>
       {/* ======== POST CARD BODY========== */}
 

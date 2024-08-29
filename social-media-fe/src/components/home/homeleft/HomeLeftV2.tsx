@@ -70,7 +70,7 @@ const HomeLeftV2 = () => {
   };
 
   return (
-    <div className="sticky top-0 h-max">
+    <div className="sticky top-0 h-max basis-1/4">
       <a className="flex items-center p-4 bg-white rounded-md mt-4">
         <AvatarWithInfo
           imgUrl="abc"

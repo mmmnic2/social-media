@@ -10,9 +10,9 @@ const MiddlePartV2 = () => {
   const postSelector = useSelector((state: any) => state.post);
   return (
     <React.Fragment>
-      <Stories />
+      {/* <Stories /> */}
       <CreatePostCard />
-      <div className="feeds">
+      <div className="feeds mt-4">
         {arrUser.map((item, idx) => (
           <PostCardV2 key={idx} post={[]} />
         ))}

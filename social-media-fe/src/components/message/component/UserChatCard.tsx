@@ -7,6 +7,14 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
+
+interface UserLoginProps {
+  id: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
+
 const UserChatCard = ({
   chat,
   handleSelectUserChat,
@@ -17,7 +25,7 @@ const UserChatCard = ({
   isSelected: boolean;
 }) => {
   const dispatch = useDispatch();
-  const [userChat, setUserChat] = useState({});
+  const [userChat, setUserChat] = useState<UserLoginProps>();
   const userLogin = useSelector((state: any) => state.user);
 
   useEffect(() => {
