@@ -61,6 +61,7 @@ const FormField: React.FC<FormFieldComponentProps> = ({
                   variant="standard"
                   label={label}
                   type={inputType}
+                  error={!!isError}
                 />
               );
             }}

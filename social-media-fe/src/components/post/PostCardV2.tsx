@@ -7,6 +7,7 @@ import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShareIcon from "@mui/icons-material/Share";
 import SmsIcon from "@mui/icons-material/Sms";
 import { IconButton } from "@mui/material";
+import Image from "next/image";
 import React, { useState } from "react";
 import { useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
@@ -52,7 +53,7 @@ const PostCardV2 = ({ post }: { post: any }) => {
           <div className="ingo flex items-center gap-2">
             <SocialAvatar imgUrl="abc" alt="Lan Lan" />
             <div>
-              <h3 className="font-bold">Lan Lan</h3>
+              <h3 className="font-bold text-[1.2rem]">Lan Lan</h3>
               <small className="text-xs">15 MINUTES AGO</small>
             </div>
           </div>
@@ -68,12 +69,12 @@ const PostCardV2 = ({ post }: { post: any }) => {
           <p>Great Food!</p>
         </div>
         <div className="photo">
-          <img src="./image/image1.png" alt="" />
+          <Image width={1000} height={90} src="/image/image1.png" alt="img" />
         </div>
       </div>
       {/* ======== POST CARD FOOTER========== */}
       <div className="foot">
-        <div className="liked-by">
+        <div className="liked-by flex gap-4">
           <div className="comments text-muted">25 Likes</div>
           <div className="comments text-muted">25 Comments</div>
         </div>

@@ -3,23 +3,23 @@ import React from "react";
 
 const NavbarV2 = () => {
   return (
-    <nav className="w-full max-w-[80%] bg-white py-2.5 fixed top-0 left-1/2 -translate-x-1/2 z-10000">
-      <div className="container mx-auto flex justify-between items-center px-4">
+    <nav className="w-full bg-white py-2.5 fixed top-12 left-0 z-50 shadow">
+      <div className="max-w-[80%] mx-auto flex justify-between items-center">
         <h2 className="font-bold text-2xl">LanSocial</h2>
-        <div className="search-bar bg-light rounded-lg py-1 px-2 flex items-center">
-          <i className="uil uil-search text-gray-500"></i>
+        <div className="search-bar border border-primary rounded-lg py-1 px-2 flex items-center min-w-52">
+          <i className="uil uil-search text-text-primary"></i>
           <input
             type="search"
             placeholder="Search for creators"
-            className="bg-transparent ml-4 w-1/3 text-dark-gray placeholder-gray text-sm"
+            className="bg-transparent ml-4 w-full text-text-primary placeholder:text-text-primary text-sm"
           />
         </div>
         <div className="create flex items-center gap-8">
           <label
-            className="btn btn-primary cursor-pointer"
+            className="bg-accent-color cursor-pointer py-2 px-4 rounded-lg text-light hover:bg-primary"
             htmlFor="create-post"
           >
-            Create
+            Create Post
           </label>
           <div className="profile-photo">
             <Image

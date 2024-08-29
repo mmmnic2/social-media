@@ -28,37 +28,34 @@ const stories = [
   },
 ];
 const Stories = () => {
-  const settings = {
-    // dots: false,
-    infinite: false,
-    // speed: 500,
-    // slidesToShow: 4,
-    // slidesToScroll: 1,
-    // adaptiveHeight: true,
-  };
   const responsive = {
     desktop: {
       breakpoint: { max: 3000, min: 1024 },
-      items: 4,
+      items: 5,
     },
     tablet: {
       breakpoint: { max: 1024, min: 464 },
-      items: 2,
+      items: 3,
     },
     mobile: {
       breakpoint: { max: 464, min: 0 },
       items: 1,
     },
   };
+  const settings = {
+    dots: false,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 5,
+    slidesToScroll: 1,
+    responsive: responsive,
+    itemClass: "carousel-item-padding",
+  };
 
   return (
     <div className="stories">
-      <Carousel
-        responsive={responsive}
-        {...settings}
-        itemClass="carousel-item-padding"
-      >
-        <div className="create-story-card">
+      <Carousel {...settings}>
+        <div className="create-story-card cursor-pointer">
           <div className="create-story-card img">
             <SocialAvatar
               imgUrl="abc"

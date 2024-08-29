@@ -22,6 +22,7 @@ const config: Config = {
         "text-primary": "#794a4b",
         "light-background": "#fdecea",
         "accent-color": "#d88589",
+        "active-side-bar": "#ffdad5",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

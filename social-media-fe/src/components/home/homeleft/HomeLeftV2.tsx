@@ -90,7 +90,7 @@ const HomeLeftV2 = () => {
               key={item.id}
               href={item.path || "#"}
               className={`flex items-center h-16 px-4 cursor-pointer transition-all duration-200 relative ${
-                item.id === "home" ? "bg-active-background text-primary" : ""
+                item.id === "home" ? "bg-active-side-bar text-text-primary" : ""
               }`}
             >
               <span className="relative text-gray-500 text-xl">
