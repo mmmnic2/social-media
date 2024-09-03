@@ -39,15 +39,15 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     return expireIn != null && expireIn != undefined && expireIn > Date.now();
   };
   let isLogin = checkIsLogin(store.getState()?.auth.expireTime);
-  console.log({ isLogin });
+  // console.log({ isLogin });
 
-  useEffect(() => {
-    if (!isLogin && currentPath != "/login" && currentPath != "/register") {
-      router.push("/login");
-    } else if (isLogin && currentPath == "/login") {
-      router.push("/test");
-    }
-  }, [isLogin, currentPath, router]);
+  // useEffect(() => {
+  //   if (!isLogin && currentPath != "/login" && currentPath != "/register") {
+  //     router.push("/login");
+  //   } else if (isLogin && currentPath == "/login") {
+  //     router.push("/test");
+  //   }
+  // }, [isLogin, currentPath, router]);
   return (
     <ThemeProvider theme={theme}>
       <QueryClientProvider client={queryClient}>

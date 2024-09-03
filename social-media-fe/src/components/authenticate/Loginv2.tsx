@@ -44,7 +44,7 @@ const LoginV2 = () => {
     if (getUserProfileSuccess) {
       showSnackbar("Login Success", "success");
       store.dispatch(setUserInfo(userData));
-      router.push("/test");
+      router.push("/");
     }
   }, [getUserProfileSuccess, userData, router]);
 

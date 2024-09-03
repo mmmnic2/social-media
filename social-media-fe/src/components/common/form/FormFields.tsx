@@ -74,7 +74,7 @@ const FormField: React.FC<FormFieldComponentProps> = ({
     <div className="mb-4 relative">
       {getInputField()}
       {isError && (
-        <div className="form-errors absolute -bottom-11 right-0 bg-white text-danger text-xs rounded-lg py-1 px-2 z-50">
+        <div className="form-errors absolute -bottom-11 right-0 bg-white text-danger text-xs rounded-xl py-1 px-2 z-50">
           <ErrorMessage
             name={name}
             component="div"

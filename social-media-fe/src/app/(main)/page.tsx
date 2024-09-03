@@ -1,7 +1,6 @@
-import HomePage from "@/components/home/HomePage";
-import HomePageV2 from "@/components/home/HomePageV2";
+import MiddlePartV2 from "@/components/home/middlepart/MiddlePartV2";
 
 export default function Home() {
-  return <HomePage />;
+  return <MiddlePartV2 />;
   // return <HomePageV2 />;
 }

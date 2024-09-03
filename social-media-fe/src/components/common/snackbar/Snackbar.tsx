@@ -47,6 +47,7 @@ export const SnackbarProvider: React.FC<{ children: ReactNode }> = ({
         onClose={handleClose}
         key={snackbar.message}
         anchorOrigin={{ vertical: "top", horizontal: "right" }}
+        sx={{ zIndex: 10001 }}
       >
         <Alert
           variant="filled"

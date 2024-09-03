@@ -1,38 +1,37 @@
-import { Grid } from "@mui/material";
-import HomeRight from "@/components/home/homeright/HomeRight";
-import Sidebar from "@/components/layout/Sidebar";
-const MainLayout = ({
-  children, // will be a page or nested layout
-}: {
-  children: React.ReactNode;
-}) => {
+// import "@/styles/main.css";
+import { Metadata } from "next";
+import { cookies } from "next/headers";
+import WarningBanner from "@/components/common/warningBanner/warningBanner";
+import HomeLeftV2 from "@/components/home/homeleft/HomeLeftV2";
+import HomeRightV2 from "@/components/home/homeright/HomeRightV2";
+import Navbar from "@/components/layout/Navbar";
+import store from "@/redux/store";
+
+export const metadata: Metadata = {
+  title: "Social Media | Home",
+  description: "This is social media homepage",
+};
+
+const MainLayout = ({ children }: { children: React.ReactNode }) => {
+  const token = cookies().get("sessionToken");
+  console.log("token", token);
+  console.log("hastoken", !!token);
   return (
-    <div className="px-20 ">
-      <Grid container spacing={0}>
-        <Grid item xs={0} lg={3}>
-          <div className="sticky top-0">
-            <Sidebar />
-          </div>
-        </Grid>
-        <Grid item xs={12} lg={9} className="px-5 flex justify-center">
-          {children}
-        </Grid>
-        {/* <Grid
-          item
-          className="px-5 flex justify-center"
-          xs={12}
-          // lg={currentPath == "/" ? 6 : 9}
-          lg={9}
-        >
-          {children}
-        </Grid>
-        <Grid item lg={3} className="relative">
-          <div className="sticky top-0 w-full">
-            <HomeRight />
-          </div>
-        </Grid> */}
-      </Grid>
-    </div>
+    <main className="bg-light-background">
+      {!!token && (
+        <div className="fixed z-10000 top-0 w-full">
+          <WarningBanner />
+        </div>
+      )}
+      <Navbar isLogin={!!token} />
+      <div
+        className={`max-w-[80%] mx-auto flex gap-4 ${!!token ? "mt-[60px]" : "mt-[108px]"}`}
+      >
+        <HomeLeftV2 />
+        <div className="middle mt-4 flex-1 ">{children}</div>
+        <HomeRightV2 />
+      </div>
+    </main>
   );
 };
 
