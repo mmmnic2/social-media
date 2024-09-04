@@ -26,14 +26,14 @@ export const useLogout = () => {
   return useMutation({
     mutationFn: logout, // Hàm sẽ được gọi khi mutate
     onSuccess: async () => {
-      // dispatch(logoutState());
-      // router.push("/login");
       await fetch("/api/logout", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
+      dispatch(logoutState());
+      router.push("/login");
     },
   });
 };

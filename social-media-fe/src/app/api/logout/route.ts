@@ -1,6 +1,12 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
-  request.cookies.delete("sessionToken");
-  return NextResponse.redirect(new URL("/login", request.url));
+export async function POST() {
+  const response = NextResponse.json({ message: "Session ended" });
+  response.cookies.set({
+    name: "sessionToken",
+    value: "",
+    maxAge: 0,
+    path: "/",
+  });
+  return response;
 }

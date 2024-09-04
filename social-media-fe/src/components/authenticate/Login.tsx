@@ -73,7 +73,6 @@ const Login = () => {
     router.push("/register");
   };
   const handleSubmit = (values: { email: string; password: string }) => {
-    console.log({ values });
     handleLogin(values, {
       onSuccess: (data: {
         accessToken: string;

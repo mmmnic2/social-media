@@ -15,7 +15,6 @@ const HomePage = () => {
   const [id, setId] = useState(0);
   const { data: allPosts, refetch: refetchAllPost } = useGetAllPosts();
   useEffect(() => {
-    console.log(allPosts);
     dispatch(setAllPost(allPosts));
     dispatch(setRefetchAllPost(refetchAllPost));
   }, [allPosts, dispatch, refetchAllPost]);

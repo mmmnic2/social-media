@@ -49,7 +49,6 @@ const LoginV2 = () => {
   }, [getUserProfileSuccess, userData, router]);
 
   const handleFormSubmit = (values: any) => {
-    console.log("Form values:", values);
     handleLogin(values, {
       onSuccess: (data: {
         accessToken: string;

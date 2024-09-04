@@ -32,7 +32,6 @@ const SidebarChat = () => {
     setAnchorEl(null);
   };
   const handleLogout = () => {
-    console.log("logout");
     logoutAction();
   };
 

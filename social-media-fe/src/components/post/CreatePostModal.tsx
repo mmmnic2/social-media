@@ -1,22 +1,15 @@
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
-import {
-  Avatar,
-  Backdrop,
-  Button,
-  CircularProgress,
-  IconButton,
-  TextField,
-} from "@mui/material";
+import { Button, IconButton, TextField } from "@mui/material";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useFormik } from "formik";
+import Image from "next/image";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
 import { useSelector } from "react-redux";
 import { useCreatePost } from "@/hooks/api-hooks/post-hooks/usePost";
 import { refetchAllPostSelector } from "@/redux/post/selectors";
-import AvatarSocial from "../common/avatar/SocialAvatar";
 import LoadingOverlay from "../common/loading/LoadingOverlay";
 const style = {
   position: "absolute",
@@ -86,6 +79,13 @@ const CreatePostModal = ({
     formik.setFieldValue(e.target.name, file);
   };
 
+  const destructiveSeleted = () => {
+    if (selectedImage || selectedVideo) {
+      setSelectedVideo(undefined);
+      setSelectedImage(undefined);
+    }
+  };
+
   return (
     <div>
       <Modal
@@ -135,8 +135,8 @@ const CreatePostModal = ({
                     <IconButton color="primary" component="span">
                       <ImageIcon />
                     </IconButton>
+                    <span className="cursor-pointer">Image</span>
                   </label>
-                  <span>Image</span>
                 </div>
 
                 <div>
@@ -152,19 +152,27 @@ const CreatePostModal = ({
                     <IconButton color="primary" component="span">
                       <VideocamIcon />
                     </IconButton>
+                    <span className="cursor-pointer">Video</span>
                   </label>
-                  <span>Video</span>
                 </div>
               </div>
             </div>
             <div className="flex space-x-2">
               {selectedImage && (
-                <div>
-                  <img
+                <div className="relative flex-1">
+                  <Image
+                    width={100}
+                    height={100}
                     src={imageSrc}
-                    alt="image"
-                    className="h-[10rem] rounded-lg"
+                    alt="Image preview"
+                    className="rounded-xl min-w-full"
                   />
+                  <div
+                    className="absolute -top-3 -right-3 text-primary cursor-pointer"
+                    onClick={destructiveSeleted}
+                  >
+                    <HighlightOffIcon />
+                  </div>
                 </div>
               )}
               {selectedVideo && (

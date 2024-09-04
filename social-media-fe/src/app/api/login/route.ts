@@ -9,5 +9,5 @@ export async function POST(request: Request) {
     httpOnly: true,
     path: "/",
   });
-  return Response.json({ res });
+  return Response.json("Login success!", { status: 200 });
 }

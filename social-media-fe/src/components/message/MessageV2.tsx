@@ -27,7 +27,6 @@ const MessageV2 = () => {
   const onConnect = (frame: any) => {
     console.log("websocket connected...", frame);
   };
-  console.log(currentChat);
   useEffect(() => {
     if (stompClient && Object.keys(currentChat).length > 0) {
       stompClient.subscribe(

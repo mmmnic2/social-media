@@ -6,7 +6,6 @@ const discountCouponState = createSlice({
   initialState,
   reducers: {
     setDataStatusProps(state, { payload }) {
-      console.log(payload);
       state.statusData = payload;
     },
     setResourceDialogProps(state, { payload }) {

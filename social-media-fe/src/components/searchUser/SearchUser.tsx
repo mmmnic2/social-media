@@ -22,7 +22,6 @@ const SearchUser = () => {
   const dispatch = useDispatch();
   const { mutate: createChat } = useCreateChat();
   const handleSearchUser = (e: any) => {
-    console.log("search user:", e.target.value);
     setUsername(e.target.value);
     if (typingTimeout) {
       clearTimeout(typingTimeout);
@@ -33,7 +32,6 @@ const SearchUser = () => {
         if (e.target.value.trim() !== "") {
           searchUser(username, {
             onSuccess: (data) => {
-              console.log(data);
               setUserSearchList(data);
             },
           });
@@ -42,12 +40,10 @@ const SearchUser = () => {
     );
   };
   const handleClick = (id: number) => {
-    console.log(id);
     const payload = { userId: id };
     createChat(payload, {
       onSuccess: (data) => {
         dispatch(setChatSelected(data));
-        console.log(data);
       },
       onError: (error) => {
         console.log(error);

@@ -5,7 +5,6 @@ const buildValidationSchema = (formFields: FormField[]) => {
   return Yup.object(
     formFields.reduce(
       (schema, field) => {
-        console.log(schema, field);
         let validator: Yup.StringSchema = Yup.string();
 
         if (field.isMandatory) {
