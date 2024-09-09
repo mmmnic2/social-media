@@ -11,8 +11,10 @@ const MiddlePartV2 = () => {
   return (
     <React.Fragment>
       <Stories />
-      <CreatePostCard />
-      <div className="feeds">
+      <div className="mt-4">
+        <CreatePostCard />
+      </div>
+      <div className="feeds mt-4">
         {arrUser.map((item, idx) => (
           <PostCardV2 key={idx} post={[]} />
         ))}

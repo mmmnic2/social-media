@@ -70,8 +70,8 @@ const ChatPanel = ({
     } else {
       setUserChat(
         currentChat?.memberList?.find(
-          (member: any) => member.id !== userLogin.id
-        )
+          (member: any) => member.id !== userLogin.id,
+        ),
       );
     }
   }, [currentChat, userLogin]);

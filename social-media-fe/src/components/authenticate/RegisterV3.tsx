@@ -55,7 +55,6 @@ const RegisterV3 = () => {
   const { mutate: handleRegister, isLoading } = useRegister();
 
   const handleFormSubmit = (values: any) => {
-    console.log("test handle submit", values);
     handleRegister(values, {
       onSuccess: (data: {
         firstName: string;

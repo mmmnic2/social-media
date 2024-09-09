@@ -24,7 +24,6 @@ export const useCreatePost = () => {
 export const useGetAllPosts = () => {
   return useQuery("all_posts", getAllPost, {
     onSuccess: (data) => {
-      console.log(data);
       store.dispatch(setAllPost(data));
     },
   });

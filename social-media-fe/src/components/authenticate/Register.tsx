@@ -42,7 +42,6 @@ const Register = () => {
     message: "",
   });
   const handleSubmit = (values: typeof initialValues) => {
-    console.log("test handle submit", values);
     handleRegister(values, {
       onSuccess: (data: {
         firstName: string;
@@ -56,7 +55,6 @@ const Register = () => {
           status: "success",
           message: "Register successful.",
         });
-        console.log(data);
       },
       onError: (e) => {
         setNotification({

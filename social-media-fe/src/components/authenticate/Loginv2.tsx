@@ -44,12 +44,11 @@ const LoginV2 = () => {
     if (getUserProfileSuccess) {
       showSnackbar("Login Success", "success");
       store.dispatch(setUserInfo(userData));
-      router.push("/test");
+      router.push("/");
     }
   }, [getUserProfileSuccess, userData, router]);
 
   const handleFormSubmit = (values: any) => {
-    console.log("Form values:", values);
     handleLogin(values, {
       onSuccess: (data: {
         accessToken: string;

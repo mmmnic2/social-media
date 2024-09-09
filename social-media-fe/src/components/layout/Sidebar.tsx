@@ -71,7 +71,6 @@ const Sidebar = () => {
 
   const { mutate: logoutAction } = useLogout();
   const handleLogout = () => {
-    console.log("logout");
     logoutAction();
   };
   return (

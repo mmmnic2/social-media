@@ -10,17 +10,19 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        primary: "hsl(252, 75%, 60%)",
-        secondary: "hsl(272, 75%, 70%)",
+        primary: "#e0a2a2",
+        secondary: "#edb9b8",
         dark: "hsl(252, 30%, 17%)",
         light: "hsl(252, 30%, 95%)",
         gray: "hsl(252, 15%, 50%)",
         "dark-gray": "hsl(252, 15%, 30%)",
-        background: "hsl(252, 20%, 85%)",
+        background: "#f7cac9",
         danger: "hsl(0, 95%, 65%)",
         success: "hsl(120, 95%, 65%)",
-        "text-primary": "hsl(252, 10%, 20%)",
-        "active-background": "hsl(240, 100%, 90%)",
+        "text-primary": "#794a4b",
+        "light-background": "#fdecea",
+        "accent-color": "#d88589",
+        "active-side-bar": "#ffdad5",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",

@@ -54,7 +54,6 @@ const Register1 = () => {
     message: "",
   });
   const handleSubmit = (values: typeof initialValues) => {
-    console.log(values);
     handleRegister(values, {
       onSuccess: (data: {
         firstName: string;
@@ -68,7 +67,6 @@ const Register1 = () => {
           status: "success",
           message: "Register successful.",
         });
-        console.log(data);
       },
       onError: (e) => {
         setNotification({
