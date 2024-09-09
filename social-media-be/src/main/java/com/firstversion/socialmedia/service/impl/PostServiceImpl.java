@@ -50,6 +50,7 @@ public class PostServiceImpl implements PostService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = (User) authentication.getPrincipal();
 //        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new NotFoundException("User not found."));
+
         Post post = new Post();
         String imageUrl = uploadImage(createPostRequest.getImage());
         String videoUrl = uploadVideo(createPostRequest.getVideo());
@@ -198,4 +199,7 @@ public class PostServiceImpl implements PostService {
         response.setTotalLikes(postLikeRepository.countUserLikePost(post.getId()));
         return response;
     }
+
+
+
 }
