@@ -24,7 +24,6 @@ const Message = () => {
   const [subscription, setSubscription] = useState<stomp.Subscription | null>(
     null
   );
-  const [newMessage, setNewMessage] = useState({});
   //websocket ở đây
   const userLogin = useSelector((state: any) => state.user);
   const onConnect = (frame: any) => {
@@ -44,7 +43,7 @@ const Message = () => {
   useEffect(() => {
     if (stompClient && Object.keys(currentChat).length > 0) {
       const newSubscription = stompClient.subscribe(
-        `/topic/chat/${currentChat.chatId}`,
+        `/topic/messages/${currentChat.chatId}`,
         onMessageReceive
       );
       setSubscription(newSubscription);
@@ -62,14 +61,13 @@ const Message = () => {
   };
 
   const sendMessageToServer = (message: any) => {
-    setNewMessage(message);
     if (stompClient?.connected && message) {
       stompClient.publish({
         destination: `/app/chat/${currentChat?.chatId}`,
         body: JSON.stringify(message),
-        // headers: {
-        //   "content-type": "application/json", // Optional: Xác định kiểu nội dung là JSON
-        // },
+        headers: {
+          "content-type": "application/json", // Optional: Xác định kiểu nội dung là JSON
+        },
       });
     }
   };
