@@ -1,4 +1,4 @@
-package com.firstversion.socialmedia.security.logout;
+package com.firstversion.socialmedia.component.logout;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

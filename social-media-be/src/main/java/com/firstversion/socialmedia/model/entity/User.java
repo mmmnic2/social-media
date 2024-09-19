@@ -1,8 +1,10 @@
 package com.firstversion.socialmedia.model.entity;
 
 import com.firstversion.socialmedia.dto.response.user.UserResponse;
+import com.firstversion.socialmedia.model.enums.AuthProvider;
 import com.firstversion.socialmedia.model.enums.Gender;
 import com.firstversion.socialmedia.model.enums.Role;
+import com.firstversion.socialmedia.model.enums.UserStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
@@ -44,6 +46,12 @@ public class User extends BaseEntity implements UserDetails {
     private Role role;
     @Column
     private String imageUrl;
+    @Column
+    private AuthProvider authProvider;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private UserStatus userStatus = UserStatus.OFFLINE;
+
 
     public String handleSaved_Unsaved(Long postId) {
         if (this.savedPost.contains(postId)) {

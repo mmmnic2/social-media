@@ -1,18 +1,22 @@
 package com.firstversion.socialmedia.service.impl;
 
+import com.firstversion.socialmedia.component.oauth2.CustomOAuth2User;
 import com.firstversion.socialmedia.config.CloudinaryService;
 import com.firstversion.socialmedia.dto.request.CreateUserRequest;
 import com.firstversion.socialmedia.dto.response.user.FollowUserResponse;
 import com.firstversion.socialmedia.dto.response.user.UserResponse;
 import com.firstversion.socialmedia.exception.AlreadyExistException;
+import com.firstversion.socialmedia.exception.ForbiddenAccessException;
 import com.firstversion.socialmedia.exception.NotFoundException;
 import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.model.entity.UserFollower;
+import com.firstversion.socialmedia.model.enums.AuthProvider;
 import com.firstversion.socialmedia.model.enums.Gender;
 import com.firstversion.socialmedia.model.enums.Role;
+import com.firstversion.socialmedia.model.enums.UserStatus;
 import com.firstversion.socialmedia.repository.UserFollowerRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
-import com.firstversion.socialmedia.security.jwt.JwtUtils;
+import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,9 +29,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,6 +58,7 @@ public class UserServiceImpl implements UserService {
         user.setLastName(userRequest.getLastName());
         user.setGender(Gender.valueOf(userRequest.getGender()));
         user.setRole(Role.ROLE_USER);
+        user.setAuthProvider(AuthProvider.LOCAL);
         userRepository.save(user);
     }
 
@@ -147,6 +152,23 @@ public class UserServiceImpl implements UserService {
         return imageUrl;
     }
 
+    @Override
+    public User processOAuthPostLogin(CustomOAuth2User oAuth2User) {
+        Optional<User> existUser = userRepository.findUserByEmail(oAuth2User.getEmail());
+        if (existUser.isEmpty()) {
+            User newUser = new User();
+            newUser.setEmail(oAuth2User.getEmail());
+            newUser.setAuthProvider(AuthProvider.GOOGLE);
+            newUser.setRole(Role.ROLE_USER);
+            newUser.setImageUrl(oAuth2User.getPictureURL());
+            newUser.setFirstName(oAuth2User.getFirstName());
+            newUser.setLastName(oAuth2User.getLastName());
+            System.out.println(oAuth2User.getGender());
+            return userRepository.save(newUser);
+        }
+        return existUser.get();
+    }
+
 
     private void addListFollowerAndFollowing(UserResponse userResponse, User user) {
         // Lấy danh sách following
@@ -175,4 +197,18 @@ public class UserServiceImpl implements UserService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findUserByEmail(username).orElseThrow(() -> new NotFoundException("User not found."));
     }
+
+    // set status user
+    @Override
+    public UserStatus updateUserStatus(Long userId, UserStatus newStatus) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userLogin = (User) authentication.getPrincipal();
+        if (userId != userLogin.getId())
+            throw new ForbiddenAccessException("You are not authorized to modify this user's information.");
+        userLogin.setUserStatus(newStatus);
+        User savedUser = userRepository.save(userLogin);
+        return savedUser.getUserStatus();
+    }
+
+
 }

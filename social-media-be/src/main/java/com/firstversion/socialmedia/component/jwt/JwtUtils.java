@@ -1,4 +1,4 @@
-package com.firstversion.socialmedia.security.jwt;
+package com.firstversion.socialmedia.component.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -8,14 +8,12 @@ import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -51,6 +49,10 @@ public class JwtUtils {
         return createToken(new HashMap<>(), userDetails, jwtExpirationTime);
     }
 
+    public String generateTokenWithClaims(Map<String, Object> extraClaims, UserDetails userDetails) {
+        return createToken(extraClaims, userDetails, jwtExpirationTime);
+    }
+
     public String generateRefreshToken(UserDetails userDetails) {
         return createToken(new HashMap<>(), userDetails, refreshExpirationTime);
     }
@@ -71,6 +73,10 @@ public class JwtUtils {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public Long extractUserId(String token) {
+        return Long.valueOf(extractClaim(token, Claims::getId));
     }
 
     public Date extractExpiration(String token) {

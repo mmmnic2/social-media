@@ -6,13 +6,12 @@ import com.firstversion.socialmedia.model.entity.Reels;
 import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.repository.ReelsRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
-import com.firstversion.socialmedia.security.jwt.JwtUtils;
+import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.ReelsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ReelsServiceImpl implements ReelsService {

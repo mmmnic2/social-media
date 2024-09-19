@@ -8,7 +8,7 @@ import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.repository.CommentLikeRepository;
 import com.firstversion.socialmedia.repository.CommentRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
-import com.firstversion.socialmedia.security.jwt.JwtUtils;
+import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.CommentLikeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;

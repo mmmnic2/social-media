@@ -1,5 +1,6 @@
-package com.firstversion.socialmedia.security.jwt;
+package com.firstversion.socialmedia.component.jwt;
 
+import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -32,7 +33,8 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             if (jwt != null && jwtUtils.validateToken(jwt)) {
                 String username = jwtUtils.extractUsername(jwt);
                 if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userService.loadUserByUsername(username);
+                    User userDetails = (User) userService.loadUserByUsername(username);
+
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     // setDetails: Bằng cách thiết lập chi tiết về việc xác thực này, bạn có thể truy cập thông tin cụ thể về yêu cầu HTTP
                     // khi người dùng thực hiện xác thực. Điều này có thể hữu ích để theo dõi và ghi nhận các hoạt động của người dùng trong hệ thống.

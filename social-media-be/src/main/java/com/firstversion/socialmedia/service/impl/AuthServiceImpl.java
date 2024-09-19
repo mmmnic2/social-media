@@ -9,7 +9,7 @@ import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.model.enums.Gender;
 import com.firstversion.socialmedia.model.enums.Role;
 import com.firstversion.socialmedia.repository.UserRepository;
-import com.firstversion.socialmedia.security.jwt.JwtUtils;
+import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +19,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class AuthServiceImpl implements AuthService {
@@ -34,11 +37,13 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public AuthenticationResponse authenticate(LoginRequest request) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        User userDetails = (User) authentication.getPrincipal();
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String accessToken = jwtUtils.generateToken(userDetails);
+        Map<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", userDetails.getId());
+        String accessToken = jwtUtils.generateTokenWithClaims(extraClaims, userDetails);
         String refreshToken = jwtUtils.generateRefreshToken(userDetails);
-        return new AuthenticationResponse(accessToken, refreshToken, (long) jwtUtils.getJwtExpirationTime());
+        return new AuthenticationResponse(accessToken, refreshToken, jwtUtils.getJwtExpirationTime());
     }
 
     public UserResponse register(CreateUserRequest userRequest) {

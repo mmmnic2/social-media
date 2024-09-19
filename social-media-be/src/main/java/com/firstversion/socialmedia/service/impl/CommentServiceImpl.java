@@ -11,14 +11,13 @@ import com.firstversion.socialmedia.repository.CommentLikeRepository;
 import com.firstversion.socialmedia.repository.CommentRepository;
 import com.firstversion.socialmedia.repository.PostRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
-import com.firstversion.socialmedia.security.jwt.JwtUtils;
+import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.CommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service

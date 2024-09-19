@@ -1,6 +1,7 @@
 package com.firstversion.socialmedia.dto.response.user;
 
 import com.firstversion.socialmedia.dto.BaseDTO;
+import com.firstversion.socialmedia.model.enums.UserStatus;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,4 +21,5 @@ public class UserResponse extends BaseDTO {
     private String gender;
     private List<FollowUserResponse> followerList;
     private List<FollowUserResponse> followingList;
+    private UserStatus userStatus;
 }

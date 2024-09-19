@@ -13,7 +13,7 @@ import com.firstversion.socialmedia.repository.CommentRepository;
 import com.firstversion.socialmedia.repository.PostLikeRepository;
 import com.firstversion.socialmedia.repository.PostRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
-import com.firstversion.socialmedia.security.jwt.JwtUtils;
+import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.PostService;
 import com.firstversion.socialmedia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

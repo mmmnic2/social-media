@@ -6,7 +6,6 @@ import com.firstversion.socialmedia.model.entity.Story;
 import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.repository.StoryRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
-import com.firstversion.socialmedia.security.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

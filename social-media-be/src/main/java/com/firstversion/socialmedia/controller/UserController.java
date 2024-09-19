@@ -4,7 +4,9 @@ import com.firstversion.socialmedia.dto.request.CreateUserRequest;
 import com.firstversion.socialmedia.dto.response.user.FollowUserResponse;
 import com.firstversion.socialmedia.dto.response.user.UserResponse;
 import com.firstversion.socialmedia.exception.AlreadyExistException;
+import com.firstversion.socialmedia.exception.ForbiddenAccessException;
 import com.firstversion.socialmedia.exception.NotFoundException;
+import com.firstversion.socialmedia.model.enums.UserStatus;
 import com.firstversion.socialmedia.service.UserFollowerService;
 import com.firstversion.socialmedia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,12 +96,6 @@ public class UserController {
         return ResponseEntity.ok(responses);
     }
 
-//    @GetMapping("/profile")
-//    public ResponseEntity<?> getUserFromToken(@RequestHeader("Authorization") String jwt) {
-//        UserResponse response = userService.findUserByJwt(jwt.substring(7));
-//        return ResponseEntity.ok(response);
-//    }
-
     @GetMapping("/profile")
     public ResponseEntity<?> getUserProfile() {
         UserResponse response = userService.findUserDetails();
@@ -115,4 +111,19 @@ public class UserController {
             return ResponseEntity.ok(imageUrl);
         }
     }
+
+
+
+//    STATUS OF USER
+    @PutMapping("/status/{userId}")
+    public ResponseEntity<?> updateUserStatus(@PathVariable Long userId, @RequestBody UserStatus newStatus) {
+        try {
+            UserStatus updateStatus = userService.updateUserStatus(userId, newStatus);
+            return ResponseEntity.ok(updateStatus);
+        } catch (ForbiddenAccessException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
+        }
+    }
+
+
 }

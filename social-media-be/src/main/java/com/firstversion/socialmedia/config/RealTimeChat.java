@@ -27,10 +27,13 @@ public class RealTimeChat {
 //        return message;
 //    }
 
-    @MessageMapping("/chat/{userId}")
-    public MessageResponse sendtoUser(@Payload MessageResponse message, @DestinationVariable String userId) {
-        simpMessagingTemplate.convertAndSendToUser(userId, "/private", message);
+    // send messToServer qua đường dẫn /app/chat/${chatId} (publish)
+    // receive message thông qua /user/${chatId}/private    (subcribe)
+    @MessageMapping("/chat/{chatId}")
+    public MessageResponse sendtoUser(@Payload MessageResponse message, @DestinationVariable String chatId) {
+        simpMessagingTemplate.convertAndSend( "/topic/chat/" + chatId, message);
         return message;
     }
+
 
 }

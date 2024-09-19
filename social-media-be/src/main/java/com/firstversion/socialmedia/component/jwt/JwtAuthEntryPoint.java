@@ -1,4 +1,4 @@
-package com.firstversion.socialmedia.security.jwt;
+package com.firstversion.socialmedia.component.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
