@@ -103,7 +103,7 @@ const LoginV2 = () => {
           {loginMethodIcon.map((item, idx) => (
             <a
               key={idx}
-              href="#"
+              href={item.path}
               className="border border-gray-300 rounded-[20%] inline-flex justify-center items-center mx-1 w-10 h-10 text-primary hover:bg-primary hover:text-white hover:transition-colors hover:duration-300 ease-linear"
             >
               <i className={`fa-brands ${item.icon} text-inherit`}></i>

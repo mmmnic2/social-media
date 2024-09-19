@@ -1,9 +1,10 @@
 "use client";
 import { Avatar, Grid, IconButton } from "@mui/material";
 import { Stomp, Client } from "@stomp/stompjs";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
+import stomp from "stompjs";
 import { useGetChatsByUser } from "@/hooks/api-hooks/chat-hooks/useChat";
 import { setAllChats } from "@/redux/chat/chat";
 import { chatSelectedSelector } from "@/redux/chat/selectors";
@@ -14,48 +15,61 @@ import SidebarChat from "./component/SidebarChat";
 const Message = () => {
   const { data: allChats, isLoading } = useGetChatsByUser();
   const currentChat = useSelector(chatSelectedSelector);
-
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setAllChats(allChats));
   }, [allChats, dispatch]);
   const validToken = useSelector((state: any) => state.auth.accessToken);
   const [stompClient, setStompClient] = useState<Client | null>(null);
-
+  const [subscription, setSubscription] = useState<stomp.Subscription | null>(
+    null
+  );
+  const [newMessage, setNewMessage] = useState({});
   //websocket ở đây
   const userLogin = useSelector((state: any) => state.user);
   const onConnect = (frame: any) => {
     console.log("websocket connected...", frame);
   };
-  console.log(currentChat);
+  const onMessageReceive = useCallback((message: any) => {
+    const receivedMessage = JSON.parse(message.body);
+    console.log("checl");
+    dispatch(addMessage(receivedMessage));
+  }, []);
+
+  // const onMessageReceive = (message: any) => {
+  //   const receivedMessage = JSON.parse(message.body);
+  //   console.log("checl");
+  //   dispatch(addMessage(receivedMessage));
+  // }; // Add dependencies if necessary
   useEffect(() => {
     if (stompClient && Object.keys(currentChat).length > 0) {
-      stompClient.subscribe(
-        `/user/${currentChat?.chatId}/private`,
-        onMessageReceive,
+      const newSubscription = stompClient.subscribe(
+        `/topic/chat/${currentChat.chatId}`,
+        onMessageReceive
       );
+      setSubscription(newSubscription);
+      console.log("check");
     }
-  }, [currentChat, stompClient]);
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe();
+      }
+    };
+  }, [currentChat, stompClient, onMessageReceive]);
 
   const onError = (error: any) => {
     console.log("error: ", error);
   };
 
-  const onMessageReceive = (message: any) => {
-    const receivedMessage = JSON.parse(message.body);
-    // console.log("message receive from websocket ", receivedMessage);
-    //dispatch thêm new message vào state
-    dispatch(addMessage(receivedMessage));
-  };
-
   const sendMessageToServer = (message: any) => {
+    setNewMessage(message);
     if (stompClient?.connected && message) {
       stompClient.publish({
         destination: `/app/chat/${currentChat?.chatId}`,
         body: JSON.stringify(message),
-        headers: {
-          "content-type": "application/json", // Optional: Xác định kiểu nội dung là JSON
-        },
+        // headers: {
+        //   "content-type": "application/json", // Optional: Xác định kiểu nội dung là JSON
+        // },
       });
     }
   };
@@ -64,7 +78,13 @@ const Message = () => {
     const stomp = Stomp.over(sock);
     setStompClient(stomp);
     stomp.connect({}, onConnect, onError);
-  }, [validToken]);
+    return () => {
+      if (stomp) {
+        stomp.disconnect();
+      }
+    };
+  }, []);
+
   return (
     <div>
       <Grid container className="h-screen overflow-y-hidden">
