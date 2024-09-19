@@ -31,7 +31,7 @@ public class RealTimeChat {
     // receive message thông qua /user/${chatId}/private    (subcribe)
     @MessageMapping("/chat/{chatId}")
     public MessageResponse sendtoUser(@Payload MessageResponse message, @DestinationVariable String chatId) {
-        simpMessagingTemplate.convertAndSend( "/topic/chat/" + chatId, message);
+        simpMessagingTemplate.convertAndSend( "/topic/messages/" + chatId, message);
         return message;
     }
 

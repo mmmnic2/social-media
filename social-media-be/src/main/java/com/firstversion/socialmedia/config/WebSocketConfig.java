@@ -36,7 +36,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // Định nghĩa prefix cho các tin nhắn đến từ client gửi đến server (thông qua publish)
         registry.setApplicationDestinationPrefixes("/app");
         // Kích hoạt một SimpleBroker với các topic
-        registry.enableSimpleBroker("/group", "/user", "/chat", "/topic");
+        registry.enableSimpleBroker("/group","/topic", "/messages");
         // Định nghĩa prefix cho các tin nhắn đến từ server gửi đến client (thông qua subcribe)
         registry.setUserDestinationPrefix("/user");
     }
