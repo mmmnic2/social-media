@@ -1,6 +1,7 @@
 package com.firstversion.socialmedia.service.impl;
 
 import com.firstversion.socialmedia.component.oauth2.CustomOAuth2User;
+import com.firstversion.socialmedia.component.websocket.WSService;
 import com.firstversion.socialmedia.config.CloudinaryService;
 import com.firstversion.socialmedia.dto.request.CreateUserRequest;
 import com.firstversion.socialmedia.dto.response.user.FollowUserResponse;
@@ -17,6 +18,7 @@ import com.firstversion.socialmedia.model.enums.UserStatus;
 import com.firstversion.socialmedia.repository.UserFollowerRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.component.jwt.JwtUtils;
+import com.firstversion.socialmedia.service.NotificationService;
 import com.firstversion.socialmedia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -28,10 +30,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -203,11 +202,19 @@ public class UserServiceImpl implements UserService {
     public UserStatus updateUserStatus(Long userId, UserStatus newStatus) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userLogin = (User) authentication.getPrincipal();
-        if (userId != userLogin.getId())
+        if (!Objects.equals(userId, userLogin.getId()))
             throw new ForbiddenAccessException("You are not authorized to modify this user's information.");
         userLogin.setUserStatus(newStatus);
         User savedUser = userRepository.save(userLogin);
         return savedUser.getUserStatus();
+    }
+
+    @Override
+    public List<UserResponse> getFriendList() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userLogin = (User) authentication.getPrincipal();
+        List<User> users = userRepository.getFriendList(userLogin.getId());
+        return users.stream().map(User::toUserResponse).toList();
     }
 
 

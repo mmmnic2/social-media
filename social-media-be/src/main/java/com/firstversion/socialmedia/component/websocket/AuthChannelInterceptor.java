@@ -28,6 +28,9 @@ public class AuthChannelInterceptor implements ChannelInterceptor {
 
         // Ghi log tin nhắn trước khi gửi
         System.out.println("Preparing to send message: " + message.getPayload());
+
+
+
         return message; // Tiếp tục gửi tin nhắn nếu hợp lệ
     }
 

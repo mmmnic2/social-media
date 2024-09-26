@@ -1,29 +1,29 @@
 package com.firstversion.socialmedia.component.websocket;
 
 
+import com.firstversion.socialmedia.dto.response.user.UserResponse;
+import com.firstversion.socialmedia.model.entity.User;
+import com.firstversion.socialmedia.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class WSService {
+    private final SimpMessagingTemplate simpMessagingTemplate;
+    private final UserRepository userRepository;
 
-    private final SimpMessagingTemplate messagingTemplate;
-
-    public void sendMessage(final String message){
-        messagingTemplate.convertAndSend("/receive/message",message);
+    public void notifyFriends(User user) {
+        // Lấy danh sách bạn bè của người dùng
+        List<User> friends = userRepository.getFriendList(user.getId());
+        // Gửi cập nhật trạng thái tới từng bạn bè
+        UserResponse response = user.toUserResponse();
+        for (User friend : friends) {
+            simpMessagingTemplate.convertAndSend("/topic/friend-status/" + friend.getId(), response);
+        }
     }
-    public void sendPrivateMessage(final String message, final String id){
-
-        messagingTemplate.convertAndSendToUser(id,"/receive/private-message", message);
-    }
-    public void sendNotification(final String message) {
-        messagingTemplate.convertAndSend("/receive/global-notification",message);
-    }
-    public void sendPrivateNotification(final String message,final String id) {
-        messagingTemplate.convertAndSendToUser(id,"/receive/private-notification",message);
-    }
-
 }

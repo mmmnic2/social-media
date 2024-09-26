@@ -2,7 +2,6 @@ package com.firstversion.socialmedia.config;
 
 import com.firstversion.socialmedia.component.jwt.AuthTokenFilter;
 import com.firstversion.socialmedia.component.jwt.JwtAuthEntryPoint;
-import com.firstversion.socialmedia.component.oauth2.CustomOAuth2SuccessHandler;
 import com.firstversion.socialmedia.component.oauth2.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -76,13 +75,14 @@ public class WebSecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(authorization -> authorization
                                 // đường dẫn uri khi chuyển hướng từ fe sang bên thứ 3 để đăng nhập là gg.
+                                //  http://localhost:8080/login/oauth2/authorization/google
+                                // thêm tien to google vao de oauth2 theo gg
                                 .baseUri("/login/oauth2/authorization"))
                         // đăng nhập qua gg => khi thành công sẽ gọi vào hàm trong customOAuth2SuccessHandler
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oauthUserService)
                         )
                         .successHandler(customOAuth2SuccessHandler))
-
                 // nhà cung cấp xác thực bằng cách sử dụng method authenticationProvider()
                 // khi gọi hàm này, sẽ thêm authenticationProvider vào authenticationManagerBuilder
                 // mục đích để authenticationManagerBuilder sẽ gồm 1 list authenticationProvider

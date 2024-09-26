@@ -24,9 +24,10 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(UserNotAuthorizedException.class)
-    public ResponseEntity<String> handle(NotFoundException ex) {
+    public ResponseEntity<String> handle(UserNotAuthorizedException ex) {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ex.getMessage());
     }
+
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<Object> handleExpiredJwtException(ExpiredJwtException ex) {
         return new ResponseEntity<>("Token has expired", HttpStatus.UNAUTHORIZED);

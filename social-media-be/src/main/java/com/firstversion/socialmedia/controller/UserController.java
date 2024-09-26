@@ -1,11 +1,13 @@
 package com.firstversion.socialmedia.controller;
 
+import com.firstversion.socialmedia.component.websocket.WSService;
 import com.firstversion.socialmedia.dto.request.CreateUserRequest;
 import com.firstversion.socialmedia.dto.response.user.FollowUserResponse;
 import com.firstversion.socialmedia.dto.response.user.UserResponse;
 import com.firstversion.socialmedia.exception.AlreadyExistException;
 import com.firstversion.socialmedia.exception.ForbiddenAccessException;
 import com.firstversion.socialmedia.exception.NotFoundException;
+import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.model.enums.UserStatus;
 import com.firstversion.socialmedia.service.UserFollowerService;
 import com.firstversion.socialmedia.service.UserService;
@@ -13,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,7 +30,8 @@ public class UserController {
     UserService userService;
     @Autowired
     UserFollowerService userFollowerService;
-
+    @Autowired
+    WSService wsService;
     @GetMapping("/all-user")
     public ResponseEntity<?> getAllUser() {
 
@@ -119,6 +124,9 @@ public class UserController {
     public ResponseEntity<?> updateUserStatus(@PathVariable Long userId, @RequestBody UserStatus newStatus) {
         try {
             UserStatus updateStatus = userService.updateUserStatus(userId, newStatus);
+            User foundUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            // update status user to friend
+            wsService.notifyFriends(foundUser);
             return ResponseEntity.ok(updateStatus);
         } catch (ForbiddenAccessException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());

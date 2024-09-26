@@ -1,9 +1,7 @@
-package com.firstversion.socialmedia.model.entity;
+package com.firstversion.socialmedia.component.websocket;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.security.Principal;
 import java.util.List;

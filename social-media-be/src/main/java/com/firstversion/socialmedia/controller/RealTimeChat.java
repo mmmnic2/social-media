@@ -1,12 +1,12 @@
-package com.firstversion.socialmedia.config;
+package com.firstversion.socialmedia.controller;
 
 import com.firstversion.socialmedia.dto.response.message.MessageResponse;
-import com.firstversion.socialmedia.model.entity.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.stereotype.Controller;
 
 @Controller
@@ -27,6 +27,7 @@ public class RealTimeChat {
 //        return message;
 //    }
 
+    // đường dẫn này dùng để gửi tin nhắn cho từng cuộc trò chuyện
     // send messToServer qua đường dẫn /app/chat/${chatId} (publish)
     // receive message thông qua /user/${chatId}/private    (subcribe)
     @MessageMapping("/chat/{chatId}")
@@ -34,6 +35,18 @@ public class RealTimeChat {
         simpMessagingTemplate.convertAndSend( "/topic/messages/" + chatId, message);
         return message;
     }
+
+    // chanel để lắng nghe khi có user online/offline
+    // subscribe: "/topic/friend-status/{userId}"
+    @SubscribeMapping("/topic/friend-status/{userId}")
+    public void subscribeToFriendStatus(@DestinationVariable Long userId) {
+        // Đây là nơi client subscribe vào để lắng nghe cập nhật trạng thái bạn bè
+    }
+
+    // chanel cá nhân dùng để nhận các notifications
+    // subscribe: '/user/queue/messages'
+
+
 
 
 }

@@ -34,4 +34,6 @@ public interface UserService extends UserDetailsService {
     User processOAuthPostLogin(CustomOAuth2User oAuth2User);
 
     UserStatus updateUserStatus(Long userId, UserStatus newStatus);
+
+    List<UserResponse> getFriendList();
 }

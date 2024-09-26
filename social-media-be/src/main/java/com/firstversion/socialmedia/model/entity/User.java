@@ -52,6 +52,9 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus = UserStatus.OFFLINE;
 
+    public String getFullName() {
+        return this.firstName + " " + this.lastName;
+    }
 
     public String handleSaved_Unsaved(Long postId) {
         if (this.savedPost.contains(postId)) {
