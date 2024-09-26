@@ -75,6 +75,7 @@ public class User extends BaseEntity implements UserDetails {
         userResponse.setLastName(this.getLastName());
         userResponse.setCreateDate(this.getCreateDate());
         userResponse.setModifiedDate(this.getModifiedDate());
+        userResponse.setUserStatus(this.userStatus);
         return userResponse;
     }
 
