@@ -22,7 +22,7 @@ const Message = () => {
   const validToken = useSelector((state: any) => state.auth.accessToken);
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const [subscription, setSubscription] = useState<stomp.Subscription | null>(
-    null
+    null,
   );
   //websocket ở đây
   const userLogin = useSelector((state: any) => state.user);
@@ -44,7 +44,7 @@ const Message = () => {
     if (stompClient && Object.keys(currentChat).length > 0) {
       const newSubscription = stompClient.subscribe(
         `/topic/messages/${currentChat.chatId}`,
-        onMessageReceive
+        onMessageReceive,
       );
       setSubscription(newSubscription);
       console.log("check");

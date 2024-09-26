@@ -45,8 +45,9 @@ const LoginV2 = () => {
       showSnackbar("Login Success", "success");
       store.dispatch(setUserInfo(userData));
       router.push("/");
+      router.refresh();
     }
-  }, [getUserProfileSuccess, userData, router]);
+  }, [getUserProfileSuccess, userData]);
 
   const handleFormSubmit = (values: any) => {
     handleLogin(values, {

@@ -13,13 +13,10 @@ export const metadata: Metadata = {
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const token = cookies().get("sessionToken");
+  console.log(!!token);
   return (
     <main className="bg-light-background">
-      {!token && (
-        <div className="fixed z-10000 top-0 w-full">
-          <WarningBanner />
-        </div>
-      )}
+      <WarningBanner isLogin={!!token} />
       <Navbar isLogin={!!token} />
       <div
         className={`max-w-[80%] mx-auto flex gap-4 ${!!token ? "mt-[60px]" : "mt-[108px]"}`}
