@@ -23,7 +23,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       >
         <HomeLeftV2 isLogin={!!token} />
         <div className="middle mt-4 flex-1 ">{children}</div>
-        <HomeRightV2 />
+        <HomeRightV2 isLogin={!!token} />
       </div>
     </main>
   );
