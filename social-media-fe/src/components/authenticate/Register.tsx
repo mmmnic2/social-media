@@ -1,47 +1,60 @@
 "use client";
-import {
-  Button,
-  Card,
-  Grid,
-  TextField,
-  FormControl,
-  FormLabel,
-  RadioGroup,
-  FormControlLabel,
-  Radio,
-} from "@mui/material";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useRouter, usePathname } from "next/navigation";
-import { useState } from "react";
-import * as Yup from "yup";
+import { Divider } from "@mui/material";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useRegister } from "@/hooks/api-hooks/auth-hooks/useAuth";
-const initialValues = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  password: "",
-  gender: "",
-};
+import FormComponent, { FormField } from "../common/form/FormComponent";
+import { useSnackbar } from "../common/snackbar/Snackbar";
+import { loginMethodIcon } from "./constances";
 
-const validationRegister = Yup.object().shape({
-  firstName: Yup.string().required("First Name is required"),
-  lastName: Yup.string().required("Last Name is required"),
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string()
-    .min(6, "Password too short!")
-    .required("Password is required"),
-  gender: Yup.string().required("Gender is required"),
-});
+const formFields: FormField[] = [
+  {
+    name: "firstName",
+    inputType: "text",
+    isMandatory: true,
+    minLength: 2,
+    label: "First Name",
+  },
+  {
+    name: "lastName",
+    inputType: "text",
+    isMandatory: true,
+    minLength: 2,
+    label: "Last Name",
+  },
+  {
+    name: "email",
+    inputType: "text",
+    isMandatory: true,
+    isEmail: true,
+    label: "User Name",
+  },
+  {
+    name: "password",
+    inputType: "password",
+    isMandatory: true,
+    minLength: 6,
+    label: "Password",
+  },
+  {
+    name: "gender",
+    inputType: "radioButton",
+    isMandatory: true,
+    options: [
+      { label: "Male", value: "MALE" },
+      { label: "Female", value: "FEMALE" },
+    ],
+    label: "Gender",
+  },
+];
+
 const Register = () => {
   const router = useRouter();
-  const currentPath = usePathname();
+  const { showSnackbar } = useSnackbar();
+
   const { mutate: handleRegister, isLoading } = useRegister();
-  const [notification, setNotification] = useState({
-    isOpen: false,
-    status: "error",
-    message: "",
-  });
-  const handleSubmit = (values: typeof initialValues) => {
+
+  const handleFormSubmit = (values: any) => {
     handleRegister(values, {
       onSuccess: (data: {
         firstName: string;
@@ -50,170 +63,48 @@ const Register = () => {
         password: string;
         email: string;
       }) => {
-        setNotification({
-          isOpen: true,
-          status: "success",
-          message: "Register successful.",
-        });
+        showSnackbar("Register Success!", "success");
+        router.push("/login");
       },
       onError: (e) => {
-        setNotification({
-          isOpen: true,
-          status: "error",
-          message: "Login failure!",
-        });
+        showSnackbar("Register Failed!", "error");
       },
     });
   };
-  const formRegister = Object.keys(initialValues).map((key, index) => (
-    <div key={index}>
-      <Field
-        as={TextField}
-        name={key}
-        placeholder={key}
-        type="email"
-        variant="outlined"
-        fullWidth
-      />
-      <ErrorMessage name="email" component="div" className="text-red-500" />
-    </div>
-  ));
+
   return (
-    <div className="px-20 flex flex-col justify-center h-full">
-      <Card className="card  p-8">
-        <div className="flex flex-col items-center mb-5 space-y-1">
-          <h1 className="logo text-center">Lan Social</h1>
-          <p className="text-center text-sm w-[70&]">
-            Connecting Lives, Sharing Stories: Making Your Friendship
-          </p>
+    <div className="p-8 flex flex-col justify-between">
+      <div className="heading mb-4">
+        <h2 className="text-4xl font-semibold text-primary">Get Started</h2>
+        <h6 className="text-secondary font-medium text-sm inline">
+          Already have an account?{" "}
+        </h6>
+        <Link href={"/login"} className="hover:text-primary">
+          Login
+        </Link>
+      </div>
+      <div>
+        <FormComponent
+          form={formFields}
+          onSubmit={handleFormSubmit}
+          submitLabel="Sign up"
+          isLoading={isLoading}
+        />
+      </div>
+      <div>
+        <Divider sx={{ color: "gray" }}>OR</Divider>
+        <div className="flex items-center justify-between">
+          {loginMethodIcon.map((item, idx) => (
+            <a
+              key={idx}
+              href="#"
+              className="border border-gray-300 rounded-[20%] inline-flex justify-center items-center mx-1 w-10 h-10 text-primary hover:bg-primary hover:text-white hover:transition-colors hover:duration-300 ease-linear"
+            >
+              <i className={`fa-brands ${item.icon} text-inherit`}></i>
+            </a>
+          ))}
         </div>
-        {/* Login Form here */}
-        <Formik
-          onSubmit={handleSubmit}
-          validationSchema={validationRegister}
-          initialValues={initialValues}
-        >
-          {({ handleSubmit, handleChange, values, setFieldValue }) => (
-            <Form className="space-y-5" onSubmit={handleSubmit}>
-              <div className="space-y-5">
-                <div>
-                  <Field
-                    as={TextField}
-                    name="firstName"
-                    placeholder="First Name"
-                    type="text"
-                    variant="outlined"
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                  <ErrorMessage
-                    name="firstName"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div>
-                  <Field
-                    as={TextField}
-                    name="lastName"
-                    placeholder="Last Name"
-                    type="text"
-                    variant="outlined"
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                  <ErrorMessage
-                    name="lastName"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div>
-                  <Field
-                    as={TextField}
-                    name="email"
-                    placeholder="Email"
-                    type="email"
-                    variant="outlined"
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div>
-                  <Field
-                    as={TextField}
-                    name="password"
-                    placeholder="Password"
-                    type="password"
-                    variant="outlined"
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="text-red-500"
-                  />
-                </div>
-                <div>
-                  <FormControl>
-                    <FormLabel id="demo-row-radio-buttons-group-label">
-                      Gender
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="demo-row-radio-buttons-group-label"
-                      // name="row-radio-buttons-group"
-                      name="gender"
-                      value={values.gender}
-                      onChange={(event) =>
-                        setFieldValue("gender", event.target.value)
-                      }
-                    >
-                      <FormControlLabel
-                        value="FEMALE"
-                        control={<Radio />}
-                        label="Female"
-                      />
-                      <FormControlLabel
-                        value="MALE"
-                        control={<Radio />}
-                        label="Male"
-                      />
-                    </RadioGroup>
-                    <ErrorMessage
-                      name="gender"
-                      component="div"
-                      className="text-red-500"
-                    />
-                  </FormControl>
-                </div>
-              </div>
-              <Button
-                sx={{ padding: ".8rem 0rem" }}
-                fullWidth
-                type="submit"
-                variant="contained"
-                color="primary"
-              >
-                Register
-              </Button>
-            </Form>
-          )}
-        </Formik>
-        <div
-          className="flex justify-center items-center gap-4 pt-2
-            "
-        >
-          <p>If you already have an account ?</p>
-          <Button onClick={() => router.push("/login")}>Login</Button>
-        </div>
-      </Card>
+      </div>
     </div>
   );
 };

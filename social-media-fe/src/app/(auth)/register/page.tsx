@@ -1,7 +1,6 @@
-import Register1 from "@/components/authenticate/Register1";
-import RegisterV3 from "@/components/authenticate/RegisterV3";
+import Register from "@/components/authenticate/Register";
 const Registers = () => {
-  return <RegisterV3 />;
+  return <Register />;
 };
 
 export default Registers;

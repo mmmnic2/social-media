@@ -1,78 +1,56 @@
 "use client";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { LoadingButton } from "@mui/lab";
-import {
-  Button,
-  Divider,
-  FormControl,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-  Snackbar,
-  SnackbarCloseReason,
-  TextField,
-} from "@mui/material";
-import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import { Divider } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
-import * as Yup from "yup";
+import { useEffect } from "react";
 import { useLogin } from "@/hooks/api-hooks/auth-hooks/useAuth";
 import { useGetUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
 import { loginSuccess } from "@/redux/auth";
 import store from "@/redux/store";
 import { setUserInfo } from "@/redux/user";
-import LoadingOverlay from "../common/loading/LoadingOverlay";
+import FormComponent, { FormField } from "../common/form/FormComponent";
 import { useSnackbar } from "../common/snackbar/Snackbar";
+import { loginMethodIcon } from "./constances";
 
-const initualValues = {
-  email: "",
-  password: "",
-};
-const validitionSchema = Yup.object().shape({
-  email: Yup.string().email("Invalid email").required("Email is required"),
-  password: Yup.string()
-    .min(2, "Password must be at least 6 characters")
-    .required("Password is required"),
-});
+const formFields: FormField[] = [
+  {
+    name: "email",
+    inputType: "text",
+    isMandatory: true,
+    isEmail: true,
+    label: "Username",
+  },
+  {
+    name: "password",
+    inputType: "password",
+    isMandatory: true,
+    minLength: 2,
+    label: "Password",
+  },
+];
+
 const Login = () => {
-  const [showPassword, setShowPassword] = useState(false);
+  const router = useRouter();
   const { showSnackbar } = useSnackbar();
 
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (
-    event: React.MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.preventDefault();
-  };
-  const router = useRouter();
-  const [formValue, setFormValue] = useState();
-  const [notification, setNotification] = useState({
-    isOpen: false,
-    status: "error",
-    message: "",
-  });
   const { mutate: handleLogin, data } = useLogin();
   const {
     data: userData,
     isSuccess: getUserProfileSuccess,
     isLoading,
+    isFetching,
   } = useGetUserProfile(data?.accessToken);
 
   useEffect(() => {
     if (getUserProfileSuccess) {
       showSnackbar("Login Success", "success");
       store.dispatch(setUserInfo(userData));
-      router.push("/test");
+      router.push("/");
+      router.refresh();
     }
-  }, [getUserProfileSuccess, userData, router]);
+  }, [getUserProfileSuccess, userData]);
 
-  const handleClick = () => {
-    router.push("/register");
-  };
-  const handleSubmit = (values: { email: string; password: string }) => {
+  const handleFormSubmit = (values: any) => {
     handleLogin(values, {
       onSuccess: (data: {
         accessToken: string;
@@ -91,156 +69,52 @@ const Login = () => {
         store.dispatch(loginSuccess(token));
       },
       onError: (e) => {
-        setNotification({
-          isOpen: true,
-          status: "error",
-          message: "Login failure!",
-        });
+        showSnackbar("Login Failed", "error");
       },
     });
   };
+
   return (
-    <>
-      <LoadingOverlay isLoading={isLoading} />
-      <Formik
-        onSubmit={handleSubmit}
-        validationSchema={validitionSchema}
-        initialValues={initualValues}
-      >
-        {({ handleSubmit, handleChange, isValid, dirty }) => (
-          <Form
-            onSubmit={handleSubmit}
-            action="submit"
-            autoComplete="off"
-            className="sign-in-form form"
-          >
-            <div className="heading">
-              <h2>Welcome Back</h2>
-              <h6>Not register yet? </h6>
-              <Link href={"/register"} className="toggle">
-                Sign up
-              </Link>
-            </div>
-
-            <div className="actual-form">
-              <div className="input-wrap">
-                <Field
-                  as={TextField}
-                  sx={{
-                    width: "100%",
-                    position: "absolute",
-                    "& .MuiInput-root": {
-                      "&.Mui-focused:after": {
-                        borderColor: "#8371fd", // Màu của border khi focus
-                      },
-                    },
-                    "& .MuiInputLabel-root": {
-                      "&.Mui-focused": {
-                        color: "#8371fd", // Màu của label khi focus
-                      },
-                    },
-                  }}
-                  id="standard-basic"
-                  name="email"
-                  label="Email"
-                  type="email"
-                  variant="standard"
-                  onChange={handleChange}
-                  fullWidth
-                />
-                <ErrorMessage
-                  name="email"
-                  component="div"
-                  className="form-errors"
-                />
-              </div>
-
-              <div className="input-wrap">
-                <FormControl
-                  sx={{
-                    width: "100%",
-                    position: "absolute",
-                    "& .MuiInput-root": {
-                      "&.Mui-focused:after": {
-                        borderColor: "#8371fd", // Màu của border khi focus
-                      },
-                    },
-                    "& .MuiInputLabel-root": {
-                      "&.Mui-focused": {
-                        color: "#8371fd", // Màu của label khi focus
-                      },
-                    },
-                  }}
-                  variant="standard"
-                >
-                  <InputLabel htmlFor="standard-adornment-password">
-                    Password
-                  </InputLabel>
-                  <Field
-                    as={Input}
-                    name="password"
-                    variant="standard"
-                    onChange={handleChange}
-                    fullWidth
-                    sx={{ width: "100%" }}
-                    id="standard-adornment-password"
-                    type={showPassword ? "text" : "password"}
-                    endAdornment={
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label="toggle password visibility"
-                          onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
-                        >
-                          {showPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                  />
-                </FormControl>
-                <ErrorMessage
-                  name="password"
-                  component="div"
-                  className="form-errors"
-                />
-              </div>
-
-              <Button
-                type="submit"
-                disabled={!isValid || !dirty}
-                className="sign-btn"
-              >
-                Sign in
-              </Button>
-
-              <p className="text">
-                Forgotten your password?
-                <Link href={"#"} className="toggle">
-                  {" "}
-                  Get help
-                </Link>
-              </p>
-            </div>
-
-            <Divider sx={{ color: "gray" }}>OR</Divider>
-            <div className="social-icons">
-              <a href="#" className="icon">
-                <i className="fa-brands fa-google-plus-g"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-facebook-f"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-github"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-linkedin-in"></i>
-              </a>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </>
+    <div className="p-8 flex flex-col justify-between">
+      <div className="heading mb-4">
+        <h2 className="text-4xl font-semibold text-primary">Welcome Back</h2>
+        <h6 className="text-secondary font-medium text-sm inline">
+          Not register yet?{" "}
+        </h6>
+        <Link href={"/register"} className="hover:text-primary">
+          Sign up
+        </Link>
+      </div>
+      <div>
+        <FormComponent
+          form={formFields}
+          onSubmit={handleFormSubmit}
+          submitLabel="Login"
+          isLoading={isLoading || isFetching}
+        />
+        <p className="font-semibold text-primary mt-4">
+          Forgotten your password?
+          <Link href={"#"} className="text-text-primary hover:text-primary">
+            {" "}
+            Get help
+          </Link>
+        </p>
+      </div>
+      <div>
+        <Divider sx={{ color: "gray" }}>OR</Divider>
+        <div className="flex items-center justify-between">
+          {loginMethodIcon.map((item, idx) => (
+            <a
+              key={idx}
+              href={item.path}
+              className="border border-gray-300 rounded-[20%] inline-flex justify-center items-center mx-1 w-10 h-10 text-primary hover:bg-primary hover:text-white hover:transition-colors hover:duration-300 ease-linear"
+            >
+              <i className={`fa-brands ${item.icon} text-inherit`}></i>
+            </a>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 };
 

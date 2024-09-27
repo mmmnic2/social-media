@@ -2,6 +2,7 @@
 
 import { Form, Formik } from "formik";
 import React from "react";
+import { AppButton } from "../button/AppButton";
 import FormFieldComponent from "./FormFields";
 import buildValidationSchema from "./ValidationSchemaBuilder";
 
@@ -27,10 +28,12 @@ interface FormProps {
   form: FormField[];
   onSubmit: (values: Record<string, any>) => void;
   submitLabel: string;
+  isLoading?: boolean;
 }
 
 const FormComponent: React.FC<FormProps> = ({
   form,
+  isLoading,
   onSubmit,
   submitLabel = "submit",
 }) => {
@@ -61,13 +64,14 @@ const FormComponent: React.FC<FormProps> = ({
               errors={errors}
             />
           ))}
-          <button
+          <AppButton
             className="bg-primary text-white w-full py-3 rounded-xl hover:bg-secondary hover:text-text-primary transition-all duration-500 disabled:bg-gray disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:text-white"
             type="submit"
             disabled={!isValid || !dirty}
+            loading={isLoading}
           >
             {submitLabel}
-          </button>
+          </AppButton>
         </Form>
       )}
     </Formik>
