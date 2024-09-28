@@ -13,7 +13,6 @@ interface FriendActionsPayloadProps {
 }
 
 const FriendRequests = ({ isLogin }: { isLogin: boolean }) => {
-  console.log(isLogin);
   const { data: pendingRequests, isLoading } = usePendingFriendRequests();
   const { mutate: friendRequestActions } = useFriendRequestActions();
   const { showSnackbar } = useSnackbar();

@@ -4,6 +4,7 @@ import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import Image from "next/image";
 import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useSendFriendRequest } from "@/hooks/api-hooks/friend-requests/useFriendRequests";
 import { useGetPostByUserId } from "@/hooks/api-hooks/post-hooks/usePost";
 import {
   useGetUserById,
@@ -13,6 +14,7 @@ import { setRefetchPostByUser } from "@/redux/post/post";
 import { UserProps } from "@/redux/user";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import { AppButton } from "../common/button/AppButton";
+import { useSnackbar } from "../common/snackbar/Snackbar";
 import PostCard from "../post/PostCard";
 import UserReelCard from "../reels/UserReelCard";
 import UpdateProfileModal from "./component/UpdateProfileModal";
@@ -32,6 +34,8 @@ interface ProfileProps {
 
 const Profile = ({ id, isLogin }: ProfileProps) => {
   const userSelector = useSelector((state: UserProps) => state.user);
+  const { posts } = useSelector((state: any) => state.post);
+  const { showSnackbar } = useSnackbar();
   // const [value, setValue] = useState("post");
   // const [open, setOpen] = useState(false);
   // const handleClose = () => setOpen(false);
@@ -51,25 +55,8 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     isSuccess: boolean;
     refetch: () => void;
   } = useGetUserById(id);
-  console.log(userInfor);
-  console.log(userSelector);
-  // // hàm getPostByUserId
-  // const {
-  //   data: postData,
-  //   error: postError,
-  //   isLoading: postLoading,
-  //   isSuccess: getPostSuccess,
-  //   refetch: refetchGetPostByUserId,
-  // }: {
-  //   data: any;
-  //   error: any;
-  //   isLoading: boolean;
-  //   isSuccess: boolean;
-  //   refetch: () => void;
-  // } = useGetPostByUserId(id);
-  // useEffect(() => {
-  //   dispatch(setRefetchPostByUser(refetchGetPostByUserId));
-  // }, [refetchGetPostByUserId, dispatch]);
+
+  const { mutate: sendFriendRequest } = useSendFriendRequest();
 
   // if (isLoading) return <div>Loading...</div>;
 
@@ -82,13 +69,28 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
   // const handleChange = (event: React.SyntheticEvent, newValue: string) => {
   //   setValue(newValue);
   // };
+  const handleFollowUser = () => {
+    const reqBody = {
+      userId: userSelector.id,
+      friendId: userInfor.id,
+    };
+    sendFriendRequest(reqBody, {
+      onSuccess: () => {
+        showSnackbar("Send friend request successfully!", "success");
+      },
+      onError: () => {
+        showSnackbar("Send friend request error!", "error");
+      },
+    });
+  };
   const renderFollowButton = () => {
-    if (id !== userSelector.id) {
+    if (Number(id) !== userSelector.id) {
       return (
         <AppButton
           className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 -right-32 z-11 hover:bg-accent-color/50"
           style={{ position: "absolute" }}
           disabled={!isLogin}
+          onClick={handleFollowUser}
         >
           <p className="flex items-center text-white">
             <span>Follow</span> <AddIcon />
@@ -135,9 +137,17 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
       </div>
       <div className="-translate-y-56">
         <div className="bg-white h-[10rem] w-[10rem] rounded-t-full p-1 rounded-br-full">
-          <SocialAvatar imgUrl="abc" alt="Lan Lan" height="100%" width="100%" />
+          <SocialAvatar
+            imgUrl="abc"
+            alt={userInfor?.firstName || "Lan Lan"}
+            height="100%"
+            width="100%"
+          />
           <div className=" relative z-10">
-            <p className="text-center mt-4 font-bold text-2xl">Lan Lan</p>
+            <p className="text-center mt-4 font-bold text-2xl">
+              {(userInfor && `${userInfor.firstName} ${userInfor.lastName}`) ||
+                "Lan Lan"}
+            </p>
             {renderFollowButton()}
           </div>
         </div>
@@ -147,17 +157,26 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
           <p>Description</p>
           <div className="grid grid-cols-3 py-4">
             <div className="flex flex-col items-center relative">
-              <span className="text-2xl font-bold">100</span>
+              <span className="text-2xl font-bold">
+                {(posts && posts?.length) || 0}
+              </span>
               <span className="text-sm">Posts</span>
               <div className="absolute top-0 right-0 w-[2px] h-full bg-text-primary"></div>
             </div>
             <div className="flex flex-col items-center  relative">
-              <span className="text-2xl font-bold">100</span>
+              <span className="text-2xl font-bold">
+                {(userInfor?.followerList && userInfor?.followerList.length) ||
+                  0}
+              </span>
               <span className="text-sm">Followers</span>
               <div className="absolute top-0 right-0 w-[2px] h-full bg-text-primary"></div>
             </div>
             <div className="flex flex-col items-center ">
-              <span className="text-2xl font-bold">100</span>
+              <span className="text-2xl font-bold">
+                {(userInfor?.followingList.length > 0 &&
+                  userInfor?.followingList.length) ||
+                  0}
+              </span>
               <span className="text-sm">Following</span>
             </div>
           </div>

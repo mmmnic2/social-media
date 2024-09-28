@@ -1,8 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
+"use client";
 import WarningIcon from "@mui/icons-material/Warning";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const WarningBanner = ({ isLogin }: { isLogin: boolean }) => {
+  const pathname = usePathname();
   return (
     <>
       {(!isLogin && (
@@ -14,6 +17,13 @@ const WarningBanner = ({ isLogin }: { isLogin: boolean }) => {
               experience the full functionality."
             </p>
             <div className="flex space-x-2">
+              <Link
+                className="bg-text-primary text-light rounded-lg hover:bg-text-primary/70 py-2 px-4"
+                href={pathname === "/" ? "/profile/1" : "/"}
+              >
+                {pathname === "/" ? "Profile Demo" : "Home Demo"}
+              </Link>
+
               <Link
                 className="bg-accent-color text-light rounded-lg hover:bg-primary py-2 px-4"
                 href={"/login"}

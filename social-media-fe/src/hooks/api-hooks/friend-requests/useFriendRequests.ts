@@ -2,6 +2,7 @@ import { useMutation, useQuery } from "react-query";
 import {
   friendRequestActions,
   pendingFriendRequests,
+  sendFriendRequest,
 } from "@/api/friendrequests";
 
 export const usePendingFriendRequests = () => {
@@ -10,4 +11,8 @@ export const usePendingFriendRequests = () => {
 
 export const useFriendRequestActions = () => {
   return useMutation(friendRequestActions);
+};
+
+export const useSendFriendRequest = () => {
+  return useMutation(sendFriendRequest);
 };

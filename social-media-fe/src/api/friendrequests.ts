@@ -7,8 +7,13 @@ export async function pendingFriendRequests() {
 }
 
 export async function friendRequestActions(payload: any) {
-  console.log(payload);
   const url = `/api/v1/friendship/respond/${payload?.requestId}?status=${payload?.status}`;
   const res = await axios.put(url);
+  return res.data;
+}
+
+export async function sendFriendRequest(payload: any) {
+  const url = `/api/v1/friendship/send`;
+  const res = await axios.post(url, payload);
   return res.data;
 }

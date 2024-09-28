@@ -25,7 +25,6 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const token = cookies().get("sessionToken");
-  console.log(token);
   return (
     <html lang="en">
       <body className={nunito.className}>

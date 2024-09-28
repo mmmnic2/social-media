@@ -13,9 +13,8 @@ export const metadata: Metadata = {
 
 const MainLayout = ({ children }: { children: React.ReactNode }) => {
   const token = cookies().get("sessionToken");
-  console.log(!!token);
   return (
-    <main className="bg-light-background">
+    <main className="bg-light-background min-h-screen">
       <WarningBanner isLogin={!!token} />
       <Navbar isLogin={!!token} />
       <div

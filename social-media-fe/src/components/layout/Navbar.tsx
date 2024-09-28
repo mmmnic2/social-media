@@ -1,7 +1,9 @@
 "use client";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import axios from "@/constant/apiConstant";
+import SocialAvatar from "../common/avatar/SocialAvatar";
 import SearchBar from "../common/searchBar/SearchBar";
 import CreatePostModal from "../post/CreatePostModal";
 
@@ -10,11 +12,9 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
   const [filteredSuggestions, setFilteredSuggestions] = useState<
     React.ReactNode[]
   >([]);
-  console.log(filteredSuggestions);
+  const router = useRouter();
   const handleSearch = async (query: string) => {
-    console.log(query);
     if (query.trim() === "") {
-      console.log("here");
       setFilteredSuggestions([]);
       return;
     }
@@ -27,18 +27,20 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
           suggestion.firstName.toLowerCase().includes(query.toLowerCase()),
         )
         .map((suggestion: any) => (
-          <div className="border-b-[1px]" key={suggestion.id}>
-            {suggestion.firstName}
+          <div className="flex items-center gap-2 pb-2" key={suggestion.id}>
+            <SocialAvatar imgUrl={""} alt={suggestion.firstName} />
+            <span>
+              {suggestion.firstName} {suggestion.lastName}{" "}
+            </span>
           </div>
         ));
-      console.log(filtered);
       setFilteredSuggestions(filtered);
     } catch (error) {
       console.error("Error fetching suggestions:", error);
     }
   };
   const handleSuggestionClick = (suggestion: any) => {
-    console.log("Selected suggestion:", suggestion.key);
+    router.replace(`/profile/${suggestion.key}`);
   };
   return (
     <>
