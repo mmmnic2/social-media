@@ -2,7 +2,7 @@
 import { Metadata } from "next";
 import { cookies } from "next/headers";
 import WarningBanner from "@/components/common/warningBanner/warningBanner";
-import HomeLeftV2 from "@/components/home/homeleft/HomeLeftV2";
+import HomeLeft from "@/components/home/homeleft/HomeLeft";
 import HomeRightV2 from "@/components/home/homeright/HomeRightV2";
 import Navbar from "@/components/layout/Navbar";
 
@@ -21,7 +21,7 @@ const MainLayout = ({ children }: { children: React.ReactNode }) => {
       <div
         className={`max-w-[80%] mx-auto flex gap-4 ${!!token ? "mt-[60px]" : "mt-[108px]"}`}
       >
-        <HomeLeftV2 isLogin={!!token} />
+        <HomeLeft isLogin={!!token} />
         <div className="middle mt-4 flex-1 ">{children}</div>
         <HomeRightV2 isLogin={!!token} />
       </div>

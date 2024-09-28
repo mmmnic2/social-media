@@ -1,5 +1,20 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+export interface UserProps {
+  user: any;
+  id: number;
+  email: string;
+  first_name: string;
+  last_name: string;
+  gender: string;
+  create_at: string;
+  update_at: string;
+  followers: [];
+  followings: [];
+  role: string;
+  userStatus: string;
+}
+
 const initialState = {
   id: null,
   email: null,
@@ -12,6 +27,7 @@ const initialState = {
   followers: [],
   followings: [],
   role: null,
+  userStatus: null,
 };
 
 const user = createSlice({
@@ -31,6 +47,7 @@ const user = createSlice({
         createDate,
         modifiedDate,
         role,
+        userStatus,
       } = action.payload;
 
       state.id = id;
@@ -44,6 +61,7 @@ const user = createSlice({
       state.create_at = createDate;
       state.update_at = modifiedDate;
       state.role = role;
+      state.userStatus = userStatus;
     },
     clearUserInfo: (state: any) => {
       for (const key in state) {
@@ -61,6 +79,7 @@ const user = createSlice({
       // state.user_image = userImage;
       state.create_at = payload.createDate;
       state.update_at = payload.modifiedDate;
+      state.userStatus = payload.userStatus;
       state.role = payload.role;
     },
   },
