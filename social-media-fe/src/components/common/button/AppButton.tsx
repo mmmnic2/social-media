@@ -16,7 +16,11 @@ export const AppButton: React.FC<AppButtonProps> = ({
   ...props
 }) => {
   return (
-    <button className={`${className} relative`} type={type} {...props}>
+    <button
+      className={`${className} relative disabled:bg-gray disabled:cursor-not-allowed`}
+      type={type}
+      {...props}
+    >
       {children}
       {loading && (
         <div className="absolute top-1/2 right-5 -translate-y-1/2">

@@ -70,7 +70,7 @@ const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
   const userSelector = useSelector((state: UserProps) => state.user);
 
   const handleLogout = () => {
-    logoutAction(); 
+    logoutAction();
   };
 
   return (
