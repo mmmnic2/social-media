@@ -68,7 +68,7 @@ const navigationMenu = [
 const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
   const { mutate: logoutAction } = useLogout();
   const userSelector = useSelector((state: UserProps) => state.user);
-
+  console.log(userSelector);
   const handleLogout = () => {
     logoutAction();
   };
@@ -78,9 +78,17 @@ const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
       <a className="flex items-center p-4 bg-white rounded-md mt-4">
         <AvatarWithInfo
           imgUrl={"abc"}
-          alt={userSelector?.first_name}
-          title={userSelector?.first_name + " " + userSelector?.last_name}
-          subtitle={`@${userSelector?.first_name?.toLowerCase()}`}
+          alt={userSelector?.first_name || "Lan Lan"}
+          title={
+            userSelector?.first_name
+              ? userSelector?.first_name + " " + userSelector?.last_name
+              : "Lan Lan"
+          }
+          subtitle={
+            userSelector?.first_name
+              ? `@${userSelector?.first_name?.toLowerCase()}`
+              : "@lanlan"
+          }
         />
       </a>
 
