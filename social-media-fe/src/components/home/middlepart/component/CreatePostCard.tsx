@@ -1,10 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import { useQueryClient } from "react-query";
+import { useDispatch, useSelector } from "react-redux";
 import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 import { AppButton } from "@/components/common/button/AppButton";
 import { useSnackbar } from "@/components/common/snackbar/Snackbar";
 import { useCreatePost } from "@/hooks/api-hooks/post-hooks/usePost";
+import { setIsFetchAllPosts } from "@/redux/post/post";
+import { UserProps } from "@/redux/user";
 
 interface CreatePostCardProps {
   isLogin: boolean;
@@ -13,15 +15,20 @@ interface CreatePostCardProps {
 const CreatePostCard = ({ isLogin }: CreatePostCardProps) => {
   const [caption, setCaption] = useState("");
   const { showSnackbar } = useSnackbar();
+
   const { mutate: createPostCard } = useCreatePost();
-  const queryClient = useQueryClient();
-  const handleCreatePost = () => {
+
+  const currentUser = useSelector((state: UserProps) => state.user);
+  const dispatch = useDispatch();
+
+  const handleCreatePost = (e: any) => {
+    e.preventDefault();
     createPostCard(
       { caption },
       {
         onSuccess: () => {
           showSnackbar("create post successfully!", "success");
-          queryClient.invalidateQueries("all_posts");
+          dispatch(setIsFetchAllPosts(true));
         },
         onError: (error) => {
           showSnackbar(`create post error! ${error}`, "error");
@@ -33,11 +40,14 @@ const CreatePostCard = ({ isLogin }: CreatePostCardProps) => {
   return (
     <form className="create-post flex gap-3 relative">
       <div className="absolute top-1/2 left-2 -translate-y-1/2">
-        <SocialAvatar imgUrl="abc" alt="Lan Lan" />
+        <SocialAvatar
+          imgUrl={currentUser.imgUrl || "abc"}
+          alt={currentUser.first_name || "Lan Lan"}
+        />
       </div>
       <input
         type="text"
-        placeholder="What do you think, Lan Lan?"
+        placeholder={`What do you think, ${currentUser.first_name || "Lan Lan"}?`}
         id="create-post"
         className="w-full rounded-lg py-3 pr-3 pl-14"
         onChange={(e) => setCaption(e.target.value)}
@@ -46,7 +56,7 @@ const CreatePostCard = ({ isLogin }: CreatePostCardProps) => {
         type="submit"
         className="bg-accent-color text-white py-2 px-6 transition-all duration-500 disabled:bg-gray disabled:cursor-not-allowed hover:bg-accent-color/50"
         disabled={!isLogin}
-        onClick={handleCreatePost}
+        onClick={(e) => handleCreatePost(e)}
       >
         Post
       </AppButton>

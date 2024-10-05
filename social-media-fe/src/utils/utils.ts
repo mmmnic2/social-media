@@ -42,3 +42,20 @@ export const parseTime = (createPostTime: any) => {
 };
 
 export const isUserLiked = (postId: number, userId: number) => {};
+
+export const sortedDataByDate = (
+  data: any[],
+  sortField: string,
+  sortType: string = "asc",
+) => {
+  return data.sort((a: any, b: any) => {
+    const dateA = new Date(a[sortField]).getTime();
+    const dateB = new Date(b[sortField]).getTime();
+
+    if (sortType.toLowerCase() === "asc") {
+      return dateA - dateB;
+    } else {
+      return dateB - dateA;
+    }
+  });
+};

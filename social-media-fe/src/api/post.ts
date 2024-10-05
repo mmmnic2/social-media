@@ -1,15 +1,18 @@
 import axios from "@/constant/apiConstant";
+import { sortedDataByDate } from "@/utils/utils";
 
 export async function getPostByUserId(userId?: number | string) {
   const url = `/api/v1/post/find-by-user/${userId}`;
   const res = await axios.get(url);
-  return res.data;
+  const sortedRes = sortedDataByDate(res.data, "modifiedDate", "desc");
+  return sortedRes;
 }
 
 export async function getAllPost() {
   const url = `/api/v1/post/all`;
   const res = await axios.get(url);
-  return res.data;
+  const sortedRes = sortedDataByDate(res.data, "modifiedDate", "desc");
+  return sortedRes;
 }
 
 export async function getPostById(postId: number | string) {

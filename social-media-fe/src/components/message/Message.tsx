@@ -57,7 +57,7 @@ const Message = () => {
   }, [currentChat, stompClient, onMessageReceive]);
 
   const onError = (error: any) => {
-    console.log("error: ", error);
+    console.error("error: ", error);
   };
 
   const sendMessageToServer = (message: any) => {

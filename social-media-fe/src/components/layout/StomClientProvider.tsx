@@ -15,7 +15,7 @@ export const StomClientProvider = ({
   const userSelector = useSelector((state: any) => state.user);
 
   const onError = (error: any) => {
-    console.log("error: ", error);
+    console.error("error: ", error);
   };
 
   useEffect(() => {

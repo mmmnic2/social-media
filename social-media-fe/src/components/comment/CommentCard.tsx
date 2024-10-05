@@ -1,17 +1,18 @@
 "use client";
-import { Avatar, Divider } from "@mui/material";
 import React from "react";
+import SocialAvatar from "../common/avatar/SocialAvatar";
 
 const CommentCard = ({ comment }: { comment: any }) => {
   return (
     <div className="mx-3 space-y-2 my-5 text-sm">
       {/* <div className="flex justify-between items-center"> */}
       <div className="flex items-center space-x-5">
-        <Avatar
-          sx={{ height: "2.25rem", width: "2.25rem", fontSize: "0.8rem" }}
-        ></Avatar>
+        <SocialAvatar
+          imgUrl={comment?.userResponse.image || "abc"}
+          alt={comment?.userResponse.firstName}
+        />
         <div>
-          <p className="font-semibold">
+          <p className="font-bold">
             {comment?.userResponse.firstName +
               " " +
               comment?.userResponse.lastName}

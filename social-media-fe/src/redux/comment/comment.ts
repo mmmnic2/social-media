@@ -16,6 +16,9 @@ const commentState = createSlice({
     insertComment(state, { payload }) {
       state.comments = [...state.comments, payload];
     },
+    setIsRefetchAllComment(state, { payload }) {
+      state.isRefetchAllComments = payload;
+    },
   },
 });
 
@@ -26,4 +29,5 @@ export const {
   setAllComments,
   setCommentSelecteds,
   setRefetchAllComment,
+  setIsRefetchAllComment,
 } = commentState.actions;

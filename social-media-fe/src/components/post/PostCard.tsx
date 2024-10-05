@@ -4,21 +4,33 @@ import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ShareIcon from "@mui/icons-material/Share";
 import SmsIcon from "@mui/icons-material/Sms";
-import { IconButton } from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useLikePost, useSavePost } from "@/hooks/api-hooks/post-hooks/usePost";
+import { useGetCommentByPostId } from "@/hooks/api-hooks/comment-hooks/useComment";
+import {
+  useDeletePost,
+  useLikePost,
+  useSavePost,
+} from "@/hooks/api-hooks/post-hooks/usePost";
+import { setIsRefetchAllComment } from "@/redux/comment/comment";
 import { setIsFetchAllPosts } from "@/redux/post/post";
 import {
   refetchAllPostSelector,
   refetchPostByUserSelector,
 } from "@/redux/post/selectors";
+import { UserProps } from "@/redux/user";
 import { parseTime } from "@/utils/utils";
+import CommentList from "../comment/CommentList";
+import CreateCommentCard from "../comment/CreateCommentCard";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import { useSnackbar } from "../common/snackbar/Snackbar";
+import CreatePostModal from "./CreatePostModal";
+import DeletePostModal from "./DeletePostModal";
 
 interface PostCardProps {
   post: any;
@@ -29,12 +41,23 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
   const [isLiked, setIsLiked] = useState(post?.currentUserLikePost);
   const [showComments, setShowComments] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(false);
+  const [isEditPostMenuOpen, setIsEditPostMenuOpen] = useState(false);
+  const [isEditPost, setIsEditPost] = useState(false);
+  const [isDeletePost, setIsDeletePost] = useState(false);
 
   const { mutate: handleLikePost } = useLikePost();
   const { mutate: handleSavePost } = useSavePost();
+  const { mutate: deletePostMutate } = useDeletePost();
+  const {
+    data: commentsByPostId,
+    isLoading,
+    refetch: refetchAllComments,
+  } = useGetCommentByPostId(post?.id, showComments);
 
   const refetchAllPost = useSelector(refetchAllPostSelector);
   const refetchAllPostByUser = useSelector(refetchPostByUserSelector);
+  const isRefetchAllComments = useSelector((state: any) => state.comment);
+  const currentUser = useSelector((state: UserProps) => state.user);
   const dispatch = useDispatch();
 
   const { showSnackbar } = useSnackbar();
@@ -65,6 +88,35 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
       },
     });
   };
+
+  const handleCloseEditPost = () => {
+    setIsEditPost(!isEditPost);
+  };
+
+  const handleCloseDeletePost = () => {
+    setIsDeletePost(!isDeletePost);
+  };
+
+  const handleDeletePost = () => {
+    deletePostMutate(post?.id, {
+      onSuccess: (data) => {
+        showSnackbar(data, "success");
+        handleCloseDeletePost();
+        dispatch(setIsFetchAllPosts(true));
+      },
+      onError: (err: any) => {
+        showSnackbar(err?.response?.data, "error");
+        handleCloseDeletePost();
+      },
+    });
+  };
+
+  useEffect(() => {
+    if (isRefetchAllComments) {
+      refetchAllComments();
+    }
+    dispatch(setIsRefetchAllComment(false));
+  }, [isRefetchAllComments]);
 
   const renderPostCardImage = () => {
     if (post?.image && isLogin) {
@@ -110,9 +162,34 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
               </small>
             </div>
           </div>
-          <span className="edit">
-            <i className="uil uil-ellipsis-h"></i>
-          </span>
+          {/* Edit Post */}
+          {currentUser.id === post?.userResponse?.id && (
+            <div className="relative">
+              <Tooltip title={"Edit Post"}>
+                <button
+                  onClick={() => setIsEditPostMenuOpen(!isEditPostMenuOpen)}
+                >
+                  <MoreHorizIcon />
+                </button>
+              </Tooltip>
+              {isEditPostMenuOpen && (
+                <div className="absolute top-5 right-0 bg-light min-w-36 shadow-xl rounded-lg">
+                  <p
+                    className="hover:bg-accent-color hover:text-white hover:rounded-lg cursor-pointer py-2 px-4"
+                    onClick={() => setIsEditPost(!isEditPost)}
+                  >
+                    Edit Post
+                  </p>
+                  <p
+                    className="hover:bg-accent-color hover:text-white hover:rounded-lg cursor-pointer py-2 px-4"
+                    onClick={() => setIsDeletePost(!isDeletePost)}
+                  >
+                    Delete Post
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
       {/* ======== POST CARD BODY========== */}
@@ -158,6 +235,33 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
           </div>
         </div>
       </div>
+      {/* Comment */}
+      {(showComments && (
+        <>
+          <div className="w-full h-[1px] bg-text-primary"></div>
+          <CreateCommentCard post={post} />
+          <div className="max-h-48 overflow-y-scroll">
+            {(!isLoading && commentsByPostId && (
+              <CommentList comments={commentsByPostId} />
+            )) || <div>loading...</div>}
+          </div>
+        </>
+      )) ||
+        null}
+      {isDeletePost && (
+        <DeletePostModal
+          isOpen={isDeletePost}
+          handleClose={handleCloseDeletePost}
+          handleApply={handleDeletePost}
+        />
+      )}
+      {isEditPost && (
+        <CreatePostModal
+          open={isEditPost}
+          handleClose={handleCloseEditPost}
+          postData={post}
+        />
+      )}
     </div>
   );
 };

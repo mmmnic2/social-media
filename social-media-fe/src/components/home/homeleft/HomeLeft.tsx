@@ -68,7 +68,6 @@ const navigationMenu = [
 const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
   const { mutate: logoutAction } = useLogout();
   const userSelector = useSelector((state: UserProps) => state.user);
-  console.log(userSelector);
   const handleLogout = () => {
     logoutAction();
   };

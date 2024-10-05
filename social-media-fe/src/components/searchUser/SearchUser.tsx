@@ -46,7 +46,7 @@ const SearchUser = () => {
         dispatch(setChatSelected(data));
       },
       onError: (error) => {
-        console.log(error);
+        console.error(error);
       },
     });
   };
