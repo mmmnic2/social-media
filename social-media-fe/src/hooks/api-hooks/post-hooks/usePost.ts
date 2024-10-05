@@ -10,8 +10,10 @@ import {
 } from "@/api/post";
 import { setAllPost, setRefetchAllPost } from "@/redux/post/post";
 import store from "@/redux/store";
-export const useGetPostByUserId = (userId: number | string) => {
-  return useQuery(["post_user", userId], () => getPostByUserId(userId));
+export const useGetPostByUserId = (userId?: number | string) => {
+  return useQuery(["post_user", userId], () => getPostByUserId(userId), {
+    enabled: !!userId,
+  });
 };
 
 export const useGetPostByPostId = (postId: number | string) => {
@@ -21,11 +23,12 @@ export const useCreatePost = () => {
   return useMutation(createPost);
 };
 
-export const useGetAllPosts = () => {
+export const useGetAllPosts = (id?: number | string) => {
   return useQuery("all_posts", getAllPost, {
     onSuccess: (data) => {
       store.dispatch(setAllPost(data));
     },
+    enabled: !!!id,
   });
 };
 

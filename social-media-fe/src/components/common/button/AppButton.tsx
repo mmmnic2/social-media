@@ -17,7 +17,7 @@ export const AppButton: React.FC<AppButtonProps> = ({
 }) => {
   return (
     <button
-      className={`${className} relative disabled:bg-gray disabled:cursor-not-allowed`}
+      className={`${className} relative rounded-lg disabled:bg-gray disabled:cursor-not-allowed`}
       type={type}
       {...props}
     >

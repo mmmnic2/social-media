@@ -1,160 +1,164 @@
 "use client";
+
 import BookmarkIcon from "@mui/icons-material/Bookmark";
 import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import ShareIcon from "@mui/icons-material/Share";
 import SmsIcon from "@mui/icons-material/Sms";
-import {
-  Avatar,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Collapse,
-  colors,
-  Divider,
-  IconButton,
-  Typography,
-} from "@mui/material";
-import { red } from "@mui/material/colors";
-import { useState, useEffect } from "react";
-import { useQueryClient } from "react-query";
+import { IconButton } from "@mui/material";
+import Image from "next/image";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useGetCommentByPostId } from "@/hooks/api-hooks/comment-hooks/useComment";
-import { useLikePost } from "@/hooks/api-hooks/post-hooks/usePost";
-import { refetchAllPostSelector } from "@/redux/post/selectors";
-import { refetchPostByUserSelector } from "@/redux/post/selectors";
+import { useLikePost, useSavePost } from "@/hooks/api-hooks/post-hooks/usePost";
+import { setIsFetchAllPosts } from "@/redux/post/post";
+import {
+  refetchAllPostSelector,
+  refetchPostByUserSelector,
+} from "@/redux/post/selectors";
 import { parseTime } from "@/utils/utils";
-import CommentCard from "../comment/CommentCard";
-import CreateCommentCard from "../comment/CreateCommentCard";
-const PostCard = ({ post }: { post: any }) => {
-  const dispatch = useDispatch();
-  // const getCommentByPostId = commentSelectedSelector();
-  // const comment = useSelector((state) =>
-  //   commentSelectedSelector(state, post.id)
-  // );
+import SocialAvatar from "../common/avatar/SocialAvatar";
+import { useSnackbar } from "../common/snackbar/Snackbar";
 
-  // const userLikePostList = useSelector((state: any) =>
-  //   listUserLikePostSelector(state, post.id)
-  // );
+interface PostCardProps {
+  post: any;
+  isLogin: boolean;
+}
+
+const PostCard = ({ post, isLogin }: PostCardProps) => {
   const [isLiked, setIsLiked] = useState(post?.currentUserLikePost);
-  const { mutate: handleLikePost, data } = useLikePost();
-  const queryClient = useQueryClient();
   const [showComments, setShowComments] = useState(false);
-  const {
-    data: commentData,
-    isLoading: loadingComment,
-    refetch,
-  } = useGetCommentByPostId(post?.id, showComments);
+  const [isBookMarked, setIsBookMarked] = useState(false);
+
+  const { mutate: handleLikePost } = useLikePost();
+  const { mutate: handleSavePost } = useSavePost();
+
   const refetchAllPost = useSelector(refetchAllPostSelector);
   const refetchAllPostByUser = useSelector(refetchPostByUserSelector);
+  const dispatch = useDispatch();
+
+  const { showSnackbar } = useSnackbar();
+
   const handleClickLikePost = () => {
     handleLikePost(post.id, {
       onSuccess: (data) => {
         setIsLiked(!data.delete);
+        dispatch(setIsFetchAllPosts(true));
         refetchAllPost();
-        // queryClient.invalidateQueries(["post", post.id]);
-        queryClient.invalidateQueries("all_posts");
-
         refetchAllPostByUser();
       },
     });
   };
+
   const handleShowComments = () => {
     setShowComments(!showComments);
   };
-  // const isUserLiked = (userId: number) => {
-  //   let userLike = userLikePostList.find((user: any) => user.id === userId);
-  //   return !!userLike;
-  // };
-  // const user_id = useSelector((state: any) => state.user.id);
-  // useEffect(() => {
-  //   setIsLiked(isUserLiked(user_id));
-  // }, []);
 
-  //use staletime in react-query to handle user spam click
+  const handleBookMark = () => {
+    handleSavePost(post?.id, {
+      onSuccess: (data) => {
+        showSnackbar(data, "success");
+        setIsBookMarked(!isBookMarked);
+      },
+      onError: (err: any) => {
+        showSnackbar(err, "error");
+      },
+    });
+  };
+
+  const renderPostCardImage = () => {
+    if (post?.image && isLogin) {
+      return (
+        <Image
+          width={1000}
+          height={90}
+          src={post?.image}
+          alt={`${post?.caption || "Post"} Image`}
+        />
+      );
+    } else if (!isLogin) {
+      return (
+        <Image
+          width={1000}
+          height={90}
+          src={"/image/image1.png"}
+          alt={`${post?.caption || "Post"} Image`}
+        />
+      );
+    }
+    return null;
+  };
 
   return (
-    <Card>
-      <CardHeader
-        avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={
-          post?.userResponse?.firstName + " " + post?.userResponse?.lastName
-        }
-        subheader={parseTime(post?.createDate)}
-        titleTypographyProps={{ fontWeight: "bold" }}
-      />
-      <CardContent>
-        <Typography variant="body2" color="text.primary">
-          {post?.caption}
-        </Typography>
-      </CardContent>
-      {post?.image && (
-        <CardMedia
-          component="img"
-          height="194"
-          image={post?.image}
-          alt="Cute Cat"
-        />
-      )}
-      <CardContent className="flex  space-x-5">
-        <Typography variant="body2" color="text.secondary">
-          {post?.totalLikes} likes
-        </Typography>
-        <Typography variant="body2" color="text.secondary">
-          {/* {comment?.length + " comments"} */}
-          {post?.totalComments} comments
-        </Typography>
-      </CardContent>
-      <CardActions disableSpacing className="flex justify-between align-center">
-        <div>
-          <IconButton onClick={handleClickLikePost}>
-            {isLiked ? (
-              <FavoriteIcon sx={{ color: "red" }} />
-            ) : (
-              <FavoriteBorderIcon />
-            )}
-          </IconButton>
-
-          <IconButton onClick={handleShowComments}>
-            <SmsIcon />
-          </IconButton>
-
-          <IconButton>
-            <ShareIcon />
-          </IconButton>
+    <div className="feed bg-white rounded-xl py-2 px-4 mb-4">
+      {/* ======== POST CARD HEADER========== */}
+      <div className="head">
+        <div className="user flex items-center justify-between">
+          <div className="ingo flex items-center gap-2">
+            <SocialAvatar
+              imgUrl="abc"
+              alt={post?.userResponse?.firstName || "Lan Lan"}
+            />
+            <div>
+              <h3 className="font-bold text-[1.2rem]">
+                {post?.userResponse?.firstName || "Lan Lan"}
+              </h3>
+              <small className="text-xs">
+                {post?.modifiedDate && isLogin
+                  ? parseTime(post?.modifiedDate)
+                  : "15 MINUTES AGO"}
+              </small>
+            </div>
+          </div>
+          <span className="edit">
+            <i className="uil uil-ellipsis-h"></i>
+          </span>
         </div>
-        <div>
-          <IconButton>
-            {true ? <BookmarkIcon /> : <BookmarkBorderIcon />}
-          </IconButton>
-        </div>
-      </CardActions>
+      </div>
+      {/* ======== POST CARD BODY========== */}
 
-      {showComments && (
-        <section>
-          {/* <Collapse in={expanded} timeout="auto" unmountOnExit> */}
-          <CreateCommentCard post={post} />
-          <Divider />
-          {commentData?.map((comment: any) => (
-            <CommentCard key={comment} comment={comment} />
-          ))}
-          {/* </Collapse> */}
-        </section>
-      )}
-    </Card>
+      <div className="body">
+        <div className="caption mt-3">
+          <p>{post?.caption || "Great food!"}</p>
+        </div>
+        <div className="photo">{renderPostCardImage()}</div>
+      </div>
+      {/* ======== POST CARD FOOTER========== */}
+      <div className="foot">
+        <div className="liked-by flex gap-4">
+          <div className="comments text-muted">
+            {post?.totalLikes || 0} Likes
+          </div>
+          <div className="comments text-muted">
+            {post?.totalComments || 0} Comments
+          </div>
+        </div>
+        <div className="action-button flex justify-between">
+          <div className="interaction-buttons">
+            <IconButton disabled={!isLogin} onClick={handleClickLikePost}>
+              {isLiked ? (
+                <FavoriteIcon sx={{ color: "red" }} />
+              ) : (
+                <FavoriteBorderIcon />
+              )}
+            </IconButton>
+
+            <IconButton disabled={!isLogin} onClick={handleShowComments}>
+              <SmsIcon />
+            </IconButton>
+
+            <IconButton disabled={!isLogin}>
+              <ShareIcon />
+            </IconButton>
+          </div>
+          <div className="book-mark">
+            <IconButton disabled={!isLogin} onClick={handleBookMark}>
+              {isBookMarked ? <BookmarkIcon /> : <BookmarkBorderIcon />}
+            </IconButton>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

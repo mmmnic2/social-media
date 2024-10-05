@@ -75,7 +75,10 @@ const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
 
   return (
     <div className="sticky top-0 h-max basis-1/4">
-      <a className="flex items-center p-4 bg-white rounded-md mt-4">
+      <Link
+        href={`/profile/${userSelector?.id}` || "#"}
+        className="flex items-center p-4 bg-white rounded-md mt-4"
+      >
         <AvatarWithInfo
           imgUrl={"abc"}
           alt={userSelector?.first_name || "Lan Lan"}
@@ -90,7 +93,7 @@ const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
               : "@lanlan"
           }
         />
-      </a>
+      </Link>
 
       <div className="mt-4 bg-white rounded-md">
         {navigationMenu.map((item) => (

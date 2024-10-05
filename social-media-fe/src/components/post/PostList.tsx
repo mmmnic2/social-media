@@ -1,12 +1,19 @@
 "use client";
 import React, { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { useGetPostByUserId } from "@/hooks/api-hooks/post-hooks/usePost";
-import { setAllPost, setRefetchPostByUser } from "@/redux/post/post";
-import PostCardV2 from "./PostCardV2";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  useGetAllPosts,
+  useGetPostByUserId,
+} from "@/hooks/api-hooks/post-hooks/usePost";
+import {
+  setAllPost,
+  setIsFetchAllPosts,
+  setRefetchPostByUser,
+} from "@/redux/post/post";
+import PostCard from "./PostCard";
 
 interface PostListProps {
-  id: string | number;
+  id?: string | number;
   isLogin: boolean;
 }
 
@@ -14,6 +21,9 @@ const arrUser = [1, 1, 1, 1, 1];
 
 export const PostList = ({ id, isLogin }: PostListProps) => {
   const dispatch = useDispatch();
+  const refetchAllPost = useSelector(
+    (state: any) => state.post.isAllPostRefetch,
+  );
   // hàm getPostByUserId
   const {
     data: postData,
@@ -28,6 +38,7 @@ export const PostList = ({ id, isLogin }: PostListProps) => {
     isSuccess: boolean;
     refetch: () => void;
   } = useGetPostByUserId(id);
+  const { data: allPost, refetch: refecthAllPost } = useGetAllPosts(id);
   useEffect(() => {
     dispatch(setRefetchPostByUser(refetchGetPostByUserId));
   }, [id]);
@@ -36,13 +47,24 @@ export const PostList = ({ id, isLogin }: PostListProps) => {
       dispatch(setAllPost(postData));
     }
   }, [postData]);
+  useEffect(() => {
+    if (refetchAllPost) {
+      refecthAllPost();
+    } else if (refetchAllPost && id) {
+      refetchGetPostByUserId();
+    }
+    dispatch(setIsFetchAllPosts(false));
+  }, [refetchAllPost]);
+
   const renderPosts = () => {
-    if (postData?.length > 0) {
-      return postData.map((item: any) => (
-        <PostCardV2 key={item.id} post={[]} />
+    if (postData?.length > 0 || allPost?.length > 0) {
+      return (postData || allPost).map((item: any) => (
+        <PostCard key={item.id} post={item} isLogin={isLogin} />
       ));
     } else if (!isLogin) {
-      return arrUser.map((item, idx) => <PostCardV2 key={idx} post={[]} />);
+      return arrUser.map((item, idx) => (
+        <PostCard key={idx} post={[]} isLogin={isLogin} />
+      ));
     }
     return (
       <div className="bg-white rounded-md py-2 px-4">

@@ -1,6 +1,6 @@
 import axios from "@/constant/apiConstant";
 
-export async function getPostByUserId(userId: number | string) {
+export async function getPostByUserId(userId?: number | string) {
   const url = `/api/v1/post/find-by-user/${userId}`;
   const res = await axios.get(url);
   return res.data;
@@ -37,8 +37,8 @@ export async function savePost(postId: number | string) {
 }
 export async function createPost(payload: {
   caption: any;
-  image: any;
-  video: any;
+  image?: any;
+  video?: any;
 }) {
   const { caption, image, video } = payload;
   const url = `/api/v1/post/create-post`;
