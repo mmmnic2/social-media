@@ -133,5 +133,10 @@ public class UserController {
         }
     }
 
+    @GetMapping("/all-friends")
+    public ResponseEntity<?> getAllFriends() {
+        List<UserResponse> response = userService.getFriendList();
+        return ResponseEntity.ok(response);
+    }
 
 }
