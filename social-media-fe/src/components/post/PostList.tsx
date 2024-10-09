@@ -57,7 +57,7 @@ export const PostList = ({ id, isLogin }: PostListProps) => {
   }, [refetchAllPost]);
 
   const renderPosts = () => {
-    if (postData?.length > 0 || allPost?.length > 0) {
+    if (postData?.length > 0 || (allPost && allPost?.length > 0)) {
       return (postData || allPost).map((item: any) => (
         <PostCard key={item.id} post={item} isLogin={isLogin} />
       ));

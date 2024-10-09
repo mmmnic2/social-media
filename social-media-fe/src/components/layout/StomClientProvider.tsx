@@ -3,6 +3,7 @@ import { Client, Stomp } from "@stomp/stompjs";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
+import { useSnackbar } from "../common/snackbar/Snackbar";
 
 export const StomClientProvider = ({
   children,
@@ -13,9 +14,17 @@ export const StomClientProvider = ({
 }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const userSelector = useSelector((state: any) => state.user);
+  const { showSnackbar } = useSnackbar();
 
   const onError = (error: any) => {
     console.error("error: ", error);
+  };
+
+  const onNotiFriendStatus = (friendStatus: any) => {
+    const friendInfo = JSON.parse(friendStatus.body);
+    showSnackbar(
+      `${friendInfo.lastName + " " + friendInfo.firstName} has ${friendInfo.userStatus}`,
+    );
   };
 
   useEffect(() => {
@@ -31,7 +40,7 @@ export const StomClientProvider = ({
           if (userSelector.id) {
             stomp.subscribe(
               `/topic/friend-status/${userSelector.id}`,
-              () => {},
+              onNotiFriendStatus,
             );
           }
         },
