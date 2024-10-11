@@ -41,6 +41,8 @@ public class Notification extends BaseEntity {
         response.setSender(sender.toUserResponse());
         response.setReceiver(receiver.toUserResponse());
         response.setType(type);
+        response.setCreateDate(this.getCreateDate());
+        response.setModifiedDate(this.getModifiedDate());
         return response;
     }
 }

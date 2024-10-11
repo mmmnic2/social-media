@@ -4,6 +4,7 @@ import com.firstversion.socialmedia.component.websocket.AuthChannelInterceptor;
 import com.firstversion.socialmedia.component.websocket.CustomHandshakeHandler;
 import com.firstversion.socialmedia.component.websocket.CustomHandshakeInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
@@ -28,6 +29,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 .setHandshakeHandler(customHandshakeHandler)
                 .addInterceptors(customHandshakeInterceptor)
                 .setAllowedOrigins("http://localhost:3000")
+                .setAllowedOrigins("https://social-media-two-ecru.vercel.app")
                 .withSockJS();
     }
 
@@ -37,7 +39,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
         // Kích hoạt một SimpleBroker với các topic
         registry.enableSimpleBroker("/group","/topic", "/notifications", "/queue");
-        // Định nghĩa prefix cho các tin nhắn đến từ server gửi đến client (thông qua subcribe)
+        // Định nghĩa prefix cho các tin nhắn đến từ server gửi đến client (thông qua subscribe)
         registry.setUserDestinationPrefix("/user");
     }
     @Override

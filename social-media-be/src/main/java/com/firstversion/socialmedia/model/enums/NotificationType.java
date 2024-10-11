@@ -30,6 +30,12 @@ public enum NotificationType {
         public String getPrefix() {
             return "commented on your post.";
         }
+    },
+    MESSAGE{
+        @Override
+        public String getPrefix(){
+            return "send you a message.";
+        }
     };
     public abstract String getPrefix();
 }

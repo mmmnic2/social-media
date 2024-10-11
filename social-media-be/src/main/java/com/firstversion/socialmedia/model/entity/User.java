@@ -47,10 +47,13 @@ public class User extends BaseEntity implements UserDetails {
     @Column
     private String imageUrl;
     @Column
+    @Enumerated(EnumType.STRING)
     private AuthProvider authProvider;
     @Column
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus = UserStatus.OFFLINE;
+    @Column
+    private boolean isActive;
 
     public String getFullName() {
         return this.firstName + " " + this.lastName;
