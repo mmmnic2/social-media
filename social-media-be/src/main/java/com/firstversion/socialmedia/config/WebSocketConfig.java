@@ -13,6 +13,9 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Configuration
 @EnableWebSocketMessageBroker
 public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
@@ -28,8 +31,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setHandshakeHandler(customHandshakeHandler)
                 .addInterceptors(customHandshakeInterceptor)
-                .setAllowedOrigins("http://localhost:3000")
-                .setAllowedOrigins("https://social-media-two-ecru.vercel.app")
+                .setAllowedOrigins("http://localhost:3000", "https://social-media-two-ecru.vercel.app")
                 .withSockJS();
     }
 

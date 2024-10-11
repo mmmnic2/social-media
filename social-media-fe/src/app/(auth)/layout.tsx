@@ -1,8 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 // import "@/styles/login.css";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Image1 from "../../../public/image/image1.png";
+import Image2 from "../../../public/image/image2.png";
+import Image3 from "../../../public/image/image3.png";
 
 const AuthLayout = ({
   children, // will be a page or nested layout
@@ -16,18 +20,6 @@ const AuthLayout = ({
     bullet3: "",
   });
   const [translateValue, setTranslateValue] = useState("translateY(0)");
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  // const autoSlideInterval = () => {
-  //   setInterval();
-  // };
-  // useEffect(() => {
-  //   const autoSlideInterval = setInterval(() => {
-  //     setCurrentIndex((prevIndex) => prevIndex + 1);
-  //   }, 5000);
-
-  //   return () => clearInterval(autoSlideInterval);
-  // }, []);
 
   const handleClick = (e: any) => {
     const value = -(e.target.getAttribute("data-value") - 1) * 2.2;
@@ -56,23 +48,29 @@ const AuthLayout = ({
             {children}
           </div>
           <div
-            className={`absolute w-[55%] h-full bg-white rounded-xl ${currentPath === "/register" ? "left-0" : "right-0"} grid grid-rows-[auto,1fr] p-8 overflow-hidden transition-all duration-700 ease-in-out`}
+            className={`absolute w-[55%] h-full bg-white rounded-tr-xl rounded-br-xl ${currentPath === "/register" ? "left-0" : "right-0"} grid grid-rows-[auto,1fr] p-8 overflow-hidden transition-all duration-700 ease-in-out`}
           >
             <div className="relative w-full h-[450px] overflow-hidden bg-background">
-              <img
-                src="./image/image1.png"
+              <Image
+                layout="fill"
+                quality={100}
+                src={Image1}
                 alt="image1"
-                className={`absolute w-full h-full object-cover transition-opacity duration-300 ${bulletValue.bullet1 ? "opacity-100" : "opacity-0"}`}
+                className={`transition-opacity duration-300 ${bulletValue.bullet1 ? "opacity-100" : "opacity-0"}`}
               />
-              <img
-                src="./image/image2.png"
+              <Image
+                layout="fill"
+                quality={100}
+                src={Image2}
                 alt="image2"
-                className={`absolute w-full h-full object-cover transition-opacity duration-300 ${bulletValue.bullet2 ? "opacity-100" : "opacity-0"}`}
+                className={`transition-opacity duration-300 ${bulletValue.bullet2 ? "opacity-100" : "opacity-0"}`}
               />
-              <img
-                src="./image/image3.png"
+              <Image
+                layout="fill"
+                quality={100}
+                src={Image3}
                 alt="image3"
-                className={`absolute w-full h-full object-cover transition-opacity duration-300 ${bulletValue.bullet3 ? "opacity-100" : "opacity-0"}`}
+                className={`transition-opacity duration-300 ${bulletValue.bullet3 ? "opacity-100" : "opacity-0"}`}
               />
             </div>
             <div className="flex flex-col items-center justify-center">

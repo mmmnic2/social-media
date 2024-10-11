@@ -29,9 +29,7 @@ const Message = () => {
     console.log("websocket connected...", frame);
   };
   const onMessageReceive = useCallback((message: any) => {
-    console.log(message);
     const receivedMessage = JSON.parse(message.body);
-    console.log("checl");
     dispatch(addMessage(receivedMessage));
   }, []);
   useEffect(() => {
@@ -41,7 +39,6 @@ const Message = () => {
         onMessageReceive,
       );
       setSubscription(newSubscription);
-      console.log("check");
     }
     return () => {
       if (subscription) {
@@ -66,7 +63,7 @@ const Message = () => {
     }
   };
   useEffect(() => {
-    const sock = new SockJS("http://localhost:8080/ws");
+    const sock = new SockJS(`${process.env.NEXT_PUBLIC_API_URL}/ws`);
     const stomp = Stomp.over(sock);
     setStompClient(stomp);
     stomp.connect({}, onConnect, onError);

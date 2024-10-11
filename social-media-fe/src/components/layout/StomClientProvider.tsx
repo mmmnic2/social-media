@@ -29,7 +29,7 @@ export const StomClientProvider = ({
 
   useEffect(() => {
     if (token) {
-      const sock = new SockJS("http://localhost:8080/ws");
+      const sock = new SockJS(`${process.env.NEXT_PUBLIC_API_URL}/ws`);
       const stomp = Stomp.over(sock);
       setStompClient(stomp);
       stomp.connect(
