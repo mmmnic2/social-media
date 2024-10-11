@@ -35,6 +35,9 @@ const postState = createSlice({
         return post;
       });
     },
+    setIsFetchAllPosts(state, { payload }) {
+      state.isAllPostRefetch = payload;
+    },
   },
 });
 const postStateReducer = postState.reducer;
@@ -43,5 +46,6 @@ export const {
   setPostSelected,
   setRefetchAllPost,
   setRefetchPostByUser,
+  setIsFetchAllPosts,
 } = postState.actions;
 export default postStateReducer;

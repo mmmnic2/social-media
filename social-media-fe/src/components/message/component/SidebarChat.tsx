@@ -2,6 +2,7 @@
 import HomeIcon from "@mui/icons-material/Home";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, Menu, MenuItem } from "@mui/material";
+import Link from "next/link";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
@@ -39,7 +40,9 @@ const SidebarChat = () => {
     <div className="flex h-full justify-between space-x-2 shadow-custom-shadow">
       <div className="w-full">
         <div className="flex space-x-4 items-center py-5 pl-5 border-b border-gray-300">
-          <HomeIcon />
+          <Link href={"/"}>
+            <HomeIcon />
+          </Link>
           <h1 className="text-xl font-bold">Home</h1>
         </div>
 

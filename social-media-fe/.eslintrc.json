@@ -29,6 +29,7 @@
     "import/no-named-as-default": "warn",
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "prettier/prettier": ["error", { "endOfLine": "auto" }],
-    "react-hooks/exhaustive-deps": "off"
+    "react-hooks/exhaustive-deps": "off",
+    "no-console": ["warn", { "allow": ["warn", "error"] }]
   }
 }

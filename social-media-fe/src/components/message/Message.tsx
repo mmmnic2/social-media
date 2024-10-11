@@ -1,12 +1,11 @@
 "use client";
 import { Avatar, Grid, IconButton } from "@mui/material";
-import { Stomp, Client } from "@stomp/stompjs";
+import { Stomp, Client, StompSubscription } from "@stomp/stompjs";
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
-import stomp from "stompjs";
 import { useGetChatsByUser } from "@/hooks/api-hooks/chat-hooks/useChat";
-import { setAllChats } from "@/redux/chat/chat";
+import { setAllChats, setChatSelected } from "@/redux/chat/chat";
 import { chatSelectedSelector } from "@/redux/chat/selectors";
 import { addMessage } from "@/redux/message/message";
 import ChatNotFound from "./component/ChatNotFound";
@@ -21,7 +20,7 @@ const Message = () => {
   }, [allChats, dispatch]);
   const validToken = useSelector((state: any) => state.auth.accessToken);
   const [stompClient, setStompClient] = useState<Client | null>(null);
-  const [subscription, setSubscription] = useState<stomp.Subscription | null>(
+  const [subscription, setSubscription] = useState<StompSubscription | null>(
     null,
   );
   //websocket ở đây
@@ -30,16 +29,11 @@ const Message = () => {
     console.log("websocket connected...", frame);
   };
   const onMessageReceive = useCallback((message: any) => {
+    console.log(message);
     const receivedMessage = JSON.parse(message.body);
     console.log("checl");
     dispatch(addMessage(receivedMessage));
   }, []);
-
-  // const onMessageReceive = (message: any) => {
-  //   const receivedMessage = JSON.parse(message.body);
-  //   console.log("checl");
-  //   dispatch(addMessage(receivedMessage));
-  // }; // Add dependencies if necessary
   useEffect(() => {
     if (stompClient && Object.keys(currentChat).length > 0) {
       const newSubscription = stompClient.subscribe(
@@ -57,7 +51,7 @@ const Message = () => {
   }, [currentChat, stompClient, onMessageReceive]);
 
   const onError = (error: any) => {
-    console.log("error: ", error);
+    console.error("error: ", error);
   };
 
   const sendMessageToServer = (message: any) => {
@@ -77,6 +71,7 @@ const Message = () => {
     setStompClient(stomp);
     stomp.connect({}, onConnect, onError);
     return () => {
+      dispatch(setChatSelected({}));
       if (stomp) {
         stomp.disconnect();
       }

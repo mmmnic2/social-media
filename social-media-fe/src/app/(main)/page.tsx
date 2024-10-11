@@ -1,6 +1,5 @@
-import MiddlePartV2 from "@/components/home/middlepart/MiddlePartV2";
+import MiddlePart from "@/components/home/middlepart/MiddlePart";
 
 export default function Home() {
-  return <MiddlePartV2 />;
-  // return <HomePageV2 />;
+  return <MiddlePart />;
 }

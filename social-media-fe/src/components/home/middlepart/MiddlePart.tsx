@@ -1,42 +1,26 @@
-"use client";
-import AddIcon from "@mui/icons-material/Add";
-import { Avatar, Card, IconButton } from "@mui/material";
-import { useSelector } from "react-redux";
-import CreatePost from "@/components/post/CreatePost";
-import PostCard from "@/components/post/PostCard";
-import StoryCircle from "./component/StoryCircle";
-const arrUser = [1, 1, 1, 1, 1];
+import { cookies } from "next/headers";
+import React from "react";
+import { PostList } from "@/components/post/PostList";
+import CreatePostCard from "./component/CreatePostCard";
+import Stories from "./component/Stories";
 
 const MiddlePart = () => {
-  const postSelector = useSelector((state: any) => state.post);
+  const token = cookies().get("sessionToken");
   return (
-    <div className="w-full">
-      {/* mỗi section là một component trong miđlepart */}
-      <section className="w-full py-5 flex items-center rounded-b-md">
-        <div className="flex flex-col items-center mr-4 cursor-pointer">
-          <Avatar
-            sx={{ width: "5rem", height: "5rem" }}
-            // src="https://png.pngtree.com/png-clipart/20210608/ourlarge/pngtree-dark-gray-simple-avatar-png-image_3418404.jpg"
-          >
-            <AddIcon sx={{ fontSize: "3rem" }} />
-          </Avatar>
-          <p>New</p>
-        </div>
-        {arrUser.map((user, index) => (
-          <StoryCircle key={index} />
+    <React.Fragment>
+      <Stories />
+      <div className="mt-4">
+        <CreatePostCard isLogin={!!token} />
+      </div>
+      {/* <div className="feeds mt-4">
+        {arrUser.map((item, idx) => (
+          <PostCard key={idx} post={[]} />
         ))}
-      </section>
-      {/* create-post */}
-      <section className="w-full ">
-        <CreatePost />
-      </section>
-      {/* Post here */}
-      <section className="mt-5 space-y-5">
-        {postSelector?.posts?.map((post: any) => (
-          <PostCard key={post} post={post} />
-        ))}
-      </section>
-    </div>
+      </div> */}
+      <div className="mt-4">
+        <PostList isLogin={!!token} />
+      </div>
+    </React.Fragment>
   );
 };
 export default MiddlePart;
