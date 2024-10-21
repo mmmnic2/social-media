@@ -1,5 +1,6 @@
 "use client";
 import AddIcon from "@mui/icons-material/Add";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import Image from "next/image";
 import React, { useState, useEffect, useMemo } from "react";
@@ -9,6 +10,7 @@ import { useGetPostByUserId } from "@/hooks/api-hooks/post-hooks/usePost";
 import {
   useGetUserById,
   useGetUserProfile,
+  useUploadUserAvatar,
 } from "@/hooks/api-hooks/user-hooks/useUser";
 import { setRefetchPostByUser } from "@/redux/post/post";
 import { UserProps } from "@/redux/user";
@@ -18,6 +20,8 @@ import { useSnackbar } from "../common/snackbar/Snackbar";
 import PostCard from "../post/PostCard";
 import UserReelCard from "../reels/UserReelCard";
 import UpdateProfileModal from "./component/UpdateProfileModal";
+import ImageUploadDialog from "./component/UploadImageDialog";
+import UploadAvatarDialog from "./component/UploadImageDialog";
 
 const properties = [
   { value: "post", name: "Post" },
@@ -36,6 +40,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
   const userSelector = useSelector((state: UserProps) => state.user);
   const { posts } = useSelector((state: any) => state.post);
   const { showSnackbar } = useSnackbar();
+  const [isUploadImageDialogOpen, setIsUploadImageDialogOpen] = useState(false);
   // const [value, setValue] = useState("post");
   // const [open, setOpen] = useState(false);
   // const handleClose = () => setOpen(false);
@@ -57,6 +62,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
   } = useGetUserById(id);
 
   const { mutate: sendFriendRequest } = useSendFriendRequest();
+  const { mutate: updateUserAvatarRequest } = useUploadUserAvatar();
 
   // if (isLoading) return <div>Loading...</div>;
 
@@ -136,13 +142,19 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
         </div>
       </div>
       <div className="-translate-y-56">
-        <div className="bg-white h-[10rem] w-[10rem] rounded-t-full p-1 rounded-br-full">
+        <div
+          className="bg-white h-[10rem] w-[10rem] rounded-t-full p-1 rounded-br-full group relative cursor-pointer"
+          onClick={() => setIsUploadImageDialogOpen(true)}
+        >
           <SocialAvatar
             imgUrl="abc"
             alt={userInfor?.firstName || "Lan Lan"}
             height="100%"
             width="100%"
           />
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <CameraAltIcon />
+          </div>
           <div className=" relative z-10">
             <p className="text-center mt-4 font-bold text-2xl">
               {(userInfor && `${userInfor.firstName} ${userInfor.lastName}`) ||
@@ -182,6 +194,10 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
           </div>
         </div>
       </div>
+      <UploadAvatarDialog
+        open={isUploadImageDialogOpen}
+        onClose={() => setIsUploadImageDialogOpen(!isUploadImageDialogOpen)}
+      />
     </>
   );
 };

@@ -30,3 +30,12 @@ export async function handleFollowUser(followedId: number) {
   const res = await axios.put(url);
   return res.data;
 }
+export async function uploadUserAvatar(payload: any) {
+  const url = `/api/v1/user/upload-avatar`;
+  const res = await axios.post(url, payload, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return res.data;
+}

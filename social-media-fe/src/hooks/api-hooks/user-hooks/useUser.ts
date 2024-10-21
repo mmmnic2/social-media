@@ -5,6 +5,7 @@ import {
   getUserProfileById,
   updateUserProfile,
   searchUser,
+  uploadUserAvatar,
 } from "@/api/user";
 
 export const useGetUserProfile = (token: string | null) => {
@@ -23,4 +24,7 @@ export const useFindUserByEmail = (email: string | null) => {
 };
 export const useSearchUser = () => {
   return useMutation(searchUser);
+};
+export const useUploadUserAvatar = () => {
+  return useMutation(uploadUserAvatar);
 };
