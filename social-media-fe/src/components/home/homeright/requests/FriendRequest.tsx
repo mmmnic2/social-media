@@ -13,7 +13,11 @@ interface FriendActionsPayloadProps {
 }
 
 const FriendRequests = ({ isLogin }: { isLogin: boolean }) => {
-  const { data: pendingRequests, isLoading } = usePendingFriendRequests();
+  const {
+    data: pendingRequests,
+    isLoading,
+    refetch: refetchFriendRequests,
+  } = usePendingFriendRequests();
   const { mutate: friendRequestActions } = useFriendRequestActions();
   const { showSnackbar } = useSnackbar();
 
@@ -25,6 +29,7 @@ const FriendRequests = ({ isLogin }: { isLogin: boolean }) => {
     friendRequestActions(payload, {
       onSuccess: () => {
         showSnackbar("Friend Accepted!", "success");
+        refetchFriendRequests();
       },
       onError: () => {
         showSnackbar("Accept friend failed!", "error");
@@ -33,13 +38,14 @@ const FriendRequests = ({ isLogin }: { isLogin: boolean }) => {
   };
 
   const handleDecline = (request: any) => {
-    const payload = {
+    const payload: FriendActionsPayloadProps = {
       requestId: request.id,
-      status: "DECLINE",
+      status: "DECLINED",
     };
     friendRequestActions(payload, {
       onSuccess: () => {
         showSnackbar("Decline Friend Request Successfully!", "success");
+        refetchFriendRequests();
       },
       onError: () => {
         showSnackbar("Decline Friend Request Failed!", "error");

@@ -5,7 +5,9 @@ import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import Image from "next/image";
 import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NotificationPayload, NotificationType } from "@/api/notification";
 import { useSendFriendRequest } from "@/hooks/api-hooks/friend-requests/useFriendRequests";
+import { useSendNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
 import { useGetPostByUserId } from "@/hooks/api-hooks/post-hooks/usePost";
 import {
   useGetUserById,
@@ -61,8 +63,9 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     refetch: () => void;
   } = useGetUserById(id);
 
-  const { mutate: sendFriendRequest } = useSendFriendRequest();
-  const { mutate: updateUserAvatarRequest } = useUploadUserAvatar();
+  const { mutate: sendFriendRequest, isSuccess: sendFriendRequestSuccess } =
+    useSendFriendRequest();
+  const { mutate: sendNotificationMutate } = useSendNotification();
 
   // if (isLoading) return <div>Loading...</div>;
 
@@ -89,11 +92,25 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
       },
     });
   };
+  const sendFriendRequestNoti = () => {
+    const friendNotiReqBoby: NotificationPayload = {
+      senderId: userSelector.id,
+      receiverId: userInfor.id,
+      notificationType: NotificationType.FRIEND_REQUEST,
+    };
+    sendNotificationMutate(friendNotiReqBoby);
+  };
+  useEffect(() => {
+    if (sendFriendRequestSuccess) {
+      sendFriendRequestNoti();
+    }
+  }, [sendFriendRequestSuccess]);
+
   const renderFollowButton = () => {
     if (Number(id) !== userSelector.id) {
       return (
         <AppButton
-          className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 -right-32 z-11 hover:bg-accent-color/50"
+          className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 left-1/3 z-110 hover:bg-accent-color/50"
           style={{ position: "absolute" }}
           disabled={!isLogin}
           onClick={handleFollowUser}
@@ -106,7 +123,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     } else if (!isLogin) {
       return (
         <AppButton
-          className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 -right-32 z-11 hover:bg-accent-color/50"
+          className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 left-1/3 z-11 hover:bg-accent-color/50"
           style={{ position: "absolute" }}
           disabled={!isLogin}
         >
@@ -155,17 +172,17 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
           <div className="absolute bottom-5 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
             <CameraAltIcon />
           </div>
-          <div className=" relative z-10">
-            <p className="text-center mt-4 font-bold text-2xl">
-              {(userInfor && `${userInfor.firstName} ${userInfor.lastName}`) ||
-                "Lan Lan"}
-            </p>
-            {renderFollowButton()}
-          </div>
+        </div>
+        <div className="relative z-10">
+          <p className="px-[2rem] mt-4 font-bold text-2xl">
+            {(userInfor && `${userInfor.firstName} ${userInfor.lastName}`) ||
+              "Lan Lan"}
+          </p>
+          {renderFollowButton()}
         </div>
       </div>
-      <div className="bg-white w-full -translate-y-44 relative z-10">
-        <div className="pt-4 px-[2.3rem]">
+      <div className="bg-white w-full -translate-y-52 relative z-10">
+        <div className="pt-4 px-[2rem]">
           <p>Description</p>
           <div className="grid grid-cols-3 py-4">
             <div className="flex flex-col items-center relative">
