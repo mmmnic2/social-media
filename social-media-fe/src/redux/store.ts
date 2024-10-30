@@ -6,6 +6,7 @@ import authReducer from "./auth";
 import chatReducer from "./chat/chat";
 import commentReducer from "./comment/comment";
 import messageReducer from "./message/message";
+import notiReducer from "./notifications/notifications";
 import postReducer from "./post/post";
 import userReducer from "./user";
 const persistConfig = {
@@ -22,6 +23,7 @@ const reducer = combineReducers({
   comment: commentReducer,
   chat: chatReducer,
   message: messageReducer,
+  noti: notiReducer,
 });
 const isClientMiddleware = (storeAPI: any) => (next: any) => (action: any) => {
   if (typeof window !== "undefined") {

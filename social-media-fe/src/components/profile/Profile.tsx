@@ -1,15 +1,20 @@
 "use client";
 import AddIcon from "@mui/icons-material/Add";
+import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import Image from "next/image";
 import React, { useState, useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NotificationPayload } from "@/api/notification";
 import { useSendFriendRequest } from "@/hooks/api-hooks/friend-requests/useFriendRequests";
+import { useSendNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
 import { useGetPostByUserId } from "@/hooks/api-hooks/post-hooks/usePost";
 import {
   useGetUserById,
   useGetUserProfile,
+  useUploadUserAvatar,
 } from "@/hooks/api-hooks/user-hooks/useUser";
+import { NotificationType } from "@/redux/notifications/state";
 import { setRefetchPostByUser } from "@/redux/post/post";
 import { UserProps } from "@/redux/user";
 import SocialAvatar from "../common/avatar/SocialAvatar";
@@ -18,6 +23,8 @@ import { useSnackbar } from "../common/snackbar/Snackbar";
 import PostCard from "../post/PostCard";
 import UserReelCard from "../reels/UserReelCard";
 import UpdateProfileModal from "./component/UpdateProfileModal";
+import ImageUploadDialog from "./component/UploadImageDialog";
+import UploadAvatarDialog from "./component/UploadImageDialog";
 
 const properties = [
   { value: "post", name: "Post" },
@@ -36,6 +43,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
   const userSelector = useSelector((state: UserProps) => state.user);
   const { posts } = useSelector((state: any) => state.post);
   const { showSnackbar } = useSnackbar();
+  const [isUploadImageDialogOpen, setIsUploadImageDialogOpen] = useState(false);
   // const [value, setValue] = useState("post");
   // const [open, setOpen] = useState(false);
   // const handleClose = () => setOpen(false);
@@ -56,7 +64,9 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     refetch: () => void;
   } = useGetUserById(id);
 
-  const { mutate: sendFriendRequest } = useSendFriendRequest();
+  const { mutate: sendFriendRequest, isSuccess: sendFriendRequestSuccess } =
+    useSendFriendRequest();
+  const { mutate: sendNotificationMutate } = useSendNotification();
 
   // if (isLoading) return <div>Loading...</div>;
 
@@ -83,11 +93,25 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
       },
     });
   };
+  const sendFriendRequestNoti = () => {
+    const friendNotiReqBoby: NotificationPayload = {
+      senderId: userSelector.id,
+      receiverId: userInfor.id,
+      notificationType: NotificationType.FRIEND_REQUEST,
+    };
+    sendNotificationMutate(friendNotiReqBoby);
+  };
+  useEffect(() => {
+    if (sendFriendRequestSuccess) {
+      sendFriendRequestNoti();
+    }
+  }, [sendFriendRequestSuccess]);
+
   const renderFollowButton = () => {
     if (Number(id) !== userSelector.id) {
       return (
         <AppButton
-          className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 -right-32 z-11 hover:bg-accent-color/50"
+          className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 left-1/3 z-110 hover:bg-accent-color/50"
           style={{ position: "absolute" }}
           disabled={!isLogin}
           onClick={handleFollowUser}
@@ -100,7 +124,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     } else if (!isLogin) {
       return (
         <AppButton
-          className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 -right-32 z-11 hover:bg-accent-color/50"
+          className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 left-1/3 z-11 hover:bg-accent-color/50"
           style={{ position: "absolute" }}
           disabled={!isLogin}
         >
@@ -136,24 +160,30 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
         </div>
       </div>
       <div className="-translate-y-56">
-        <div className="bg-white h-[10rem] w-[10rem] rounded-t-full p-1 rounded-br-full">
+        <div
+          className="bg-white h-[10rem] w-[10rem] rounded-t-full p-1 rounded-br-full group relative cursor-pointer"
+          onClick={() => setIsUploadImageDialogOpen(true)}
+        >
           <SocialAvatar
             imgUrl="abc"
             alt={userInfor?.firstName || "Lan Lan"}
             height="100%"
             width="100%"
           />
-          <div className=" relative z-10">
-            <p className="text-center mt-4 font-bold text-2xl">
-              {(userInfor && `${userInfor.firstName} ${userInfor.lastName}`) ||
-                "Lan Lan"}
-            </p>
-            {renderFollowButton()}
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+            <CameraAltIcon />
           </div>
         </div>
+        <div className="relative z-10">
+          <p className="px-[2rem] mt-4 font-bold text-2xl">
+            {(userInfor && `${userInfor.firstName} ${userInfor.lastName}`) ||
+              "Lan Lan"}
+          </p>
+          {renderFollowButton()}
+        </div>
       </div>
-      <div className="bg-white w-full -translate-y-44 relative z-10">
-        <div className="pt-4 px-[2.3rem]">
+      <div className="bg-white w-full -translate-y-52 relative z-10">
+        <div className="pt-4 px-[2rem]">
           <p>Description</p>
           <div className="grid grid-cols-3 py-4">
             <div className="flex flex-col items-center relative">
@@ -182,6 +212,10 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
           </div>
         </div>
       </div>
+      <UploadAvatarDialog
+        open={isUploadImageDialogOpen}
+        onClose={() => setIsUploadImageDialogOpen(!isUploadImageDialogOpen)}
+      />
     </>
   );
 };

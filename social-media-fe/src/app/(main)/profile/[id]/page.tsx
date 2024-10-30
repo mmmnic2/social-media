@@ -7,7 +7,7 @@ const ProfilePage = ({ params }: { params: { id: string } }) => {
   return (
     <div>
       <Profile id={params.id} isLogin={!!token} />
-      <div className="mt-4 -translate-y-44">
+      <div className="mt-4 -translate-y-52">
         <PostList id={params.id} isLogin={!!token} />
       </div>
     </div>

@@ -39,7 +39,6 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
     return expireIn != null && expireIn != undefined && expireIn > Date.now();
   };
   let isLogin = checkIsLogin(store.getState()?.auth.expireTime);
-  // console.log({ isLogin });
 
   // useEffect(() => {
   //   if (!isLogin && currentPath != "/login" && currentPath != "/register") {

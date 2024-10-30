@@ -14,6 +14,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 import { useLogout } from "@/hooks/api-hooks/auth-hooks/useAuth";
+import { allNotiSeletor } from "@/redux/notifications/selectors";
 import { UserProps } from "@/redux/user";
 
 const navigationMenu = [
@@ -68,6 +69,7 @@ const navigationMenu = [
 const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
   const { mutate: logoutAction } = useLogout();
   const userSelector = useSelector((state: UserProps) => state.user);
+  const allNoti = useSelector((state: any) => state.noti.allNotifications);
   const handleLogout = () => {
     logoutAction();
   };
@@ -122,7 +124,7 @@ const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
                   {item.icon}
                   {item.id === "notifications" && (
                     <small className="absolute top-[-0.5rem] right-[-0.5rem] bg-red-500 text-white text-xs rounded-full px-1">
-                      9+
+                      {allNoti.length > 9 ? "9+" : allNoti.length}
                     </small>
                   )}
                   {item.id === "messages" && (

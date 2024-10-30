@@ -1,7 +1,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["mtv.vn"],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "mtv.vn",
+        pathname: "**",
+      },
+    ],
   },
 };
 

@@ -14,6 +14,7 @@ import * as React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useLogout } from "@/hooks/api-hooks/auth-hooks/useAuth";
 import { logout } from "@/redux/auth";
+import { allNotiSeletor } from "@/redux/notifications/selectors";
 const navigationMenu = [
   {
     tilte: "Home",
@@ -60,6 +61,7 @@ const navigationMenu = [
 const Sidebar = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const userSelector = useSelector((state: any) => state.user);
+  const allNoti = useSelector((state: any) => state.noti);
   const dispatch = useDispatch();
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
