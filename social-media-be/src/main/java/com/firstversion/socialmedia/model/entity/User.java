@@ -5,6 +5,7 @@ import com.firstversion.socialmedia.model.enums.AuthProvider;
 import com.firstversion.socialmedia.model.enums.Gender;
 import com.firstversion.socialmedia.model.enums.Role;
 import com.firstversion.socialmedia.model.enums.UserStatus;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import lombok.Getter;
@@ -39,6 +40,7 @@ public class User extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private String email;
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     //List những bài post đã lưu
     @Column
@@ -79,6 +81,7 @@ public class User extends BaseEntity implements UserDetails {
         userResponse.setCreateDate(this.getCreateDate());
         userResponse.setModifiedDate(this.getModifiedDate());
         userResponse.setUserStatus(this.userStatus);
+        userResponse.setImageUrl(this.imageUrl);
         return userResponse;
     }
 

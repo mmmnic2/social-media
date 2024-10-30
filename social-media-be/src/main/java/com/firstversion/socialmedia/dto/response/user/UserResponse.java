@@ -19,6 +19,7 @@ public class UserResponse extends BaseDTO {
     private String lastName;
     private String email;
     private String gender;
+    private String imageUrl;
     private List<FollowUserResponse> followerList;
     private List<FollowUserResponse> followingList;
     private UserStatus userStatus;
