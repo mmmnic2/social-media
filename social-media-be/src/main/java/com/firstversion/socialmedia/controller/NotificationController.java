@@ -11,6 +11,8 @@ import org.springframework.messaging.MessagingException;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/notification")
 public class NotificationController {
@@ -39,5 +41,11 @@ public class NotificationController {
     public ResponseEntity<?> markAsRead(@PathVariable Long notificationId) {
         notificationService.markAsRead(notificationId);
         return ResponseEntity.ok("Read notification successful.");
+    }
+
+    @GetMapping("/get-all-by-receiver/{receiverId}")
+    public ResponseEntity<?> getAllNotification(@PathVariable Long receiverId){
+        List<NotificationResponse> response = notificationService.findByReceiver(receiverId);
+        return ResponseEntity.ok(response);
     }
 }
