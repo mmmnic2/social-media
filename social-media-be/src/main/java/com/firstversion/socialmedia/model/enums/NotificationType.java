@@ -36,6 +36,12 @@ public enum NotificationType {
         public String getPrefix(){
             return "send you a message.";
         }
+    },
+    FRIEND_REQUEST_ACCEPTED{
+        @Override
+        public String getPrefix() {
+            return "and you are friend now.";
+        }
     };
     public abstract String getPrefix();
 }

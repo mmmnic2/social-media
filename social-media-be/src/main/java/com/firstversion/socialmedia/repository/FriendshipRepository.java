@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
@@ -17,4 +18,8 @@ public interface FriendshipRepository extends JpaRepository<Friendship, Long> {
     List<Friendship> getFriendList(Long userId);
     @Query("Select fs from Friendship fs where fs.friend.id = :friendId and fs.status = 'PENDING'")
     List<Friendship> getPendingRequests(Long friendId);
+    @Query("Select fs from Friendship fs where fs.friend.id = :friendId and fs.user.id = :userId")
+    Optional<Friendship> findByUserAndFriend(Long userId, Long friendId);
+    @Query("Select fs from Friendship fs where fs.friend.id = :friendId and fs.user.id = :userId and fs.status = 'PENDING'")
+    Optional<Friendship> findByUserAndFriendAndPendingStatus(Long userId, Long friendId);
 }

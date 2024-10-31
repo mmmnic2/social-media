@@ -57,6 +57,6 @@ public class AuthServiceImpl implements AuthService {
         user.setGender(Gender.valueOf(userRequest.getGender()));
         user.setRole(Role.ROLE_USER);
         User savedUser = userRepository.save(user);
-        return savedUser.toUserResponse();
+            return savedUser.toUserResponse();
     }
 }

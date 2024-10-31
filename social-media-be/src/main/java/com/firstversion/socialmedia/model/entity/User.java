@@ -55,7 +55,7 @@ public class User extends BaseEntity implements UserDetails {
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus = UserStatus.OFFLINE;
     @Column
-    private boolean isActive;
+    private boolean isActive = true;
 
     public String getFullName() {
         return this.firstName + " " + this.lastName;
@@ -81,7 +81,7 @@ public class User extends BaseEntity implements UserDetails {
         userResponse.setCreateDate(this.getCreateDate());
         userResponse.setModifiedDate(this.getModifiedDate());
         userResponse.setUserStatus(this.userStatus);
-        userResponse.setImageUrl(this.imageUrl);
+        userResponse.setImageUrl(this.getImageUrl());
         return userResponse;
     }
 

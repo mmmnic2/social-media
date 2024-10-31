@@ -2,6 +2,7 @@ package com.firstversion.socialmedia.service.impl;
 
 import com.firstversion.socialmedia.dto.request.FriendRequest;
 import com.firstversion.socialmedia.exception.AccessDeniedException;
+import com.firstversion.socialmedia.exception.AlreadyExistException;
 import com.firstversion.socialmedia.exception.NotFoundException;
 import com.firstversion.socialmedia.model.entity.Friendship;
 import com.firstversion.socialmedia.model.entity.User;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +31,13 @@ public class FriendshipServiceImpl implements FriendshipService {
         User userLogin = (User) authentication.getPrincipal();
         if(!Objects.equals(foundUser.getId(), userLogin.getId())) throw new AccessDeniedException("User ID in the request does not match the authenticated user.");
         User foundFriend = userRepository.findById(friendRequest.getFriendId()).orElseThrow(()-> new NotFoundException("Friend not found."));
+        Optional<Friendship> existFS = friendshipRepository.findByUserAndFriendAndPendingStatus(foundUser.getId(), foundFriend.getId());
+        if(existFS.isPresent()) throw new AlreadyExistException("You has already sent friend request to this user.");
+        Optional<Friendship> foundFS = friendshipRepository.findByUserAndFriend(foundFriend.getId(), foundUser.getId());
+        if(foundFS.isPresent() && foundFS.get().getStatus() == FriendshipStatus.PENDING){
+            foundFS.get().setStatus(FriendshipStatus.ACCEPTED);
+            return friendshipRepository.save(foundFS.get());
+        }
         Friendship friendship = new Friendship();
         friendship.setFriend(foundFriend);
         friendship.setUser(foundUser);
