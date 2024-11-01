@@ -49,6 +49,13 @@ public class NotificationServiceImpl implements NotificationService {
     }
 
     @Override
+    public void markAsUnread(Long notificationId) {
+        Notification foundNotify = notificationRepository.findById(notificationId).orElseThrow(() -> new NotFoundException("Notification not found."));
+        foundNotify.setRead(false);
+        notificationRepository.save(foundNotify);
+    }
+
+    @Override
     public List<NotificationResponse> findByReceiver(Long receiverId) {
         User foundReceiver = userRepository.findById(receiverId).orElseThrow(() -> new NotFoundException("User not found."));
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

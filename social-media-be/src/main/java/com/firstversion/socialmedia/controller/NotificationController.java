@@ -42,7 +42,11 @@ public class NotificationController {
         notificationService.markAsRead(notificationId);
         return ResponseEntity.ok("Read notification successful.");
     }
-
+    @PutMapping("/unread/{notificationId}")
+    public ResponseEntity<?> markAsUnread(@PathVariable Long notificationId) {
+        notificationService.markAsUnread(notificationId);
+        return ResponseEntity.ok("Unread notification successful.");
+    }
     @GetMapping("/get-all-by-receiver/{receiverId}")
     public ResponseEntity<?> getAllNotification(@PathVariable Long receiverId){
         List<NotificationResponse> response = notificationService.findByReceiver(receiverId);

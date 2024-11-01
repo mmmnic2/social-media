@@ -10,6 +10,7 @@ import java.util.List;
 public interface NotificationService {
     NotificationResponse createNotifify(NotificationRequest notificationRequest);
     void markAsRead(Long notificationId);
+    void markAsUnread(Long notificationId);
     List<NotificationResponse> findByReceiver(Long receiverId);
     void deleteNotification(Long notificationId);
 }
