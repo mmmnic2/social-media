@@ -18,3 +18,9 @@ export async function getAllNotiByUser(userId: number) {
   const res = await axios.get(url);
   return res.data;
 }
+
+export async function markAsReadNoti(notiId: number) {
+  const url = `/api/v1/notification/read/${notiId}`;
+  const res = await axios.put(url);
+  return res.data;
+}

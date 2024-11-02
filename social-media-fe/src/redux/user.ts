@@ -13,6 +13,7 @@ export interface UserProps {
   followings: [];
   role: string;
   userStatus: string;
+  imageUrl: string;
 }
 
 const initialState = {
@@ -28,6 +29,7 @@ const initialState = {
   followings: [],
   role: null,
   userStatus: null,
+  imageUrl: null,
 };
 
 const user = createSlice({
@@ -40,7 +42,7 @@ const user = createSlice({
         email,
         lastName,
         firstName,
-        // userImage,
+        imageUrl,
         gender,
         followerList,
         followingList,
@@ -57,7 +59,7 @@ const user = createSlice({
       state.gender = gender;
       state.followers = followerList;
       state.followings = followingList;
-      // state.user_image = userImage;
+      state.imageUrl = imageUrl;
       state.create_at = createDate;
       state.update_at = modifiedDate;
       state.role = role;

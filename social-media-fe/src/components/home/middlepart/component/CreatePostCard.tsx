@@ -41,7 +41,7 @@ const CreatePostCard = ({ isLogin }: CreatePostCardProps) => {
     <form className="create-post flex gap-3 relative">
       <div className="absolute top-1/2 left-2 -translate-y-1/2">
         <SocialAvatar
-          imgUrl={currentUser.imgUrl || "abc"}
+          imgUrl={currentUser.imageUrl || "/"}
           alt={currentUser.first_name || "Lan Lan"}
         />
       </div>

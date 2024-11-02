@@ -10,9 +10,12 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Divider } from "@mui/material";
 import Link from "next/link";
-import React from "react";
+import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
+import NotificationDialog from "@/components/notifications/NotificationDialog";
 import { useLogout } from "@/hooks/api-hooks/auth-hooks/useAuth";
 import { allNotiSeletor } from "@/redux/notifications/selectors";
 import { UserProps } from "@/redux/user";
@@ -70,9 +73,24 @@ const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
   const { mutate: logoutAction } = useLogout();
   const userSelector = useSelector((state: UserProps) => state.user);
   const allNoti = useSelector((state: any) => state.noti.allNotifications);
+  const pathName = usePathname();
+  const router = useRouter();
+  const [openNotiDialog, setOpenNotiDialog] = useState(false);
   const handleLogout = () => {
     logoutAction();
   };
+  const handleClose = () => {
+    if (pathName.endsWith("/notification")) {
+      setOpenNotiDialog(false);
+    }
+    router.push("/");
+  };
+  useEffect(() => {
+    if (pathName.endsWith("/notification")) {
+      setOpenNotiDialog(true);
+      return;
+    }
+  }, [pathName]);
 
   return (
     <div className="sticky top-0 h-max basis-1/4">
@@ -81,7 +99,7 @@ const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
         className="flex items-center p-4 bg-white rounded-md mt-4"
       >
         <AvatarWithInfo
-          imgUrl={"abc"}
+          imgUrl={userSelector?.imageUrl ? userSelector.imageUrl : "/"}
           alt={userSelector?.first_name || "Lan Lan"}
           title={
             userSelector?.first_name
@@ -139,6 +157,7 @@ const HomeLeft = ({ isLogin }: { isLogin: boolean }) => {
                 )}
               </Link>
             )}
+            <NotificationDialog open={openNotiDialog} onClose={handleClose} />
           </React.Fragment>
         ))}
       </div>

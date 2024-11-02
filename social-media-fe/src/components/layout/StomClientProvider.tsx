@@ -17,18 +17,14 @@ export const StomClientProvider = ({
 }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const userSelector = useSelector((state: any) => state.user);
-  const dispatch = useDispatch();
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
-  const {
-    data: allNotification,
-    refetch: refetchGetNotification,
-    isSuccess: getNotificationSuccess,
-  } = useGetNotification(userSelector.id);
+  const { refetch: refetchGetNotification } = useGetNotification(
+    userSelector.id,
+  );
   const onError = (error: any) => {
     console.error("error: ", error);
   };
-
   const onNotiFriendStatus = (friendStatus: any) => {
     const friendInfo = JSON.parse(friendStatus.body);
     showSnackbar(
@@ -76,12 +72,6 @@ export const StomClientProvider = ({
       };
     }
   }, [token]);
-
-  useEffect(() => {
-    if (getNotificationSuccess) {
-      dispatch(setAllNotifications(allNotification));
-    }
-  }, [getNotificationSuccess]);
 
   return <div>{children}</div>;
 };

@@ -148,7 +148,11 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
         <div className="user flex items-center justify-between">
           <div className="ingo flex items-center gap-2">
             <SocialAvatar
-              imgUrl="abc"
+              imgUrl={
+                post?.userResponse?.imageUrl
+                  ? post?.userResponse?.imageUrl
+                  : "/"
+              }
               alt={post?.userResponse?.firstName || "Lan Lan"}
             />
             <div>

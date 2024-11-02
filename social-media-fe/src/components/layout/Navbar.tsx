@@ -2,7 +2,9 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
 import axios from "@/constant/apiConstant";
+import { UserProps } from "@/redux/user";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import SearchBar from "../common/searchBar/SearchBar";
 import CreatePostModal from "../post/CreatePostModal";
@@ -13,6 +15,7 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
     React.ReactNode[]
   >([]);
   const router = useRouter();
+  const userInfo = useSelector((state: UserProps) => state.user);
   const handleSearch = async (query: string) => {
     if (query.trim() === "") {
       setFilteredSuggestions([]);
@@ -66,12 +69,9 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
               Create Post
             </button>
             <div className="profile-photo">
-              <Image
-                src="https://mtv.vn/uploads/2023/02/25/meo-gg.jpg"
-                alt="avatar"
-                className="w-10 h-10 rounded-full object-cover"
-                width={40}
-                height={40}
+              <SocialAvatar
+                imgUrl={userInfo?.imageUrl ? userInfo.imageUrl : "/"}
+                alt={userInfo?.first_name || "Lan Lan"}
               />
             </div>
           </div>
