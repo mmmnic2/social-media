@@ -22,7 +22,7 @@ export async function handleLikeAndUnlikeComment(commentId: number | string) {
   return res.data;
 }
 
-export async function getByPostId(postId: number) {
+export async function getByPostId(postId: number | null) {
   const url = `/api/v1/comment/get-by-post/${postId}`;
   const res = await axios.get(url);
   return res.data;

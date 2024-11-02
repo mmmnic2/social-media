@@ -3,12 +3,12 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
 import { useMarkAsReadNoti } from "@/hooks/api-hooks/notification-hooks/useNotification";
-import { NotiInfo } from "@/redux/notifications/state";
+import { Notification } from "@/types/notificationTypes";
 import { parseTime } from "@/utils/utils";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 
 interface NotificationCardProps {
-  notiInfo: NotiInfo;
+  notiInfo: Notification;
 }
 
 const NotificationCard = ({ notiInfo }: NotificationCardProps) => {

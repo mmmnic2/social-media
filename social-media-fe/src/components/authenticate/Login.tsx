@@ -8,9 +8,10 @@ import { useGetUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
 import { loginSuccess } from "@/redux/auth";
 import store from "@/redux/store";
 import { setUserInfo } from "@/redux/user";
+import { AuthTypes } from "@/types/authTypes";
 import FormComponent, { FormField } from "../common/form/FormComponent";
 import { useSnackbar } from "../common/snackbar/Snackbar";
-import { loginMethodIcon } from "./constances";
+import { loginMethodIcon } from "./constants";
 
 const formFields: FormField[] = [
   {
@@ -52,19 +53,11 @@ const Login = () => {
 
   const handleFormSubmit = (values: any) => {
     handleLogin(values, {
-      onSuccess: (data: {
-        accessToken: string;
-        refreshToken: string;
-        expireTime: number;
-      }) => {
-        let token: {
-          accessToken: string;
-          refreshToken: string;
-          expireTime: number;
-        } = {
+      onSuccess: (data: AuthTypes) => {
+        let token: AuthTypes = {
           accessToken: data.accessToken,
           refreshToken: data.refreshToken,
-          expireTime: data.expireTime + Date.now(),
+          expireTime: data.expireTime || 0 + Date.now(),
         };
         store.dispatch(loginSuccess(token));
       },

@@ -9,7 +9,7 @@ import ShareIcon from "@mui/icons-material/Share";
 import SmsIcon from "@mui/icons-material/Sms";
 import { IconButton, Tooltip } from "@mui/material";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useGetCommentByPostId } from "@/hooks/api-hooks/comment-hooks/useComment";
 import {
@@ -23,7 +23,8 @@ import {
   refetchAllPostSelector,
   refetchPostByUserSelector,
 } from "@/redux/post/selectors";
-import { UserProps } from "@/redux/user";
+import { RootState } from "@/redux/store";
+import { Post } from "@/types/postTypes";
 import { parseTime } from "@/utils/utils";
 import CommentList from "../comment/CommentList";
 import CreateCommentCard from "../comment/CreateCommentCard";
@@ -33,12 +34,12 @@ import CreatePostModal from "./CreatePostModal";
 import DeletePostModal from "./DeletePostModal";
 
 interface PostCardProps {
-  post: any;
+  post?: Post;
   isLogin: boolean;
 }
 
 const PostCard = ({ post, isLogin }: PostCardProps) => {
-  const [isLiked, setIsLiked] = useState(post?.currentUserLikePost);
+  const [isLiked, setIsLiked] = useState(post?.isCurrentUserLikePost);
   const [showComments, setShowComments] = useState(false);
   const [isBookMarked, setIsBookMarked] = useState(false);
   const [isEditPostMenuOpen, setIsEditPostMenuOpen] = useState(false);
@@ -52,18 +53,18 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
     data: commentsByPostId,
     isLoading,
     refetch: refetchAllComments,
-  } = useGetCommentByPostId(post?.id, showComments);
+  } = useGetCommentByPostId(post?.id || null, showComments);
 
   const refetchAllPost = useSelector(refetchAllPostSelector);
   const refetchAllPostByUser = useSelector(refetchPostByUserSelector);
   const isRefetchAllComments = useSelector((state: any) => state.comment);
-  const currentUser = useSelector((state: UserProps) => state.user);
+  const currentUser = useSelector((state: RootState) => state.user);
   const dispatch = useDispatch();
 
   const { showSnackbar } = useSnackbar();
 
   const handleClickLikePost = () => {
-    handleLikePost(post.id, {
+    handleLikePost(post?.id || null, {
       onSuccess: (data) => {
         setIsLiked(!data.delete);
         dispatch(setIsFetchAllPosts(true));
@@ -78,7 +79,7 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
   };
 
   const handleBookMark = () => {
-    handleSavePost(post?.id, {
+    handleSavePost(post?.id || null, {
       onSuccess: (data) => {
         showSnackbar(data, "success");
         setIsBookMarked(!isBookMarked);
@@ -98,7 +99,7 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
   };
 
   const handleDeletePost = () => {
-    deletePostMutate(post?.id, {
+    deletePostMutate(post?.id || null, {
       onSuccess: (data) => {
         showSnackbar(data, "success");
         handleCloseDeletePost();

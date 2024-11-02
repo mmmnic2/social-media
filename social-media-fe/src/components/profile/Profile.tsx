@@ -8,8 +8,7 @@ import { NotificationPayload } from "@/api/notification";
 import { useSendFriendRequest } from "@/hooks/api-hooks/friend-requests/useFriendRequests";
 import { useSendNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
 import { useGetUserById } from "@/hooks/api-hooks/user-hooks/useUser";
-import { NotificationType } from "@/redux/notifications/state";
-import { UserProps } from "@/redux/user";
+import { RootState } from "@/redux/store";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import { AppButton } from "../common/button/AppButton";
 import { useSnackbar } from "../common/snackbar/Snackbar";
@@ -21,7 +20,7 @@ interface ProfileProps {
 }
 
 const Profile = ({ id, isLogin }: ProfileProps) => {
-  const userSelector = useSelector((state: UserProps) => state.user);
+  const userSelector = useSelector((state: RootState) => state.user);
   const { posts } = useSelector((state: any) => state.post);
   const { showSnackbar } = useSnackbar();
   const [isUploadImageDialogOpen, setIsUploadImageDialogOpen] = useState(false);
@@ -53,7 +52,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     const friendNotiReqBoby: NotificationPayload = {
       senderId: userSelector.id,
       receiverId: userInfor.id,
-      notificationType: NotificationType.FRIEND_REQUEST,
+      notificationType: "FRIEND_REQUEST",
     };
     sendNotificationMutate(friendNotiReqBoby);
   };

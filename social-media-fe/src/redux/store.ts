@@ -41,6 +41,6 @@ const store = configureStore({
       serializableCheck: false,
     }).concat(isClientMiddleware),
 });
-
+export type RootState = ReturnType<typeof reducer>;
 export const persistor = persistStore(store);
 export default store;

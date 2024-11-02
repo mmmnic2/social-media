@@ -3,6 +3,7 @@ import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { login, logout, register } from "@/api/auth";
 import { logout as logoutState } from "@/redux/auth";
+import { clearUserInfo } from "@/redux/user";
 export const useLogin = () => {
   return useMutation("login", login, {
     onSuccess: async (data) => {
@@ -33,6 +34,7 @@ export const useLogout = () => {
         },
       });
       dispatch(logoutState());
+      dispatch(clearUserInfo());
       router.push("/login");
     },
   });

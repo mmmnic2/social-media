@@ -2,10 +2,9 @@
 import { Client, Stomp } from "@stomp/stompjs";
 import React, { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import { useGetNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
-import { setAllNotifications } from "@/redux/notifications/notifications";
 import { useSnackbar } from "../common/snackbar/Snackbar";
 
 export const StomClientProvider = ({

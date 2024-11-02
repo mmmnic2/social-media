@@ -1,9 +1,8 @@
 import axios from "@/constant/apiConstant";
-import { NotificationType } from "@/redux/notifications/state";
 
 export interface NotificationPayload {
-  senderId: number;
-  receiverId: number;
+  senderId: number | null;
+  receiverId: number | null;
   notificationType: NotificationType;
 }
 

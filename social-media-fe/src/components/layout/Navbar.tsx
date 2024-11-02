@@ -1,10 +1,10 @@
 "use client";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import axios from "@/constant/apiConstant";
-import { UserProps } from "@/redux/user";
+import { RootState } from "@/redux/store";
+import { User } from "@/types/userTypes";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import SearchBar from "../common/searchBar/SearchBar";
 import CreatePostModal from "../post/CreatePostModal";
@@ -15,7 +15,7 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
     React.ReactNode[]
   >([]);
   const router = useRouter();
-  const userInfo = useSelector((state: UserProps) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user);
   const handleSearch = async (query: string) => {
     if (query.trim() === "") {
       setFilteredSuggestions([]);
@@ -26,10 +26,10 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
         `${process.env.NEXT_PUBLIC_API_URL}/api/v1/user/all-user`,
       );
       const filtered = response.data
-        .filter((suggestion: any) =>
+        .filter((suggestion: User) =>
           suggestion.firstName.toLowerCase().includes(query.toLowerCase()),
         )
-        .map((suggestion: any) => (
+        .map((suggestion: User) => (
           <div className="flex items-center gap-2 pb-2" key={suggestion.id}>
             <SocialAvatar imgUrl={""} alt={suggestion.firstName} />
             <span>
@@ -51,7 +51,12 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
         className={`w-full bg-white py-2.5 fixed ${(!isLogin && "top-12") || "top-0"} left-0 z-10000 shadow`}
       >
         <div className="max-w-[80%] mx-auto flex justify-between items-center">
-          <h2 className="font-bold text-2xl">Lan Social</h2>
+          <h2
+            className="font-bold text-2xl cursor-pointer"
+            onClick={() => router.replace("/")}
+          >
+            Lan Social
+          </h2>
           <SearchBar
             onSearch={handleSearch}
             suggestions={filteredSuggestions}
@@ -71,7 +76,7 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
             <div className="profile-photo">
               <SocialAvatar
                 imgUrl={userInfo?.imageUrl ? userInfo.imageUrl : "/"}
-                alt={userInfo?.first_name || "Lan Lan"}
+                alt={userInfo?.firstName || "Lan Lan"}
               />
             </div>
           </div>
