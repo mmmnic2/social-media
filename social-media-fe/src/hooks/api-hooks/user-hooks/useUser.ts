@@ -16,8 +16,10 @@ export const useGetUserProfile = (token: string | null) => {
 export const useUpdateUserProfile = () => {
   return useMutation("update_profile", updateUserProfile);
 };
-export const useGetUserById = (userId: string | number) => {
-  return useQuery(["user", userId], () => getUserProfileById(userId));
+export const useGetUserById = (userId: string | number | null) => {
+  return useQuery(["user", userId], () => getUserProfileById(userId), {
+    enabled: !!userId,
+  });
 };
 export const useFindUserByEmail = (email: string | null) => {
   return useQuery(["user", email], () => findUserByEmail(email));

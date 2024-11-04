@@ -19,7 +19,7 @@ const WarningBanner = ({ isLogin }: { isLogin: boolean }) => {
             <div className="flex space-x-2">
               <Link
                 className="bg-text-primary text-light rounded-lg hover:bg-text-primary/70 py-2 px-4"
-                href={pathname === "/" ? "/profile/1" : "/"}
+                href={pathname === "/" ? "/profile/demo" : "/"}
               >
                 {pathname === "/" ? "Profile Demo" : "Home Demo"}
               </Link>

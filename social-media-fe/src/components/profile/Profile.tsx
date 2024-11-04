@@ -15,7 +15,7 @@ import { useSnackbar } from "../common/snackbar/Snackbar";
 import UploadAvatarDialog from "./component/UploadImageDialog";
 
 interface ProfileProps {
-  id: string | number;
+  id?: string | number;
   isLogin: boolean;
 }
 
@@ -29,7 +29,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     data: userInfor,
   }: {
     data: any;
-  } = useGetUserById(id);
+  } = useGetUserById(id || null);
 
   const { mutate: sendFriendRequest, isSuccess: sendFriendRequestSuccess } =
     useSendFriendRequest();

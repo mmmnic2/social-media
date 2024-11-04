@@ -10,7 +10,7 @@ export async function updateUserProfile(payload: any) {
   const res = await axios.put(url, payload);
   return res.data;
 }
-export async function getUserProfileById(userId: string | number) {
+export async function getUserProfileById(userId: string | number | null) {
   const url = `/api/v1/user/${userId}`;
   const res = await axios.get(url);
   return res.data;

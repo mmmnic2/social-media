@@ -10,6 +10,7 @@ export function middleware(request: NextRequest) {
     if (
       !pathname.startsWith("/login") &&
       !pathname.startsWith("/register") &&
+      !pathname.endsWith("/profile/demo") &&
       pathname !== "/"
     ) {
       return NextResponse.redirect(new URL("/", request.url));
