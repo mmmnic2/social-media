@@ -20,9 +20,12 @@ export const useHandleLikeComment = () => {
   return useMutation(handleLikeAndUnlikeComment);
 };
 
-export const useGetCommentByPostId = (postId: number, showComment: boolean) => {
+export const useGetCommentByPostId = (
+  postId: number | null,
+  showComment: boolean,
+) => {
   return useQuery(["comment_post", postId], () => getByPostId(postId), {
-    enabled: showComment,
+    enabled: showComment && !postId,
   });
 };
 export const useGetAllComment = () => {

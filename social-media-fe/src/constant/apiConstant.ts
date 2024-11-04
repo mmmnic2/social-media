@@ -1,4 +1,3 @@
-import { error } from "console";
 import axios from "axios";
 import store from "@/redux/store";
 const instance = axios.create({

@@ -1,27 +1,45 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, Menu, MenuItem } from "@mui/material";
-import React from "react";
-import { NotiInfo } from "@/redux/notifications/state";
+import React, { useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
+import { useMarkAsReadNoti } from "@/hooks/api-hooks/notification-hooks/useNotification";
+import { Notification } from "@/types/notificationTypes";
 import { parseTime } from "@/utils/utils";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 
 interface NotificationCardProps {
-  notiInfo: NotiInfo;
+  notiInfo: Notification;
 }
 
 const NotificationCard = ({ notiInfo }: NotificationCardProps) => {
-  const { sender, read } = notiInfo;
+  const { sender, read, notificationId } = notiInfo;
+  const [isRead, setIsRead] = useState(read);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const { mutate: markAsReadMutate } = useMarkAsReadNoti();
+  const queryClient = useQueryClient();
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleMarkAsRead = () => {
+    markAsReadMutate(notificationId, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: ["get-all-noti"],
+        });
+      },
+    });
+  };
+  useEffect(() => {
+    setIsRead(notiInfo?.read);
+  }, [notiInfo]);
+
   return (
     <div
-      className={`flex items-center gap-2 ${read ? "bg-white" : "bg-active-side-bar"} rounded-md mb-2 px-2 py-4`}
+      className={`flex items-center gap-2 ${isRead ? "bg-white" : "bg-active-side-bar"} rounded-md mb-2 px-2 py-4`}
     >
       <SocialAvatar
         width="3rem"
@@ -58,7 +76,7 @@ const NotificationCard = ({ notiInfo }: NotificationCardProps) => {
                 horizontal: "right",
               }}
             >
-              <MenuItem onClick={handleClose}>Mark as read</MenuItem>
+              <MenuItem onClick={handleMarkAsRead}>Mark as read</MenuItem>
             </Menu>
           </div>
         </div>

@@ -1,38 +1,18 @@
 "use client";
 import AddIcon from "@mui/icons-material/Add";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import { Avatar, Box, Button, Card, Tab, Tabs } from "@mui/material";
 import Image from "next/image";
-import React, { useState, useEffect, useMemo } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import { NotificationPayload } from "@/api/notification";
 import { useSendFriendRequest } from "@/hooks/api-hooks/friend-requests/useFriendRequests";
 import { useSendNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
-import { useGetPostByUserId } from "@/hooks/api-hooks/post-hooks/usePost";
-import {
-  useGetUserById,
-  useGetUserProfile,
-  useUploadUserAvatar,
-} from "@/hooks/api-hooks/user-hooks/useUser";
-import { NotificationType } from "@/redux/notifications/state";
-import { setRefetchPostByUser } from "@/redux/post/post";
-import { UserProps } from "@/redux/user";
+import { useGetUserById } from "@/hooks/api-hooks/user-hooks/useUser";
+import { RootState } from "@/redux/store";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import { AppButton } from "../common/button/AppButton";
 import { useSnackbar } from "../common/snackbar/Snackbar";
-import PostCard from "../post/PostCard";
-import UserReelCard from "../reels/UserReelCard";
-import UpdateProfileModal from "./component/UpdateProfileModal";
-import ImageUploadDialog from "./component/UploadImageDialog";
 import UploadAvatarDialog from "./component/UploadImageDialog";
-
-const properties = [
-  { value: "post", name: "Post" },
-  { value: "reels", name: "Reels" },
-  { value: "saved", name: "Saved" },
-  { value: "repost", name: "Repost" },
-];
-const posts = [1, 1, 1, 1, 1];
 
 interface ProfileProps {
   id: string | number;
@@ -40,45 +20,20 @@ interface ProfileProps {
 }
 
 const Profile = ({ id, isLogin }: ProfileProps) => {
-  const userSelector = useSelector((state: UserProps) => state.user);
+  const userSelector = useSelector((state: RootState) => state.user);
   const { posts } = useSelector((state: any) => state.post);
   const { showSnackbar } = useSnackbar();
   const [isUploadImageDialogOpen, setIsUploadImageDialogOpen] = useState(false);
-  // const [value, setValue] = useState("post");
-  // const [open, setOpen] = useState(false);
-  // const handleClose = () => setOpen(false);
-  // const handleOpen = () => setOpen(true);
-  // const dispatch = useDispatch();
-  // // hàm getUserInforByUserId
+  // hàm getUserInforByUserId
   const {
     data: userInfor,
-    error,
-    isLoading,
-    isSuccess,
-    refetch,
   }: {
     data: any;
-    error: any;
-    isLoading: boolean;
-    isSuccess: boolean;
-    refetch: () => void;
   } = useGetUserById(id);
 
   const { mutate: sendFriendRequest, isSuccess: sendFriendRequestSuccess } =
     useSendFriendRequest();
   const { mutate: sendNotificationMutate } = useSendNotification();
-
-  // if (isLoading) return <div>Loading...</div>;
-
-  // if (error) {
-  //   const errorMessage =
-  //     error instanceof Error ? error.message : "An unknown error occurred";
-  //   return <div>Error: {errorMessage}</div>;
-  // }
-
-  // const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-  //   setValue(newValue);
-  // };
   const handleFollowUser = () => {
     const reqBody = {
       userId: userSelector.id,
@@ -97,7 +52,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     const friendNotiReqBoby: NotificationPayload = {
       senderId: userSelector.id,
       receiverId: userInfor.id,
-      notificationType: NotificationType.FRIEND_REQUEST,
+      notificationType: "FRIEND_REQUEST",
     };
     sendNotificationMutate(friendNotiReqBoby);
   };
@@ -165,7 +120,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
           onClick={() => setIsUploadImageDialogOpen(true)}
         >
           <SocialAvatar
-            imgUrl="abc"
+            imgUrl={userSelector?.imageUrl ? userSelector.imageUrl : "/"}
             alt={userInfor?.firstName || "Lan Lan"}
             height="100%"
             width="100%"
@@ -182,6 +137,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
           {renderFollowButton()}
         </div>
       </div>
+      {/* Profile Description */}
       <div className="bg-white w-full -translate-y-52 relative z-10">
         <div className="pt-4 px-[2rem]">
           <p>Description</p>

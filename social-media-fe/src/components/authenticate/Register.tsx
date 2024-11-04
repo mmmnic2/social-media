@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useRegister } from "@/hooks/api-hooks/auth-hooks/useAuth";
 import FormComponent, { FormField } from "../common/form/FormComponent";
 import { useSnackbar } from "../common/snackbar/Snackbar";
-import { loginMethodIcon } from "./constances";
+import { loginMethodIcon } from "./constants";
 
 const formFields: FormField[] = [
   {

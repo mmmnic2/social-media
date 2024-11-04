@@ -8,7 +8,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import React, { useState } from "react";
 import { AppButton } from "../common/button/AppButton";
 
 interface DeletePostModalProps {

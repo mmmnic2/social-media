@@ -2,10 +2,9 @@
 import { Client, Stomp } from "@stomp/stompjs";
 import React, { useEffect, useState } from "react";
 import { useQueryClient } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import { useGetNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
-import { setAllNotifications } from "@/redux/notifications/notifications";
 import { useSnackbar } from "../common/snackbar/Snackbar";
 
 export const StomClientProvider = ({
@@ -17,18 +16,14 @@ export const StomClientProvider = ({
 }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const userSelector = useSelector((state: any) => state.user);
-  const dispatch = useDispatch();
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
-  const {
-    data: allNotification,
-    refetch: refetchGetNotification,
-    isSuccess: getNotificationSuccess,
-  } = useGetNotification(userSelector.id);
+  const { refetch: refetchGetNotification } = useGetNotification(
+    userSelector.id,
+  );
   const onError = (error: any) => {
     console.error("error: ", error);
   };
-
   const onNotiFriendStatus = (friendStatus: any) => {
     const friendInfo = JSON.parse(friendStatus.body);
     showSnackbar(
@@ -76,12 +71,6 @@ export const StomClientProvider = ({
       };
     }
   }, [token]);
-
-  useEffect(() => {
-    if (getNotificationSuccess) {
-      dispatch(setAllNotifications(allNotification));
-    }
-  }, [getNotificationSuccess]);
 
   return <div>{children}</div>;
 };

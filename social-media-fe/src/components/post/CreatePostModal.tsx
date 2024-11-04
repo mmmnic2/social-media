@@ -13,13 +13,18 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useCreatePost } from "@/hooks/api-hooks/post-hooks/usePost";
 import { setIsFetchAllPosts } from "@/redux/post/post";
 import { AppButton } from "../common/button/AppButton";
 import { useSnackbar } from "../common/snackbar/Snackbar";
 
+interface PostFormModel {
+  caption?: string;
+  image?: string | null;
+  video?: string | null;
+}
 const CreatePostModal = ({
   open,
   handleClose,
@@ -27,7 +32,7 @@ const CreatePostModal = ({
 }: {
   open: boolean;
   handleClose: () => void;
-  postData?: any;
+  postData?: PostFormModel;
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));

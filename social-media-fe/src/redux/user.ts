@@ -1,33 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { User } from "@/types/userTypes";
 
-export interface UserProps {
-  user: any;
-  id: number;
-  email: string;
-  first_name: string;
-  last_name: string;
-  gender: string;
-  create_at: string;
-  update_at: string;
-  followers: [];
-  followings: [];
-  role: string;
-  userStatus: string;
-}
-
-const initialState = {
+const initialState: User = {
   id: null,
-  email: null,
-  first_name: null,
-  last_name: null,
-  gender: null,
-  // user_image: null,
-  create_at: null,
-  update_at: null,
+  email: "",
+  firstName: "",
+  lastName: "",
+  gender: "MALE",
+  createAt: "",
+  updateAt: "",
   followers: [],
   followings: [],
-  role: null,
-  userStatus: null,
+  role: "ROLE_USER",
+  userStatus: "OFFLINE",
+  imageUrl: "",
 };
 
 const user = createSlice({
@@ -40,7 +26,7 @@ const user = createSlice({
         email,
         lastName,
         firstName,
-        // userImage,
+        imageUrl,
         gender,
         followerList,
         followingList,
@@ -52,33 +38,31 @@ const user = createSlice({
 
       state.id = id;
       state.email = email;
-      state.first_name = firstName;
-      state.last_name = lastName;
+      state.firstName = firstName;
+      state.lastName = lastName;
       state.gender = gender;
       state.followers = followerList;
       state.followings = followingList;
-      // state.user_image = userImage;
-      state.create_at = createDate;
-      state.update_at = modifiedDate;
+      state.imageUrl = imageUrl;
+      state.createAt = createDate;
+      state.updateAt = modifiedDate;
       state.role = role;
       state.userStatus = userStatus;
     },
-    clearUserInfo: (state: any) => {
-      for (const key in state) {
-        state[key] = null;
-      }
+    clearUserInfo: (state: User) => {
+      Object.assign(state, initialState);
     },
     updateUserInfo: (state, { payload }) => {
       state.id = payload.id;
       state.email = payload.email;
-      state.first_name = payload.firstName;
-      state.last_name = payload.lastName;
+      state.firstName = payload.firstName;
+      state.lastName = payload.lastName;
       state.gender = payload.gender;
       // state.followers = payload.followerList;
       // state.followings = payload.followingList;
       // state.user_image = userImage;
-      state.create_at = payload.createDate;
-      state.update_at = payload.modifiedDate;
+      state.createAt = payload.createDate;
+      state.updateAt = payload.modifiedDate;
       state.userStatus = payload.userStatus;
       state.role = payload.role;
     },

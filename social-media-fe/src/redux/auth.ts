@@ -1,10 +1,6 @@
-import { access } from "fs";
 import { createSlice } from "@reduxjs/toolkit";
-const initialState: {
-  accessToken: null | string;
-  refreshToken: null | string;
-  expireTime: number | null;
-} = {
+import { AuthTypes } from "@/types/authTypes";
+const initialState: AuthTypes = {
   accessToken: null,
   refreshToken: null,
   expireTime: null,

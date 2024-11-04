@@ -2,18 +2,17 @@ import SendIcon from "@mui/icons-material/Send";
 import { IconButton } from "@mui/material";
 import { useState } from "react";
 import { useQueryClient } from "react-query";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useCreateComment } from "@/hooks/api-hooks/comment-hooks/useComment";
 import { insertComment, setIsRefetchAllComment } from "@/redux/comment/comment";
 import { setIsFetchAllPosts } from "@/redux/post/post";
-import { UserProps } from "@/redux/user";
+import { RootState } from "@/redux/store";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 const CreateCommentCard = ({ post }: { post: any }) => {
   const [comment, setComment] = useState("");
   const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const userInfo = useSelector((state: UserProps) => state.user);
+  const userInfo = useSelector((state: RootState) => state.user);
   const { mutate: handleCreateComment } = useCreateComment();
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -39,8 +38,8 @@ const CreateCommentCard = ({ post }: { post: any }) => {
       <form onSubmit={(e) => handleSubmit(e)}>
         <div className="flex items-center space-x-5 mx-3 my-5">
           <SocialAvatar
-            alt={userInfo?.first_name || "Lan Lan"}
-            imgUrl={userInfo?.image || "abc"}
+            alt={userInfo?.firstName || "Lan Lan"}
+            imgUrl={userInfo?.imageUrl || "abc"}
           />
           <input
             value={comment}

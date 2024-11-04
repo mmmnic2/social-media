@@ -3,8 +3,6 @@ import ImageIcon from "@mui/icons-material/Image";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import { Avatar, Card, IconButton } from "@mui/material";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import { setRefetchAllComment } from "@/redux/comment/comment";
 import CreatePostModal from "./CreatePostModal";
 const benefitList = [
   {

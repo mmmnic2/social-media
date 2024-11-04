@@ -21,19 +21,19 @@ export async function getPostById(postId: number | string) {
   return res.data;
 }
 
-export async function deletePost(postId: number | string) {
+export async function deletePost(postId: number | string | null) {
   const url = `/api/v1/post/delete/${postId}`;
   const res = await axios.delete(url);
   return res.data;
 }
 
-export async function likePost(postId: number | string) {
+export async function likePost(postId: number | string | null) {
   const url = `/api/v1/post/like/${postId}`;
   const res = await axios.put(url);
   return res.data;
 }
 
-export async function savePost(postId: number | string) {
+export async function savePost(postId: number | string | null) {
   const url = `/api/v1/post/saved-post/${postId}`;
   const res = await axios.put(url);
   return res.data;
