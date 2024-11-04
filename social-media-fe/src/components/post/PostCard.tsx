@@ -25,6 +25,7 @@ import {
 } from "@/redux/post/selectors";
 import { UserProps } from "@/redux/user";
 import { parseTime } from "@/utils/utils";
+import Image1 from "../../../public/image/cat_bg.jpg";
 import CommentList from "../comment/CommentList";
 import CreateCommentCard from "../comment/CreateCommentCard";
 import SocialAvatar from "../common/avatar/SocialAvatar";
@@ -133,7 +134,7 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
         <Image
           width={1000}
           height={90}
-          src={"/image/image1.png"}
+          src={Image1}
           alt={`${post?.caption || "Post"} Image`}
         />
       );
