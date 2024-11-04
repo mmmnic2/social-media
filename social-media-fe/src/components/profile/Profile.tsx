@@ -9,6 +9,7 @@ import { useSendFriendRequest } from "@/hooks/api-hooks/friend-requests/useFrien
 import { useSendNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
 import { useGetUserById } from "@/hooks/api-hooks/user-hooks/useUser";
 import { RootState } from "@/redux/store";
+import ProfileBGImage from "../../../public/image/cat_bg.jpg";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import { AppButton } from "../common/button/AppButton";
 import { useSnackbar } from "../common/snackbar/Snackbar";
@@ -97,8 +98,8 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
       <div className="relative">
         <div className="w-full h-96">
           <Image
-            src="/image/cat_bg.jpg"
-            alt="Main Image"
+            src={ProfileBGImage}
+            alt="Profile Background Image"
             objectFit="cover"
             layout="fill"
             quality={100}
