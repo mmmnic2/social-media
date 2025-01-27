@@ -11,4 +11,5 @@ import java.util.List;
 public interface ReelsRepository extends JpaRepository<Reels, Long> {
     @Query(value = "Select * from reels where user_id= :userId", nativeQuery = true)
     public List<Reels> findByUserId(Long userId);
+
 }

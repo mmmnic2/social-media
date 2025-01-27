@@ -19,19 +19,17 @@ public class Story extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    private String image;
-    private String video;
-    private String captions;
-    private LocalDateTime timeStamp;
+    private String contentUrl;
+    private String type;
+    private LocalDateTime expiredAt;
 
     public StoryResponse toStoryResponse() {
         StoryResponse response = new StoryResponse();
         response.setId(this.getId());
         response.setUser(this.getUser());
-        response.setCaptions(this.getCaptions());
-        response.setImage(this.getImage());
-        response.setVideo(this.getVideo());
-        response.setTimeStamp(this.timeStamp);
+        response.setContentUrl(this.getContentUrl());
+        response.setType(this.getType());
+        response.setExpiredAt(this.getExpiredAt());
         return response;
     }
 }

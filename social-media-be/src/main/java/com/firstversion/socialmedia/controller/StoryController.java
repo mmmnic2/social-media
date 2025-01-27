@@ -1,5 +1,8 @@
 package com.firstversion.socialmedia.controller;
 
+import com.firstversion.socialmedia.dto.request.CreatePostRequest;
+import com.firstversion.socialmedia.dto.request.CreateStoryRequest;
+import com.firstversion.socialmedia.dto.response.post.PostResponse;
 import com.firstversion.socialmedia.dto.response.story.StoryResponse;
 import com.firstversion.socialmedia.service.StoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -18,17 +23,17 @@ public class StoryController {
     StoryService storyService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createStory(@RequestBody StoryResponse storyResponse) {
+    public ResponseEntity<?> createStory(@RequestPart("type") String type,
+                                         @RequestPart(value = "content", required = true) MultipartFile content) throws IOException {
 //        @RequestHeader("Authorization") String jwt
         try {
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            String email = authentication.getName();
-            StoryResponse response = storyService.createStory(storyResponse, email);
-            if (response != null)
-                return ResponseEntity.ok(response);
-            else return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unable to create a story.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+            CreateStoryRequest request = new CreateStoryRequest();
+            request.setType(type);
+            request.setContent(content);
+            StoryResponse response = storyService.createStory(request);
+            return ResponseEntity.ok(response);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(e.getMessage());
         }
     }
 
@@ -40,5 +45,10 @@ public class StoryController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
+    }
+
+    @DeleteMapping("/{storyId}")
+    public void deleteStory(@RequestParam Long userId, @PathVariable Long storyId) {
+        storyService.deleteStory(userId, storyId);
     }
 }

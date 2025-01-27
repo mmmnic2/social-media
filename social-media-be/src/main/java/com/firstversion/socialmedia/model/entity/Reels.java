@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Reels { //story nổi bật
+public class Reels {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,8 +19,10 @@ public class Reels { //story nổi bật
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    private int likes;
+    private int views;
 
     public ReelsResponse toReelsResponse() {
-        return new ReelsResponse(id, title, video, user.toUserResponse());
+        return new ReelsResponse(id, title, video, likes, views, user.toUserResponse());
     }
 }
