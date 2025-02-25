@@ -34,4 +34,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "UNION " +
             "SELECT fs.user.id FROM Friendship fs WHERE fs.friend.id = :userId AND fs.status = 'ACCEPTED')")
     List<User> getFriendList(Long userId);
+
 }

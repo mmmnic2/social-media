@@ -21,13 +21,16 @@ public class CloudinaryService {
                 ));
     }
 
-    public Map uploadImage(MultipartFile file) throws IOException {
-        return cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+    public Map uploadImage(MultipartFile file, String folderName) throws IOException {
+        return cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+                "folder", "social_media/" + folderName
+        ));
     }
 
-    public Map uploadVideo(MultipartFile file) throws IOException {
+    public Map uploadVideo(MultipartFile file, String folderName) throws IOException {
         return cloudinary.uploader().upload(file.getBytes(),
                 ObjectUtils.asMap(
+                        "folder", "social_media/" + folderName,
                         "resource_type", "video"
                 ));
     }

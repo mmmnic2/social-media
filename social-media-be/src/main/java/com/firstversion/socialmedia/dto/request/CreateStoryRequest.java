@@ -1,15 +1,17 @@
 package com.firstversion.socialmedia.dto.request;
 
-import com.firstversion.socialmedia.dto.BaseDTO;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Getter
 @Setter
-@NoArgsConstructor
-public class CreateStoryRequest extends BaseDTO {
+public class CreateStoryRequest {
     private MultipartFile content;
-    private String type;
+    private String mediaType;
+    private Long musicId;
+    private List<StoryTextRequest> texts;
+    private List<StoryStickerRequest> stickers;
 }

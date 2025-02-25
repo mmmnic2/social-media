@@ -56,6 +56,8 @@ public class User extends BaseEntity implements UserDetails {
     private UserStatus userStatus = UserStatus.OFFLINE;
     @Column
     private boolean isActive = true;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Story> stories;
 
     public String getFullName() {
         return this.firstName + " " + this.lastName;

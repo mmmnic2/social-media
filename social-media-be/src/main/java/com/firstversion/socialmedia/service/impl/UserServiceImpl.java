@@ -1,8 +1,8 @@
 package com.firstversion.socialmedia.service.impl;
 
 import com.firstversion.socialmedia.component.oauth2.CustomOAuth2User;
-import com.firstversion.socialmedia.component.websocket.WSService;
 import com.firstversion.socialmedia.config.CloudinaryService;
+import com.firstversion.socialmedia.common.constant.CloudinaryConstant;
 import com.firstversion.socialmedia.dto.request.CreateUserRequest;
 import com.firstversion.socialmedia.dto.response.user.FollowUserResponse;
 import com.firstversion.socialmedia.dto.response.user.UserResponse;
@@ -18,7 +18,6 @@ import com.firstversion.socialmedia.model.enums.UserStatus;
 import com.firstversion.socialmedia.repository.UserFollowerRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.component.jwt.JwtUtils;
-import com.firstversion.socialmedia.service.NotificationService;
 import com.firstversion.socialmedia.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -141,7 +140,7 @@ public class UserServiceImpl implements UserService {
         User foundUser = (User) authentication.getPrincipal();
         String imageUrl = null;
         if (image != null) {
-            Map<String, Object> result = cloudinaryService.uploadImage(image);
+            Map<String, Object> result = cloudinaryService.uploadImage(image, CloudinaryConstant.USER_PROFILE);
             imageUrl = result.get("url").toString();
         }
         if (imageUrl != null) {

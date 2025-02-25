@@ -1,11 +1,9 @@
 package com.firstversion.socialmedia.dto.response.story;
 
-import com.firstversion.socialmedia.model.entity.User;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -14,8 +12,12 @@ import java.time.LocalDateTime;
 @Setter
 public class StoryResponse {
     private Long id;
-    private User user;
-    private String contentUrl;
-    private String type;
-    private LocalDateTime expiredAt;
+    private UserStoryResponse user;
+    private String mediaUrl;
+    private String mediaType;
+    private LocalDateTime createdAt;
+    private LocalDateTime expiresAt;
+    private MusicResponse music;
+    private List<TextResponse> texts;
+    private List<StickerResponse> stickers;
 }

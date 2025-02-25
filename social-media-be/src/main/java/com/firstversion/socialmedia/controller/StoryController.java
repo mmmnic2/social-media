@@ -5,6 +5,7 @@ import com.firstversion.socialmedia.dto.request.CreateStoryRequest;
 import com.firstversion.socialmedia.dto.response.post.PostResponse;
 import com.firstversion.socialmedia.dto.response.story.StoryResponse;
 import com.firstversion.socialmedia.service.StoryService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,18 +24,9 @@ public class StoryController {
     StoryService storyService;
 
     @PostMapping("/create")
-    public ResponseEntity<?> createStory(@RequestPart("type") String type,
-                                         @RequestPart(value = "content", required = true) MultipartFile content) throws IOException {
-//        @RequestHeader("Authorization") String jwt
-        try {
-            CreateStoryRequest request = new CreateStoryRequest();
-            request.setType(type);
-            request.setContent(content);
-            StoryResponse response = storyService.createStory(request);
-            return ResponseEntity.ok(response);
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(e.getMessage());
-        }
+    public ResponseEntity<StoryResponse> createStory(@Valid @RequestBody CreateStoryRequest request) throws IOException {
+        StoryResponse response = storyService.createStory(request);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/find-by-user/{userId}")

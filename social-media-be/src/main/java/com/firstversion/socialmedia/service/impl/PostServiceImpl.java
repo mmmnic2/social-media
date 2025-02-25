@@ -1,6 +1,7 @@
 package com.firstversion.socialmedia.service.impl;
 
 import com.firstversion.socialmedia.config.CloudinaryService;
+import com.firstversion.socialmedia.common.constant.CloudinaryConstant;
 import com.firstversion.socialmedia.dto.request.CreatePostRequest;
 import com.firstversion.socialmedia.dto.response.post.PostLikeResponse;
 import com.firstversion.socialmedia.dto.response.post.PostResponse;
@@ -65,7 +66,7 @@ public class PostServiceImpl implements PostService {
     public String uploadImage(MultipartFile image) throws IOException {
         String imageUrl = null;
         if (image != null) {
-            Map<String, Object> result = cloudinaryService.uploadImage(image);
+            Map<String, Object> result = cloudinaryService.uploadImage(image, CloudinaryConstant.POSTS);
             imageUrl = result.get("url").toString();
         }
         return imageUrl;
@@ -74,7 +75,7 @@ public class PostServiceImpl implements PostService {
     public String uploadVideo(MultipartFile src) throws IOException {
         String videoUrl = null;
         if (src != null) {
-            Map<String, Object> result = cloudinaryService.uploadVideo(src);
+            Map<String, Object> result = cloudinaryService.uploadVideo(src, CloudinaryConstant.POSTS);
             videoUrl = result.get("url").toString();
         }
         return videoUrl;
