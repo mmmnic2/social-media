@@ -1,13 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "mtv.vn",
-        pathname: "**",
-      },
-    ],
+    domains: ["res.cloudinary.com", "mtv.vn"],
   },
 };
 

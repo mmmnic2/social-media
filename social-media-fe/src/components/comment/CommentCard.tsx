@@ -8,7 +8,7 @@ const CommentCard = ({ comment }: { comment: any }) => {
       {/* <div className="flex justify-between items-center"> */}
       <div className="flex items-center space-x-5">
         <SocialAvatar
-          imgUrl={comment?.userResponse.image || "abc"}
+          imgUrl={comment?.userResponse.imageUrl || "abc"}
           alt={comment?.userResponse.firstName}
         />
         <div>
