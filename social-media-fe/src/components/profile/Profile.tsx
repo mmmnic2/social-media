@@ -22,6 +22,7 @@ interface ProfileProps {
 
 const Profile = ({ id, isLogin }: ProfileProps) => {
   const userSelector = useSelector((state: RootState) => state.user);
+  console.log(userSelector)
   const { posts } = useSelector((state: any) => state.post);
   const { showSnackbar } = useSnackbar();
   const [isUploadImageDialogOpen, setIsUploadImageDialogOpen] = useState(false);
@@ -57,6 +58,10 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     };
     sendNotificationMutate(friendNotiReqBoby);
   };
+  const handleUploadImage = () => {
+    if(userInfor.id !== userSelector.id) return;
+    setIsUploadImageDialogOpen(true);
+  }
   useEffect(() => {
     if (sendFriendRequestSuccess) {
       sendFriendRequestNoti();
@@ -118,10 +123,10 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
       <div className="-translate-y-56">
         <div
           className="bg-white h-[10rem] w-[10rem] rounded-t-full p-1 rounded-br-full group relative cursor-pointer"
-          onClick={() => setIsUploadImageDialogOpen(true)}
+          onClick={handleUploadImage}
         >
           <SocialAvatar
-            imgUrl={userSelector?.imageUrl ? userSelector.imageUrl : "/"}
+            imgUrl={userInfor?.imageUrl ? userInfor.imageUrl : "/"}
             alt={userInfor?.firstName || "Lan Lan"}
             height="100%"
             width="100%"
