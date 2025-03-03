@@ -22,7 +22,6 @@ interface ProfileProps {
 
 const Profile = ({ id, isLogin }: ProfileProps) => {
   const userSelector = useSelector((state: RootState) => state.user);
-  console.log(userSelector)
   const { posts } = useSelector((state: any) => state.post);
   const { showSnackbar } = useSnackbar();
   const [isUploadImageDialogOpen, setIsUploadImageDialogOpen] = useState(false);
@@ -59,9 +58,9 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
     sendNotificationMutate(friendNotiReqBoby);
   };
   const handleUploadImage = () => {
-    if(userInfor.id !== userSelector.id) return;
+    if (userInfor.id !== userSelector.id) return;
     setIsUploadImageDialogOpen(true);
-  }
+  };
   useEffect(() => {
     if (sendFriendRequestSuccess) {
       sendFriendRequestNoti();
