@@ -31,7 +31,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setHandshakeHandler(customHandshakeHandler)
                 .addInterceptors(customHandshakeInterceptor)
-                .setAllowedOrigins("http://localhost:3000", "https://social-media-two-ecru.vercel.app")
+                .setAllowedOrigins("https://social-media-two-ecru.vercel.app")
                 .withSockJS();
     }
 
