@@ -4,7 +4,7 @@ import com.firstversion.socialmedia.dto.request.CreateMessageRequest;
 import com.firstversion.socialmedia.dto.response.message.MessageResponse;
 import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.service.MessageService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,24 +12,35 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * Controller quản lý tin nhắn trong các cuộc trò chuyện.
+ */
 @RestController
 @RequestMapping("/api/v1/message")
+@RequiredArgsConstructor
 public class MessageController {
-    @Autowired
-    MessageService messageService;
+    private final MessageService messageService;
 
+    /**
+     * Lấy danh sách tin nhắn theo ID của cuộc trò chuyện.
+     *
+     * @param chatId ID của cuộc trò chuyện.
+     * @return Danh sách tin nhắn thuộc về cuộc trò chuyện đó.
+     */
     @GetMapping("/{chatId}")
-    public ResponseEntity<?> findByChat(@PathVariable Long chatId) {
-        List<MessageResponse> responses = messageService.findMessageByChat(chatId);
-        return ResponseEntity.ok(responses);
+    public ResponseEntity<List<MessageResponse>> findByChat(@PathVariable Long chatId) {
+        return ResponseEntity.ok(messageService.findMessageByChat(chatId));
     }
 
+    /**
+     * Gửi tin nhắn trong cuộc trò chuyện.
+     *
+     * @param request Nội dung tin nhắn.
+     * @return Tin nhắn sau khi được gửi thành công.
+     */
     @PostMapping("/create-message")
-    public ResponseEntity<?> createMessage(@RequestBody CreateMessageRequest request) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = (User) authentication.getPrincipal();
-        MessageResponse response = messageService.createMessage(user, request);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<MessageResponse> createMessage(@RequestBody CreateMessageRequest request) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return ResponseEntity.ok(messageService.createMessage(user, request));
     }
-
 }

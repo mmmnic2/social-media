@@ -7,23 +7,28 @@ import com.firstversion.socialmedia.dto.response.user.UserResponse;
 import com.firstversion.socialmedia.exception.AlreadyExistException;
 import com.firstversion.socialmedia.service.AuthService;
 import com.firstversion.socialmedia.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller xử lý xác thực người dùng bao gồm đăng ký và đăng nhập.
+ */
 @RestController
 @RequestMapping("/auth")
+@RequiredArgsConstructor
 public class AuthenticationController {
-    @Autowired
-    UserService userService;
-    @Autowired
-    AuthService authService;
+    private final UserService userService;
+    private final AuthService authService;
 
+    /**
+     * API đăng ký tài khoản mới.
+     *
+     * @param createUserRequest Dữ liệu đăng ký người dùng.
+     * @return Trả về thông tin người dùng nếu đăng ký thành công hoặc thông báo lỗi nếu tài khoản đã tồn tại.
+     */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody CreateUserRequest createUserRequest) {
         try {
@@ -34,13 +39,19 @@ public class AuthenticationController {
         }
     }
 
+    /**
+     * API xác thực đăng nhập.
+     *
+     * @param loginRequest Thông tin đăng nhập gồm email và mật khẩu.
+     * @return Trả về JWT token nếu đăng nhập thành công, hoặc lỗi nếu thông tin không chính xác.
+     */
     @PostMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         try {
             AuthenticationResponse response = authService.authenticate(loginRequest);
             return ResponseEntity.ok(response);
         } catch (AuthenticationException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid username or password.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Tên người dùng hoặc mật khẩu không hợp lệ.");
         }
     }
 }

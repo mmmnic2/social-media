@@ -5,36 +5,52 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 import lombok.Getter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Lớp tiện ích để xử lý JWT: tạo, xác minh và trích xuất thông tin từ token.
+ */
+@Slf4j
 @Component
 public class JwtUtils {
-    private static final Logger logger = LoggerFactory.getLogger(JwtUtils.class);
-    @Value("${security.jwt.secrect}")
-    private String jwtSecrect;
+
+    @Value("${security.jwt.secret}")
+    private String jwtSecret;
 
     @Value("${security.jwt.expirationTime}")
     @Getter
     private long jwtExpirationTime;
+
     @Value("${security.jwt.refresh-token.re-expiration}")
     @Getter
     private long refreshExpirationTime;
 
+    /**
+     * Sinh khóa bí mật từ chuỗi mã hóa trong file cấu hình.
+     *
+     * @return Khóa bí mật để ký JWT
+     */
     private Key getKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtSecrect));
+        return Keys.hmacShaKeyFor(Decoders.BASE64URL.decode(jwtSecret));
     }
 
-    //create new token by claims, userdetails and exprirationTime
+    /**
+     * Tạo JWT token với các claims tùy chỉnh.
+     *
+     * @param extraClaims    Các claims bổ sung
+     * @param userDetails    Thông tin người dùng
+     * @param expirationTime Thời gian hết hạn của token (ms)
+     * @return Token JWT đã được tạo
+     */
     public String createToken(Map<String, Object> extraClaims, UserDetails userDetails, long expirationTime) {
         return Jwts.builder()
                 .setClaims(extraClaims)
@@ -45,19 +61,43 @@ public class JwtUtils {
                 .compact();
     }
 
+    /**
+     * Tạo JWT token không có claims bổ sung.
+     *
+     * @param userDetails Thông tin người dùng
+     * @return Token JWT
+     */
     public String generateToken(UserDetails userDetails) {
-        return createToken(new HashMap<>(), userDetails, jwtExpirationTime);
+        return createToken(Collections.emptyMap(), userDetails, jwtExpirationTime);
     }
 
+    /**
+     * Tạo JWT token với claims bổ sung.
+     *
+     * @param extraClaims Các claims bổ sung
+     * @param userDetails Thông tin người dùng
+     * @return Token JWT
+     */
     public String generateTokenWithClaims(Map<String, Object> extraClaims, UserDetails userDetails) {
         return createToken(extraClaims, userDetails, jwtExpirationTime);
     }
 
+    /**
+     * Tạo token làm mới (refresh token).
+     *
+     * @param userDetails Thông tin người dùng
+     * @return Token JWT dùng để làm mới
+     */
     public String generateRefreshToken(UserDetails userDetails) {
-        return createToken(new HashMap<>(), userDetails, refreshExpirationTime);
+        return createToken(Collections.emptyMap(), userDetails, refreshExpirationTime);
     }
 
-    // how to use: extractAllClaims(token).get("email")
+    /**
+     * Trích xuất tất cả claims từ token JWT.
+     *
+     * @param token Token JWT
+     * @return Claims chứa thông tin của token
+     */
     public Claims extractAllClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getKey())
@@ -66,33 +106,65 @@ public class JwtUtils {
                 .getBody();
     }
 
+    /**
+     * Trích xuất một claim cụ thể từ token.
+     *
+     * @param token         Token JWT
+     * @param claimsResolver Hàm xử lý để lấy claim mong muốn
+     * @param <T>           Kiểu dữ liệu của claim
+     * @return Giá trị claim
+     */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+        return claimsResolver.apply(extractAllClaims(token));
     }
 
+    /**
+     * Lấy username từ token JWT.
+     *
+     * @param token Token JWT
+     * @return Username của người dùng
+     */
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Long extractUserId(String token) {
-        return Long.valueOf(extractClaim(token, Claims::getId));
-    }
-
+    /**
+     * Lấy ngày hết hạn của token.
+     *
+     * @param token Token JWT
+     * @return Ngày hết hạn của token
+     */
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 
+    /**
+     * Kiểm tra xem token có hết hạn không.
+     *
+     * @param token Token JWT
+     * @return True nếu token đã hết hạn, ngược lại False
+     */
     public boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }
 
-
+    /**
+     * Kiểm tra token có hợp lệ với một người dùng cụ thể không.
+     *
+     * @param token       Token JWT
+     * @param userDetails Thông tin người dùng
+     * @return True nếu token hợp lệ, ngược lại False
+     */
     public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return userDetails.getUsername().equals(extractUsername(token)) && !isTokenExpired(token);
     }
 
+    /**
+     * Xác minh token JWT có hợp lệ không.
+     *
+     * @param token Token JWT
+     * @return True nếu token hợp lệ, False nếu không
+     */
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
@@ -101,18 +173,12 @@ public class JwtUtils {
                     .parseClaimsJws(token);
             return true;
         } catch (ExpiredJwtException e) {
-            logger.error("Expired token: {}", e.getMessage());
-        } catch (SignatureException | MalformedJwtException e) {
-            logger.error("Invalid jwt token: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            logger.error("This token is not supported : {}", e.getMessage());
+            log.error("Token đã hết hạn: {}", e.getMessage());
+        } catch (JwtException e) {
+            log.error("Token không hợp lệ: {}", e.getMessage());
         } catch (IllegalArgumentException e) {
-            logger.error("No claims found: {}", e.getMessage());
-        } catch (Exception e) {
-            logger.error("error: {}", e.getMessage());
+            log.error("Token không chứa claims hợp lệ: {}", e.getMessage());
         }
         return false;
     }
-
-
 }

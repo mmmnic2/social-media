@@ -11,11 +11,10 @@ import com.firstversion.socialmedia.model.entity.User;
 import com.firstversion.socialmedia.model.enums.UserStatus;
 import com.firstversion.socialmedia.service.UserFollowerService;
 import com.firstversion.socialmedia.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,24 +24,32 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/user")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    UserService userService;
-    @Autowired
-    UserFollowerService userFollowerService;
-    @Autowired
-    WSService wsService;
-    @GetMapping("/all-user")
-    public ResponseEntity<?> getAllUser() {
+    private final UserService userService;
+    private final UserFollowerService userFollowerService;
+    private final WSService wsService;
 
+    /**
+     * Lấy danh sách tất cả người dùng.
+     *
+     * @return Danh sách {@link UserResponse}
+     */
+    @GetMapping("/all-user")
+    public ResponseEntity<List<UserResponse>> getAllUser() {
         return ResponseEntity.ok(userService.getAllUser());
     }
 
+    /**
+     * Cập nhật thông tin người dùng.
+     *
+     * @param createUserRequest Dữ liệu người dùng cần cập nhật.
+     * @return Thông tin người dùng sau khi cập nhật hoặc lỗi.
+     */
     @PutMapping("/update")
     public ResponseEntity<?> updateUser(@RequestBody CreateUserRequest createUserRequest) {
         try {
-            UserResponse response = userService.updateUser(createUserRequest);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(userService.updateUser(createUserRequest));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         } catch (AlreadyExistException e) {
@@ -50,23 +57,32 @@ public class UserController {
         }
     }
 
-
+    /**
+     * Lấy thông tin người dùng theo ID.
+     *
+     * @param userId ID của người dùng.
+     * @return Thông tin {@link UserResponse} hoặc lỗi.
+     */
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUserById(@PathVariable Long userId) {
         try {
-            UserResponse userResponse = userService.findUserById(userId);
-            return ResponseEntity.ok(userResponse);
+            return ResponseEntity.ok(userService.findUserById(userId));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    // follower là người theo dõi userId
+    /**
+     * Theo dõi hoặc bỏ theo dõi một người dùng.
+     *
+     * @param jwt       Token xác thực.
+     * @param followedId ID của người được theo dõi.
+     * @return Thông báo kết quả.
+     */
     @PutMapping("/follow/{followedId}")
     public ResponseEntity<?> followUserHandle(@RequestHeader("Authorization") String jwt, @PathVariable Long followedId) {
         try {
-            String message = userFollowerService.handleFollow_UnfollowUser(followedId, jwt.substring(7));
-            return ResponseEntity.ok(message);
+            return ResponseEntity.ok(userFollowerService.handleFollow_UnfollowUser(followedId, jwt.substring(7)));
         } catch (AlreadyExistException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
         } catch (NotFoundException e) {
@@ -74,58 +90,90 @@ public class UserController {
         }
     }
 
+    /**
+     * Tìm kiếm người dùng theo email.
+     *
+     * @param email Email cần tìm.
+     * @return Thông tin {@link UserResponse} hoặc lỗi.
+     */
     @GetMapping("/find-by-email")
     public ResponseEntity<?> findUserByEmail(@RequestParam String email) {
         try {
-            UserResponse response = userService.findUserByEmail(email);
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(userService.findUserByEmail(email));
         } catch (NotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
+    /**
+     * Tìm kiếm người dùng theo từ khóa.
+     *
+     * @param query Từ khóa tìm kiếm.
+     * @return Danh sách {@link UserResponse}
+     */
     @GetMapping("/search")
-    public ResponseEntity<?> searchUser(@RequestParam String query) {
+    public ResponseEntity<List<UserResponse>> searchUser(@RequestParam String query) {
         return ResponseEntity.ok(userService.searchUsers(query));
     }
 
+    /**
+     * Lấy danh sách người theo dõi của người dùng.
+     *
+     * @param jwt Token xác thực.
+     * @return Danh sách {@link FollowUserResponse}
+     */
     @GetMapping("/get-list-follower")
-    public ResponseEntity<?> getListFollower(@RequestHeader("Authorization") String jwt) {
-        List<FollowUserResponse> responses = userFollowerService.findListFollowerByUserId(jwt.substring(7));
-        return ResponseEntity.ok(responses);
+    public ResponseEntity<List<FollowUserResponse>> getListFollower(@RequestHeader("Authorization") String jwt) {
+        return ResponseEntity.ok(userFollowerService.findListFollowerByUserId(jwt.substring(7)));
     }
 
+    /**
+     * Lấy danh sách người mà người dùng đang theo dõi.
+     *
+     * @param jwt Token xác thực.
+     * @return Danh sách {@link FollowUserResponse}
+     */
     @GetMapping("/get-list-following")
-    public ResponseEntity<?> getListFollowing(@RequestHeader("Authorization") String jwt) {
-        List<FollowUserResponse> responses = userFollowerService.findListFollowingByUserId(jwt.substring(7));
-        return ResponseEntity.ok(responses);
+    public ResponseEntity<List<FollowUserResponse>> getListFollowing(@RequestHeader("Authorization") String jwt) {
+        return ResponseEntity.ok(userFollowerService.findListFollowingByUserId(jwt.substring(7)));
     }
 
+    /**
+     * Lấy thông tin hồ sơ của người dùng hiện tại.
+     *
+     * @return {@link UserResponse}
+     */
     @GetMapping("/profile")
-    public ResponseEntity<?> getUserProfile() {
-        UserResponse response = userService.findUserDetails();
-        return ResponseEntity.ok(response);
+    public ResponseEntity<UserResponse> getUserProfile() {
+        return ResponseEntity.ok(userService.findUserDetails());
     }
 
+    /**
+     * Cập nhật ảnh đại diện của người dùng.
+     *
+     * @param image Ảnh đại diện.
+     * @return URL ảnh đại diện sau khi cập nhật hoặc lỗi.
+     */
     @PostMapping(value = "/upload-avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> doUploadAvatar(@RequestPart MultipartFile image) throws IOException {
         String imageUrl = userService.doUploadAvatar(image);
-        if (imageUrl == null) {
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Can not upload avatar for user.");
-        } else {
-            return ResponseEntity.ok(imageUrl);
-        }
+        return (imageUrl != null)
+                ? ResponseEntity.ok(imageUrl)
+                : ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Không thể tải lên ảnh đại diện.");
     }
 
-
-
-//    STATUS OF USER
+    /**
+     * Cập nhật trạng thái người dùng.
+     *
+     * @param userId    ID của người dùng.
+     * @param newStatus Trạng thái mới.
+     * @return Trạng thái sau khi cập nhật hoặc lỗi.
+     */
     @PutMapping("/status/{userId}")
     public ResponseEntity<?> updateUserStatus(@PathVariable Long userId, @RequestBody UserStatus newStatus) {
         try {
             UserStatus updateStatus = userService.updateUserStatus(userId, newStatus);
             User foundUser = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            // update status user to friend
             wsService.notifyFriends(foundUser);
             return ResponseEntity.ok(updateStatus);
         } catch (ForbiddenAccessException e) {
@@ -133,10 +181,13 @@ public class UserController {
         }
     }
 
+    /**
+     * Lấy danh sách bạn bè của người dùng hiện tại.
+     *
+     * @return Danh sách {@link UserResponse}
+     */
     @GetMapping("/all-friends")
-    public ResponseEntity<?> getAllFriends() {
-        List<UserResponse> response = userService.getFriendList();
-        return ResponseEntity.ok(response);
+    public ResponseEntity<List<UserResponse>> getAllFriends() {
+        return ResponseEntity.ok(userService.getFriendList());
     }
-
 }
