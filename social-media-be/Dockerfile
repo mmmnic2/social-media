@@ -1,24 +1,27 @@
-#FROM openjdk:17
-#FROM openjdk:17
-#RUN ln -snf /usr/share/zoneinfo/Asia/Ho_Chi_Minh /etc/localtime && echo Asia/Ho_Chi_Minh > /etc/timezone
-#WORKDIR /app
-#COPY target/socialmedia-0.0.1-SNAPSHOT.jar app.jar
-#EXPOSE 8080
-#ENTRYPOINT ["java", "-jar", "app.jar"]
-
-
-
 FROM maven:3.8.5-openjdk-17 AS build
 
-COPY . .
+# Tạo thư mục làm việc trong container
+WORKDIR /app
 
+# Copy file cấu hình Maven trước để cache dependencies
+COPY pom.xml ./
+RUN mvn dependency:go-offline
+
+# Copy toàn bộ source code
+COPY src ./src
+
+# Build project
 RUN mvn clean package -DskipTests -Dfile.encoding=UTF-8
 
 FROM openjdk:17.0.1-jdk-slim
 
-COPY --from=build /target/socialmedia-0.0.1-SNAPSHOT.jar app.jar
+WORKDIR /app
 
+# Copy file JAR từ stage build
+COPY --from=build /app/target/socialmedia-0.0.1-SNAPSHOT.jar app.jar
+
+# Mở cổng 8080
 EXPOSE 8080
 
+# Chạy ứng dụng
 ENTRYPOINT ["java","-jar","app.jar"]
-
