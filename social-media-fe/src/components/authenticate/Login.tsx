@@ -61,7 +61,7 @@ const Login = () => {
         };
         store.dispatch(loginSuccess(token));
       },
-      onError: (e) => {
+      onError: () => {
         showSnackbar("Login Failed", "error");
       },
     });

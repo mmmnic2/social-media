@@ -1,0 +1,22 @@
+{
+  "name": "social-media",
+  "version": "1.0.0",
+  "description": "This project is a social network application that provides various interactive features for users. It allows user authentication, messaging, posting, liking, and commenting on posts. Additionally, users can view profiles and send friend requests.",
+  "main": "index.js",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "lint-staged": {
+    "social-media-fe/**/*.{js,jsx,ts,tsx}": [
+      "npm --prefix social-media-fe run lint"
+    ]
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
