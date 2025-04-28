@@ -11,6 +11,7 @@ import com.firstversion.socialmedia.model.enums.Role;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.AuthService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,15 +25,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
-    @Autowired
-    JwtUtils jwtUtils;
-    @Autowired
-    AuthenticationManager authenticationManager;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
+    private final AuthenticationManager authenticationManager;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public AuthenticationResponse authenticate(LoginRequest request) {

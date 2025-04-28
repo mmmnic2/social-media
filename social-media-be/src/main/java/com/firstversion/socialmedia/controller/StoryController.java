@@ -6,6 +6,7 @@ import com.firstversion.socialmedia.dto.response.post.PostResponse;
 import com.firstversion.socialmedia.dto.response.story.StoryResponse;
 import com.firstversion.socialmedia.service.StoryService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +20,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/story")
+@RequiredArgsConstructor
 public class StoryController {
-    @Autowired
-    StoryService storyService;
+
+    private final StoryService storyService;
 
     @PostMapping("/create")
     public ResponseEntity<StoryResponse> createStory(@Valid @RequestBody CreateStoryRequest request) throws IOException {

@@ -13,6 +13,7 @@ import com.firstversion.socialmedia.repository.ChatRepository;
 import com.firstversion.socialmedia.repository.MessageRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.service.MessageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,15 +24,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MessageServiceImpl implements MessageService {
-    @Autowired
-    MessageRepository messageRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    ChatRepository chatRepository;
-    @Autowired
-    ChatMemberRepository chatMemberRepository;
+
+    private final MessageRepository messageRepository;
+
+    private final ChatRepository chatRepository;
+
+    private final  ChatMemberRepository chatMemberRepository;
 
     @Override
     public MessageResponse createMessage(User user, CreateMessageRequest request) {

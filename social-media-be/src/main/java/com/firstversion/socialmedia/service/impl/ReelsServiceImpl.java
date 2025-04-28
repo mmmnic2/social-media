@@ -9,6 +9,7 @@ import com.firstversion.socialmedia.repository.ReelsRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.ReelsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,13 +19,14 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class ReelsServiceImpl implements ReelsService {
-    @Autowired
-    ReelsRepository reelsRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    JwtUtils jwtUtils;
+
+    private final ReelsRepository reelsRepository;
+
+    private final UserRepository userRepository;
+
+    private final JwtUtils jwtUtils;
 
 //    @Override
 //    public ReelsResponse createReel(ReelsResponse reelsResponse, String email) {

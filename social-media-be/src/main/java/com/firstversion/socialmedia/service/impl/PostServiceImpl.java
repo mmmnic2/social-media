@@ -17,6 +17,7 @@ import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.PostService;
 import com.firstversion.socialmedia.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,21 +31,18 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
-    @Autowired
-    PostRepository postRepository;
-    @Autowired
-    UserService userService;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    JwtUtils jwtUtils;
-    @Autowired
-    PostLikeRepository postLikeRepository;
-    @Autowired
-    CloudinaryService cloudinaryService;
-    @Autowired
-    CommentRepository commentRepository;
+
+    private final PostRepository postRepository;
+
+    private final UserRepository userRepository;
+
+    private final PostLikeRepository postLikeRepository;
+
+    private final CloudinaryService cloudinaryService;
+
+    private final CommentRepository commentRepository;
 
     @Override
     public PostResponse createNewPost(CreatePostRequest createPostRequest) throws IOException {

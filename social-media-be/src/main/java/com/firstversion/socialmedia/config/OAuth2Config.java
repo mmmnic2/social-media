@@ -3,6 +3,8 @@ package com.firstversion.socialmedia.config;
 import com.firstversion.socialmedia.component.oauth2.CustomOAuth2UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
@@ -36,8 +38,11 @@ public class OAuth2Config {
      * @throws Exception Nếu có lỗi xảy ra
      */
     @Bean
+    @Order(2)
     public SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
-        http.oauth2Login(oauth2 -> oauth2
+        http
+                .csrf(AbstractHttpConfigurer::disable)
+                .oauth2Login(oauth2 -> oauth2
                 .authorizationEndpoint(authorization -> authorization
                         .baseUri("/login/oauth2/authorization"))
                 .userInfoEndpoint(userInfo -> userInfo.userService(oauthUserService))

@@ -10,6 +10,7 @@ import com.firstversion.socialmedia.repository.CommentRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.CommentLikeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,15 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class CommentLikeServiceImpl implements CommentLikeService {
-    @Autowired
-    JwtUtils jwtUtils;
-    @Autowired
-    CommentLikeRepository commentLikeRepository;
-    @Autowired
-    CommentRepository commentRepository;
-    @Autowired
-    UserRepository userRepository;
+    private final CommentLikeRepository commentLikeRepository;
+
+    private final CommentRepository commentRepository;
 
     @Override
     @Transactional

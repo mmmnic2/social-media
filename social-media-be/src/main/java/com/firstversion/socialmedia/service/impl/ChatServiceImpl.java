@@ -10,6 +10,7 @@ import com.firstversion.socialmedia.repository.ChatMemberRepository;
 import com.firstversion.socialmedia.repository.ChatRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.service.ChatService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,13 +20,14 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@RequiredArgsConstructor
 public class ChatServiceImpl implements ChatService {
-    @Autowired
-    ChatRepository chatRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    ChatMemberRepository chatMemberRepository;
+
+    private final ChatRepository chatRepository;
+
+    private final UserRepository userRepository;
+
+    private final ChatMemberRepository chatMemberRepository;
 
     @Transactional
     @Override

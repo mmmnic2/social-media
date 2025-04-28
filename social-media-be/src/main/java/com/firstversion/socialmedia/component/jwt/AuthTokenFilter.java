@@ -7,11 +7,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -26,11 +24,12 @@ import java.util.Optional;
  * - Kiểm tra tính hợp lệ của token.
  * - Nếu hợp lệ, lấy thông tin người dùng và đặt vào SecurityContext.
  */
+@Slf4j
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     private final UserService userService;
     private final JwtUtils jwtUtils;
-    private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
+
 
     public AuthTokenFilter(UserService userService, JwtUtils jwtUtils) {
         this.userService = userService;
@@ -54,6 +53,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
+        System.out.println("hello");
         try {
             parseJwtFromRequest(request).ifPresent(jwt -> {
                 if (jwtUtils.validateToken(jwt)) {
@@ -70,7 +70,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                 }
             });
         } catch (Exception e) {
-            logger.error("Không thể xác thực người dùng: {}", e.getMessage());
+            log.error("Không thể xác thực người dùng: {}", e.getMessage());
         }
         filterChain.doFilter(request, response);
     }
@@ -87,5 +87,10 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             return Optional.of(header.substring(7));
         }
         return Optional.empty();
+    }
+
+    private boolean isPermitUrl(String path) {
+        return false;
+//        return permitUrls.stream().anyMatch(path::startsWith);
     }
 }

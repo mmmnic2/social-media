@@ -19,6 +19,7 @@ import com.firstversion.socialmedia.repository.UserFollowerRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,18 +33,19 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
-    @Autowired
-    UserFollowerRepository userFollowerRepository;
-    @Autowired
-    JwtUtils jwtUtils;
-    @Autowired
-    CloudinaryService cloudinaryService;
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final UserFollowerRepository userFollowerRepository;
+
+    private final JwtUtils jwtUtils;
+
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public void register(CreateUserRequest userRequest) {

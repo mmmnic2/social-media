@@ -5,6 +5,7 @@ import com.firstversion.socialmedia.dto.response.post.PostLikeResponse;
 import com.firstversion.socialmedia.dto.response.post.PostResponse;
 import com.firstversion.socialmedia.exception.NotFoundException;
 import com.firstversion.socialmedia.service.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,9 +18,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/post")
+@RequiredArgsConstructor
 public class PostController {
-    @Autowired
-    PostService postService;
+
+    private final PostService postService;
 
     @PostMapping(value = "/create-post", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> createPost(@RequestParam("caption") String caption,

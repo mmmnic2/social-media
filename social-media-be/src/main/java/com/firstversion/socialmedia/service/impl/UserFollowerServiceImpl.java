@@ -8,6 +8,7 @@ import com.firstversion.socialmedia.repository.UserFollowerRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.UserFollowerService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,13 +16,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserFollowerServiceImpl implements UserFollowerService {
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    UserFollowerRepository userFollowerRepository;
-    @Autowired
-    JwtUtils jwtUtils;
+
+    private final UserRepository userRepository;
+
+    private final UserFollowerRepository userFollowerRepository;
+
+    private final JwtUtils jwtUtils;
 
     @Override
     public String handleFollow_UnfollowUser(Long followedId, String token) {

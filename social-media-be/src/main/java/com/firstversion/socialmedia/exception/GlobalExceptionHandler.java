@@ -1,8 +1,5 @@
-package com.firstversion.socialmedia.controller;
+package com.firstversion.socialmedia.exception;
 
-import com.firstversion.socialmedia.exception.AlreadyExistException;
-import com.firstversion.socialmedia.exception.NotFoundException;
-import com.firstversion.socialmedia.exception.UserNotAuthorizedException;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;

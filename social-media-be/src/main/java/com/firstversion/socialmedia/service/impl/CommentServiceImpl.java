@@ -7,13 +7,10 @@ import com.firstversion.socialmedia.exception.UserNotAuthorizedException;
 import com.firstversion.socialmedia.model.entity.Comment;
 import com.firstversion.socialmedia.model.entity.Post;
 import com.firstversion.socialmedia.model.entity.User;
-import com.firstversion.socialmedia.repository.CommentLikeRepository;
 import com.firstversion.socialmedia.repository.CommentRepository;
 import com.firstversion.socialmedia.repository.PostRepository;
-import com.firstversion.socialmedia.repository.UserRepository;
-import com.firstversion.socialmedia.component.jwt.JwtUtils;
 import com.firstversion.socialmedia.service.CommentService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,17 +18,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-    @Autowired
-    JwtUtils jwtUtils;
-    @Autowired
-    CommentLikeRepository commentLikeRepository;
-    @Autowired
-    CommentRepository commentRepository;
-    @Autowired
-    PostRepository postRepository;
-    @Autowired
-    UserRepository userRepository;
+
+    private final CommentRepository commentRepository;
+
+    private final PostRepository postRepository;
+
 
     @Override
     public CommentResponse createComment(CommentRequest commentRequest, Long postId) {

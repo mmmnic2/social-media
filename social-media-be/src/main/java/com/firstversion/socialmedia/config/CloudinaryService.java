@@ -2,6 +2,7 @@ package com.firstversion.socialmedia.config;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,10 +14,10 @@ import java.util.Map;
  * Service để xử lý upload và xoá file trên Cloudinary.
  */
 @Service
+@RequiredArgsConstructor
 public class CloudinaryService {
 
-    @Autowired
-    private Cloudinary cloudinary;
+    private final Cloudinary cloudinary;
 
     /**
      * Upload một file lên Cloudinary vào thư mục chỉ định.

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StoryMapper {
-    public StoryResponse toStoryResponse(Story story) {
+    public static StoryResponse toStoryResponse(Story story) {
         StoryResponse response = new StoryResponse();
         response.setId(story.getId());
         response.setMediaUrl(story.getMediaUrl());

@@ -4,6 +4,7 @@ import com.firstversion.socialmedia.dto.request.NotificationRequest;
 import com.firstversion.socialmedia.dto.response.notification.NotificationResponse;
 import com.firstversion.socialmedia.model.entity.Notification;
 import com.firstversion.socialmedia.service.NotificationService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +16,12 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/notification")
+@RequiredArgsConstructor
 public class NotificationController {
-    @Autowired
-    SimpMessagingTemplate simpMessagingTemplate;
-    @Autowired
-    NotificationService notificationService;
+
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
+    private final NotificationService notificationService;
 
     @PostMapping("/notify")
     public ResponseEntity<?> sendNotification(@RequestBody NotificationRequest request) {

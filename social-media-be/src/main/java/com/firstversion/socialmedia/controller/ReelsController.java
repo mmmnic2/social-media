@@ -5,6 +5,7 @@ import com.firstversion.socialmedia.dto.request.CreateReelRequest;
 import com.firstversion.socialmedia.dto.response.post.PostResponse;
 import com.firstversion.socialmedia.dto.response.reels.ReelsResponse;
 import com.firstversion.socialmedia.service.ReelsService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,9 +17,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/reels")
+@RequiredArgsConstructor
 public class ReelsController {
-    @Autowired
-    private ReelsService reelsService;
+
+    private final ReelsService reelsService;
 
 //    @PostMapping("/create")
 //    public ResponseEntity<?> createReels(@RequestPart(value = "caption", required = true) String caption,

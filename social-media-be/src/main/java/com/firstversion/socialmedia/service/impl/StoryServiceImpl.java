@@ -19,6 +19,8 @@ import com.firstversion.socialmedia.repository.StoryStickerRepository;
 import com.firstversion.socialmedia.repository.StoryTextRepository;
 import com.firstversion.socialmedia.repository.UserRepository;
 import com.firstversion.socialmedia.service.StoryService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,25 +34,22 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class StoryServiceImpl implements StoryService {
-    @Autowired
-    StoryRepository storyRepository;
-    @Autowired
-    UserRepository userRepository;
-    @Autowired
-    MusicRepository musicRepository;
-    @Autowired
-    StickerRepository stickerRepository;
-    @Autowired
-    StoryStickerRepository storyStickerRepository;
-    @Autowired
-    StoryTextRepository storyTextRepository;
-    @Autowired
-    CloudinaryService cloudinaryService;
-    private Logger logger;
-    @Autowired
-    private StoryMapper storyMapper;
 
+    private final StoryRepository storyRepository;
+
+    private final MusicRepository musicRepository;
+
+    private final StickerRepository stickerRepository;
+
+    private final StoryStickerRepository storyStickerRepository;
+
+    private final StoryTextRepository storyTextRepository;
+
+    private final CloudinaryService cloudinaryService;
+    
     @Override
     public StoryResponse createStory(CreateStoryRequest storyRequest) throws IOException{
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -61,7 +60,7 @@ public class StoryServiceImpl implements StoryService {
 
         Story story = new Story();
         Map contentUrl = cloudinaryService.uploadVideo(storyRequest.getContent(), CloudinaryConstant.STORY);
-        logger.info("map content: " + contentUrl);
+        log.info("map content: " + contentUrl);
         story.setUser(user);
         story.setMediaUrl(contentUrl.toString());
         story.setCreatedAt(LocalDateTime.now());
@@ -101,7 +100,7 @@ public class StoryServiceImpl implements StoryService {
             storyStickerRepository.saveAll(stickerEntities);
         }
 
-        return storyMapper.toStoryResponse(story);
+        return StoryMapper.toStoryResponse(story);
     }
 
     public List<Story> getValidStories() {
@@ -113,7 +112,7 @@ public class StoryServiceImpl implements StoryService {
     public List<StoryResponse> findStoryByUserId(Long userId) {
         List<Story> stories = storyRepository.findByUserId(userId);
         return stories.stream()
-                .map(storyMapper::toStoryResponse)
+                .map(StoryMapper::toStoryResponse)
                 .collect(Collectors.toList());
     }
 
