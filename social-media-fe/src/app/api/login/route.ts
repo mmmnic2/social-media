@@ -2,14 +2,28 @@ import { cookies } from "next/headers";
 
 export async function POST(request: Request) {
   const res = await request.json();
-  const sessionToken = res?.accessToken;
+  const accessToken = res?.accessToken;
   const expireTime = res?.expireTime;
-  cookies().set({
+  const refreshToken = res?.refreshToken;
+
+  if (!accessToken || !expireTime || !refreshToken) {
+    return Response.json({ message: "Invalid data" }, { status: 400 });
+  }
+
+  (await cookies()).set({
     name: "sessionToken",
-    value: sessionToken,
+    value: accessToken,
     httpOnly: true,
     path: "/",
-    maxAge: expireTime / 1000,
+    maxAge: Math.floor(expireTime / 1000),
+  });
+
+  (await cookies()).set({
+    name: "refreshToken",
+    value: refreshToken,
+    httpOnly: true,
+    path: "/",
+    maxAge: Math.floor(86400000 / 1000),
   });
   return Response.json("Login success!", { status: 200 });
 }

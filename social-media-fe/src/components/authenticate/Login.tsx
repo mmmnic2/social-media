@@ -5,9 +5,6 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useLogin } from "@/hooks/api-hooks/auth-hooks/useAuth";
 import { useGetUserProfile } from "@/hooks/api-hooks/user-hooks/useUser";
-import { loginSuccess } from "@/redux/auth";
-import store from "@/redux/store";
-import { setUserInfo } from "@/redux/user";
 import { AuthTypes } from "@/types/authTypes";
 import FormComponent, { FormField } from "../common/form/FormComponent";
 import { useSnackbar } from "../common/snackbar/Snackbar";
@@ -45,7 +42,6 @@ const Login = () => {
   useEffect(() => {
     if (getUserProfileSuccess) {
       showSnackbar("Login Success", "success");
-      store.dispatch(setUserInfo(userData));
       router.push("/");
       router.refresh();
     }
@@ -59,10 +55,9 @@ const Login = () => {
           refreshToken: data.refreshToken,
           expireTime: data.expireTime || 0 + Date.now(),
         };
-        store.dispatch(loginSuccess(token));
       },
-      onError: () => {
-        showSnackbar("Login Failed", "error");
+      onError: (e) => {
+        showSnackbar(`Login Failed: ${e}`, "error");
       },
     });
   };

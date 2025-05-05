@@ -1,4 +1,4 @@
-import axios from "@/constant/apiConstant";
+import axios from "@/constant/axiosClient";
 
 export async function createChat(payload: any) {
   const url = `/api/v1/chat/create-chat`;

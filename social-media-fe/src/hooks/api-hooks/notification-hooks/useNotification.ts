@@ -1,24 +1,26 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getAllNotiByUser,
   markAsReadNoti,
   sendNotification,
 } from "@/api/notification";
-import { setAllNotifications } from "@/redux/notifications/notifications";
-import store from "@/redux/store";
 
 export const useSendNotification = () => {
-  return useMutation(sendNotification);
+  return useMutation({
+    mutationFn: sendNotification,
+  });
 };
 
-export const useGetNotification = (userId: number) => {
-  return useQuery("get-all-noti", () => getAllNotiByUser(userId), {
-    onSuccess: (data) => {
-      store.dispatch(setAllNotifications(data));
-    },
+export const useGetNotification = (userId: number, token: string) => {
+  return useQuery({
+    queryKey: ["get-all-noti"],
+    queryFn: () => getAllNotiByUser(userId),
+    enabled: !!token,
   });
 };
 
 export const useMarkAsReadNoti = () => {
-  return useMutation(markAsReadNoti);
+  return useMutation({
+    mutationFn: markAsReadNoti,
+  });
 };

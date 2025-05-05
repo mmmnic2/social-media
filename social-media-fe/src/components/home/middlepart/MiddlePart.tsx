@@ -4,8 +4,8 @@ import { PostList } from "@/components/post/PostList";
 import CreatePostCard from "./component/CreatePostCard";
 import Stories from "./component/Stories";
 
-const MiddlePart = () => {
-  const token = cookies().get("sessionToken");
+const MiddlePart = async () => {
+  const token = (await cookies()).get("sessionToken");
   return (
     <React.Fragment>
       <Stories />

@@ -1,4 +1,4 @@
-import axios from "@/constant/apiConstant";
+import axios from "@/constant/axiosClient";
 import { sortedDataByDate } from "@/utils/utils";
 
 export async function getPostByUserId(userId?: number | string) {

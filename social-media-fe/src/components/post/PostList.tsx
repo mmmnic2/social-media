@@ -1,16 +1,10 @@
 "use client";
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import {
   useGetAllPosts,
   useGetPostByUserId,
 } from "@/hooks/api-hooks/post-hooks/usePost";
-import {
-  setAllPost,
-  setIsFetchAllPosts,
-  setRefetchPostByUser,
-} from "@/redux/post/post";
-import { RootState } from "@/redux/store";
+import { createPostStore } from "@/lib/store/postStore";
 import { Post } from "@/types/postTypes";
 import PostCard from "./PostCard";
 
@@ -22,11 +16,8 @@ interface PostListProps {
 const arrUser = [1, 1, 1, 1, 1];
 
 export const PostList = ({ id, isLogin }: PostListProps) => {
-  const dispatch = useDispatch();
-  const refetchAllPost = useSelector(
-    (state: RootState) => state.post.isAllPostRefetch,
-  );
-  // hàm getPostByUserId
+  const postStore = createPostStore();
+  const isRefetchAllPosts = postStore.getState().isPostsRefetch;
   const {
     data: postData,
     error: postError,
@@ -42,21 +33,23 @@ export const PostList = ({ id, isLogin }: PostListProps) => {
   } = useGetPostByUserId(id);
   const { data: allPost, refetch: refecthAllPost } = useGetAllPosts(id);
   useEffect(() => {
-    dispatch(setRefetchPostByUser(refetchGetPostByUserId));
+    if (id) {
+      refetchGetPostByUserId();
+    }
   }, [id]);
   useEffect(() => {
     if (postData) {
-      dispatch(setAllPost(postData));
+      postStore.getState().setPosts(postData);
     }
   }, [postData]);
   useEffect(() => {
-    if (refetchAllPost) {
+    if (isRefetchAllPosts) {
       refecthAllPost();
-    } else if (refetchAllPost && id) {
+    } else if (isRefetchAllPosts && id) {
       refetchGetPostByUserId();
     }
-    dispatch(setIsFetchAllPosts(false));
-  }, [refetchAllPost]);
+    postStore.getState().setIsPostsRefetch(false);
+  }, [isRefetchAllPosts]);
 
   const renderPosts = () => {
     if (postData?.length > 0 || (allPost && allPost?.length > 0)) {

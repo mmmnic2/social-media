@@ -1,4 +1,4 @@
-import axios from "@/constant/apiConstant";
+import axios from "@/constant/axiosClient";
 
 export async function createMessage(payload: {
   chatId: number;

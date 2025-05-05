@@ -1,7 +1,7 @@
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, Menu, MenuItem } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
 import { useMarkAsReadNoti } from "@/hooks/api-hooks/notification-hooks/useNotification";
 import { Notification } from "@/types/notificationTypes";
 import { parseTime } from "@/utils/utils";

@@ -1,9 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import axios from "@/constant/apiConstant";
-import { RootState } from "@/redux/store";
+import axios from "@/constant/axiosClient";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 import { User } from "@/types/userTypes";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import SearchBar from "../common/searchBar/SearchBar";
@@ -15,7 +14,8 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
     React.ReactNode[]
   >([]);
   const router = useRouter();
-  const userInfo = useSelector((state: RootState) => state.user);
+  const { userStore } = useAppStores();
+  const userInfo = userStore.getState().user;
   const handleSearch = async (query: string) => {
     if (query.trim() === "") {
       setFilteredSuggestions([]);

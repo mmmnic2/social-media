@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-export function middleware(request: NextRequest) {
-  const token = request.cookies.get("sessionToken");
+export const middleware = async (request: NextRequest) => {
+  const token = await request.cookies.get("sessionToken");
   const pathname = request.nextUrl.pathname;
 
   // Nếu không có token và pathname không bắt đầu với /login hoặc /register, redirect về /
@@ -24,7 +24,7 @@ export function middleware(request: NextRequest) {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }
-}
+};
 
 export const config = {
   matcher:

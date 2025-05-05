@@ -1,18 +1,16 @@
 import SendIcon from "@mui/icons-material/Send";
 import { IconButton } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
-import { useQueryClient } from "react-query";
-import { useDispatch, useSelector } from "react-redux";
 import { useCreateComment } from "@/hooks/api-hooks/comment-hooks/useComment";
-import { insertComment, setIsRefetchAllComment } from "@/redux/comment/comment";
-import { setIsFetchAllPosts } from "@/redux/post/post";
-import { RootState } from "@/redux/store";
+import { useAppStores } from "@/lib/context/AppStoreContext";
+import { createPostStore } from "@/lib/store/postStore";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 const CreateCommentCard = ({ post }: { post: any }) => {
   const [comment, setComment] = useState("");
-  const dispatch = useDispatch();
   const queryClient = useQueryClient();
-  const userInfo = useSelector((state: RootState) => state.user);
+  const { userStore } = useAppStores();
+  const userInfo = userStore.getState().user;
   const { mutate: handleCreateComment } = useCreateComment();
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -24,11 +22,14 @@ const CreateCommentCard = ({ post }: { post: any }) => {
     };
     handleCreateComment(payload, {
       onSuccess: (data) => {
-        dispatch(insertComment(data));
         setComment("");
-        queryClient.invalidateQueries(["comment_post", post.id]);
-        dispatch(setIsRefetchAllComment(true));
-        dispatch(setIsFetchAllPosts(true));
+        queryClient.invalidateQueries({
+          queryKey: ["comment_post", post.id],
+        });
+        queryClient.invalidateQueries({
+          queryKey: ["all_posts"],
+          exact: true,
+        });
       },
     });
   };

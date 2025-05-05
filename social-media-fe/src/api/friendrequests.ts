@@ -1,4 +1,4 @@
-import axios from "@/constant/apiConstant";
+import axios from "@/constant/axiosClient";
 
 export async function pendingFriendRequests() {
   const url = `/api/v1/friendship/all-pending-requests`;

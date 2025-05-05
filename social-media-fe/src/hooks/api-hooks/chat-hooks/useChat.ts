@@ -1,13 +1,21 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { createChat, getChatById, getChatsByUser } from "@/api/chat";
 export const useCreateChat = () => {
-  return useMutation(createChat);
+  return useMutation({
+    mutationFn: createChat,
+  });
 };
 
 export const useGetChatById = (chatId: number) => {
-  return useQuery(["chat", chatId], () => getChatById(chatId));
+  return useQuery({
+    queryKey: ["chat", chatId],
+    queryFn: () => getChatById(chatId),
+  });
 };
 
 export const useGetChatsByUser = () => {
-  return useQuery("chat_user", getChatsByUser);
+  return useQuery({
+    queryKey: ["chat_user"],
+    queryFn: getChatsByUser,
+  });
 };

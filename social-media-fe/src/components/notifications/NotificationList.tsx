@@ -1,12 +1,10 @@
 "use client";
-import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
+import { SetStateAction, useEffect, useState } from "react";
 import { Notification } from "@/types/notificationTypes";
 import NotificationCard from "./NotificationCard";
 
 const NotificationList = () => {
-  const { allNotifications } = useSelector((state: RootState) => state.noti);
+  const allNotifications: SetStateAction<Notification[]> = [];
   const [allNoti, setAllNoti] = useState<Notification[]>([]);
   const compare = JSON.stringify(allNoti) === JSON.stringify(allNotifications);
   useEffect(() => {

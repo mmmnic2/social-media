@@ -1,12 +1,11 @@
 "use client";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 import { AppButton } from "@/components/common/button/AppButton";
 import { useSnackbar } from "@/components/common/snackbar/Snackbar";
 import { useCreatePost } from "@/hooks/api-hooks/post-hooks/usePost";
-import { setIsFetchAllPosts } from "@/redux/post/post";
-import { RootState } from "@/redux/store";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 interface CreatePostCardProps {
   isLogin: boolean;
 }
@@ -16,9 +15,10 @@ const CreatePostCard = ({ isLogin }: CreatePostCardProps) => {
   const { showSnackbar } = useSnackbar();
 
   const { mutate: createPostCard } = useCreatePost();
+  const { userStore } = useAppStores();
 
-  const currentUser = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
+  const currentUser = userStore.getState().user;
+  const queryClient = useQueryClient();
 
   const handleCreatePost = (e: any) => {
     e.preventDefault();
@@ -27,7 +27,10 @@ const CreatePostCard = ({ isLogin }: CreatePostCardProps) => {
       {
         onSuccess: () => {
           showSnackbar("create post successfully!", "success");
-          dispatch(setIsFetchAllPosts(true));
+          queryClient.invalidateQueries({
+            queryKey: ["all_posts"],
+            exact: true,
+          });
         },
         onError: (error) => {
           showSnackbar(`create post error! ${error}`, "error");
@@ -40,13 +43,13 @@ const CreatePostCard = ({ isLogin }: CreatePostCardProps) => {
     <form className="create-post flex gap-3 relative">
       <div className="absolute top-1/2 left-2 -translate-y-1/2">
         <SocialAvatar
-          imgUrl={currentUser.imageUrl || "/"}
-          alt={currentUser.firstName || "Lan Lan"}
+          imgUrl={currentUser?.imageUrl || "/"}
+          alt={currentUser?.firstName || "Lan Lan"}
         />
       </div>
       <input
         type="text"
-        placeholder={`What do you think, ${currentUser.firstName || "Lan Lan"}?`}
+        placeholder={`What do you think, ${currentUser?.firstName || "Lan Lan"}?`}
         id="create-post"
         className="w-full rounded-lg py-3 pr-3 pl-14"
         onChange={(e) => setCaption(e.target.value)}

@@ -1,4 +1,4 @@
-import axios from "@/constant/apiConstant";
+import axios from "@/constant/axiosClient";
 
 export async function login(payload: { email: string; password: string }) {
   const url = "/auth/authenticate";

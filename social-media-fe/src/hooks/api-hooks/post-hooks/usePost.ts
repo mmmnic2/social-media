@@ -1,4 +1,4 @@
-import { useQuery, useMutation } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   getPostByUserId,
   createPost,
@@ -8,36 +8,46 @@ import {
   likePost,
   savePost,
 } from "@/api/post";
-import { setAllPost, setRefetchAllPost } from "@/redux/post/post";
-import store from "@/redux/store";
 export const useGetPostByUserId = (userId?: number | string) => {
-  return useQuery(["post_user", userId], () => getPostByUserId(userId), {
+  return useQuery({
+    queryKey: ["post_user", userId],
+    queryFn: () => getPostByUserId(userId),
     enabled: !!userId,
   });
 };
 
 export const useGetPostByPostId = (postId: number | string) => {
-  return useQuery(["post", postId], () => getPostById(postId));
+  return useQuery({
+    queryKey: ["post", postId],
+    queryFn: () => getPostById(postId),
+  });
 };
 export const useCreatePost = () => {
-  return useMutation(createPost);
+  return useMutation({
+    mutationFn: createPost,
+  });
 };
 
 export const useGetAllPosts = (id?: number | string) => {
-  return useQuery("all_posts", getAllPost, {
-    onSuccess: (data) => {
-      store.dispatch(setAllPost(data));
-    },
+  return useQuery({
+    queryKey: ["all_posts"],
+    queryFn: getAllPost,
     enabled: !!!id,
   });
 };
 
 export const useDeletePost = () => {
-  return useMutation(deletePost);
+  return useMutation({
+    mutationFn: deletePost,
+  });
 };
 export const useSavePost = () => {
-  return useMutation(savePost);
+  return useMutation({
+    mutationFn: savePost,
+  });
 };
 export const useLikePost = () => {
-  return useMutation(likePost);
+  return useMutation({
+    mutationFn: likePost,
+  });
 };

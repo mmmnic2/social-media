@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   friendRequestActions,
   pendingFriendRequests,
@@ -6,13 +6,20 @@ import {
 } from "@/api/friendrequests";
 
 export const usePendingFriendRequests = () => {
-  return useQuery(["pending-requests"], pendingFriendRequests);
+  return useQuery({
+    queryKey: ["pending-requests"],
+    queryFn: pendingFriendRequests,
+  });
 };
 
 export const useFriendRequestActions = () => {
-  return useMutation(friendRequestActions);
+  return useMutation({
+    mutationFn: friendRequestActions,
+  });
 };
 
 export const useSendFriendRequest = () => {
-  return useMutation(sendFriendRequest);
+  return useMutation({
+    mutationFn: sendFriendRequest,
+  });
 };

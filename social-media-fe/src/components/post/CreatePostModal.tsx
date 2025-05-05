@@ -11,12 +11,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { useFormik } from "formik";
 import Image from "next/image";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useCreatePost } from "@/hooks/api-hooks/post-hooks/usePost";
-import { setIsFetchAllPosts } from "@/redux/post/post";
 import { AppButton } from "../common/button/AppButton";
 import { useSnackbar } from "../common/snackbar/Snackbar";
 
@@ -36,12 +35,12 @@ const CreatePostModal = ({
 }) => {
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
-  const { mutate: handleCreatePost, isLoading } = useCreatePost();
+  const { mutate: handleCreatePost } = useCreatePost();
+  const queryClient = useQueryClient();
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<File | null>(null);
   const [mediaSrc, setMediaSrc] = useState<string | null>(null);
   const { showSnackbar } = useSnackbar();
-  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues: {
@@ -56,8 +55,11 @@ const CreatePostModal = ({
           setSelectedImage(null);
           setSelectedVideo(null);
           setMediaSrc(null);
+          queryClient.invalidateQueries({
+            queryKey: ["all_posts"],
+            exact: true,
+          });
           formik.resetForm();
-          dispatch(setIsFetchAllPosts(true));
           showSnackbar(
             `${postData ? "Edit" : "Create"} Post successfully!`,
             "success",

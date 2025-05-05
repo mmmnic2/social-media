@@ -8,22 +8,19 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import ShareIcon from "@mui/icons-material/Share";
 import SmsIcon from "@mui/icons-material/Sms";
 import { IconButton, Tooltip } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useGetCommentByPostId } from "@/hooks/api-hooks/comment-hooks/useComment";
 import {
   useDeletePost,
   useLikePost,
   useSavePost,
 } from "@/hooks/api-hooks/post-hooks/usePost";
-import { setIsRefetchAllComment } from "@/redux/comment/comment";
-import { setIsFetchAllPosts } from "@/redux/post/post";
-import {
-  refetchAllPostSelector,
-  refetchPostByUserSelector,
-} from "@/redux/post/selectors";
-import { RootState } from "@/redux/store";
+
+import { useAppStores } from "@/lib/context/AppStoreContext";
+import { createCommentStore } from "@/lib/store/commentStore";
+import { createPostStore } from "@/lib/store/postStore";
 import { Post } from "@/types/postTypes";
 import { parseTime } from "@/utils/utils";
 import Image1 from "../../../public/image/cat_bg.jpg";
@@ -56,11 +53,12 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
     refetch: refetchAllComments,
   } = useGetCommentByPostId(post?.id || null, showComments);
 
-  const refetchAllPost = useSelector(refetchAllPostSelector);
-  const refetchAllPostByUser = useSelector(refetchPostByUserSelector);
-  const isRefetchAllComments = useSelector((state: any) => state.comment);
-  const currentUser = useSelector((state: RootState) => state.user);
-  const dispatch = useDispatch();
+  const { userStore } = useAppStores();
+  const currentUser = userStore.getState().user;
+  const postStore = createPostStore();
+  const commentStore = createCommentStore();
+  const isRefetchComment = commentStore.getState().isCommentRefetch;
+  const queryClient = useQueryClient();
 
   const { showSnackbar } = useSnackbar();
 
@@ -68,9 +66,11 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
     handleLikePost(post?.id || null, {
       onSuccess: (data) => {
         setIsLiked(!data.delete);
-        dispatch(setIsFetchAllPosts(true));
-        refetchAllPost();
-        refetchAllPostByUser();
+        postStore.getState().setIsPostsRefetch(true);
+        queryClient.invalidateQueries({
+          queryKey: ["all_posts"],
+          exact: true,
+        });
       },
     });
   };
@@ -104,7 +104,7 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
       onSuccess: (data) => {
         showSnackbar(data, "success");
         handleCloseDeletePost();
-        dispatch(setIsFetchAllPosts(true));
+        postStore.getState().setIsPostsRefetch(true);
       },
       onError: (err: any) => {
         showSnackbar(err?.response?.data, "error");
@@ -114,11 +114,11 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
   };
 
   useEffect(() => {
-    if (isRefetchAllComments) {
+    if (isRefetchComment) {
       refetchAllComments();
     }
-    dispatch(setIsRefetchAllComment(false));
-  }, [isRefetchAllComments]);
+    commentStore.getState().setIsCommentRefetch(true);
+  }, [isRefetchComment]);
 
   const renderPostCardImage = () => {
     if (post?.image && isLogin) {
@@ -169,7 +169,7 @@ const PostCard = ({ post, isLogin }: PostCardProps) => {
             </div>
           </div>
           {/* Edit Post */}
-          {currentUser.id === post?.userResponse?.id && (
+          {currentUser?.id === post?.userResponse?.id && (
             <div className="relative">
               <Tooltip title={"Edit Post"}>
                 <button

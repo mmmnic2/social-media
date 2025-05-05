@@ -1,10 +1,10 @@
 "use client";
 import { Client, Stomp } from "@stomp/stompjs";
+import { useQueryClient } from "@tanstack/react-query";
 import React, { useEffect, useState } from "react";
-import { useQueryClient } from "react-query";
-import { useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import { useGetNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 import { useSnackbar } from "../common/snackbar/Snackbar";
 
 export const StomClientProvider = ({
@@ -12,14 +12,16 @@ export const StomClientProvider = ({
   token,
 }: {
   children: React.ReactNode;
-  token: Object | undefined;
+  token: string;
 }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
-  const userSelector = useSelector((state: any) => state.user);
+  const { userStore } = useAppStores();
+  const userInfo = userStore?.getState().user;
   const { showSnackbar } = useSnackbar();
   const queryClient = useQueryClient();
   const { refetch: refetchGetNotification } = useGetNotification(
-    userSelector.id,
+    userInfo?.id || 0,
+    token || "",
   );
   const onError = (error: any) => {
     console.error("error: ", error);
@@ -37,7 +39,9 @@ export const StomClientProvider = ({
     switch (notificationInfo?.type) {
       case "FRIEND_REQUEST":
         showSnackbar(notificationInfo?.message, "info");
-        queryClient.invalidateQueries("pending-requests");
+        queryClient.invalidateQueries({
+          queryKey: ["pending-requests"],
+        });
         break;
       default:
         break;
@@ -55,9 +59,9 @@ export const StomClientProvider = ({
           console.log("websocket connected...");
           stomp.subscribe("/user/queue/messages", () => {});
           stomp.subscribe("/user/queue/notifications", onNotification);
-          if (userSelector.id) {
+          if (userInfo?.id) {
             stomp.subscribe(
-              `/topic/friend-status/${userSelector.id}`,
+              `/topic/friend-status/${userInfo?.id}`,
               onNotiFriendStatus,
             );
           }
