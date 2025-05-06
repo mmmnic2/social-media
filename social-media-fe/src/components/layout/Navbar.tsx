@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { useStore } from "zustand";
 import axios from "@/constant/axiosClient";
 import { useAppStores } from "@/lib/context/AppStoreContext";
 import { User } from "@/types/userTypes";
@@ -15,7 +16,7 @@ const Navbar = ({ isLogin }: { isLogin: boolean }) => {
   >([]);
   const router = useRouter();
   const { userStore } = useAppStores();
-  const userInfo = userStore.getState().user;
+  const userInfo = useStore(userStore, (state) => state.user);
   const handleSearch = async (query: string) => {
     if (query.trim() === "") {
       setFilteredSuggestions([]);

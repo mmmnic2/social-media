@@ -11,9 +11,9 @@ import {
   useCreateMessage,
   useGetMessageByChat,
 } from "@/hooks/api-hooks/message-hooks/useMessage";
+import ChatMessage from "./ChatMessage";
 import { chatSelectedSelector } from "@/redux/chat/selectors";
 import { setAllMessages } from "@/redux/message/message";
-import ChatMessage from "./ChatMessage";
 
 interface parseUserLoginProp {
   id: number;

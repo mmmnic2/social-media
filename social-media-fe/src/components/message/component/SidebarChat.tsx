@@ -8,9 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 import SearchUser from "@/components/searchUser/SearchUser";
 import { useLogout } from "@/hooks/api-hooks/auth-hooks/useAuth";
+import UserChatCard from "./UserChatCard";
 import { setChatSelected } from "@/redux/chat/chat";
 import { allChatsSelector, chatSelectedSelector } from "@/redux/chat/selectors";
-import UserChatCard from "./UserChatCard";
 
 const SidebarChat = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);

@@ -3,10 +3,13 @@ import AddIcon from "@mui/icons-material/Add";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { useStore } from "zustand";
 import { NotificationPayload } from "@/api/notification";
 import { useSendFriendRequest } from "@/hooks/api-hooks/friend-requests/useFriendRequests";
 import { useSendNotification } from "@/hooks/api-hooks/notification-hooks/useNotification";
 import { useGetUserById } from "@/hooks/api-hooks/user-hooks/useUser";
+import { useAppStores } from "@/lib/context/AppStoreContext";
+import { createPostStore } from "@/lib/store/postStore";
 import ProfileBGImage from "../../../public/image/cat_bg.jpg";
 import SocialAvatar from "../common/avatar/SocialAvatar";
 import { AppButton } from "../common/button/AppButton";
@@ -19,23 +22,23 @@ interface ProfileProps {
 }
 
 const Profile = ({ id, isLogin }: ProfileProps) => {
-  const userSelector = useSelector((state: RootState) => state.user);
-  const { posts } = useSelector((state: any) => state.post);
+  const { userStore } = useAppStores();
+  const currentUser = userStore.getState().user;
+  const { postsStore } = useAppStores();
+  const posts = useStore(postsStore, (state) => state.posts);
   const { showSnackbar } = useSnackbar();
   const [isUploadImageDialogOpen, setIsUploadImageDialogOpen] = useState(false);
   // hàm getUserInforByUserId
-  const {
-    data: userInfor,
-  }: {
-    data: any;
-  } = useGetUserById(id || null);
+  const { data: userInfor, refetch: refetchUserInfor } = useGetUserById(
+    id || null,
+  );
 
   const { mutate: sendFriendRequest, isSuccess: sendFriendRequestSuccess } =
     useSendFriendRequest();
   const { mutate: sendNotificationMutate } = useSendNotification();
   const handleFollowUser = () => {
     const reqBody = {
-      userId: userSelector.id,
+      userId: currentUser?.id,
       friendId: userInfor.id,
     };
     sendFriendRequest(reqBody, {
@@ -49,14 +52,14 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
   };
   const sendFriendRequestNoti = () => {
     const friendNotiReqBoby: NotificationPayload = {
-      senderId: userSelector.id,
+      senderId: currentUser?.id ?? null,
       receiverId: userInfor.id,
       notificationType: "FRIEND_REQUEST",
     };
     sendNotificationMutate(friendNotiReqBoby);
   };
   const handleUploadImage = () => {
-    if (userInfor.id !== userSelector.id) return;
+    if (userInfor.id !== currentUser?.id) return;
     setIsUploadImageDialogOpen(true);
   };
   useEffect(() => {
@@ -66,7 +69,7 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
   }, [sendFriendRequestSuccess]);
 
   const renderFollowButton = () => {
-    if (Number(id) !== userSelector.id) {
+    if (Number(id) !== currentUser?.id) {
       return (
         <AppButton
           className="bg-accent-color rounded-lg px-4 py-2 h-10 bottom-0 left-1/3 z-110 hover:bg-accent-color/50"
@@ -174,6 +177,10 @@ const Profile = ({ id, isLogin }: ProfileProps) => {
       <UploadAvatarDialog
         open={isUploadImageDialogOpen}
         onClose={() => setIsUploadImageDialogOpen(!isUploadImageDialogOpen)}
+        onUploadSuccess={() => {
+          refetchUserInfor();
+          userStore.getState().setUserInfo(userInfor);
+        }}
       />
     </>
   );

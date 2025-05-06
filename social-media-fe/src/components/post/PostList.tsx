@@ -4,6 +4,7 @@ import {
   useGetAllPosts,
   useGetPostByUserId,
 } from "@/hooks/api-hooks/post-hooks/usePost";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 import { createPostStore } from "@/lib/store/postStore";
 import { Post } from "@/types/postTypes";
 import PostCard from "./PostCard";
@@ -16,8 +17,8 @@ interface PostListProps {
 const arrUser = [1, 1, 1, 1, 1];
 
 export const PostList = ({ id, isLogin }: PostListProps) => {
-  const postStore = createPostStore();
-  const isRefetchAllPosts = postStore.getState().isPostsRefetch;
+  const { postsStore } = useAppStores();
+  const isRefetchAllPosts = postsStore.getState().isPostsRefetch;
   const {
     data: postData,
     error: postError,
@@ -39,7 +40,7 @@ export const PostList = ({ id, isLogin }: PostListProps) => {
   }, [id]);
   useEffect(() => {
     if (postData) {
-      postStore.getState().setPosts(postData);
+      postsStore.getState().setPosts(postData);
     }
   }, [postData]);
   useEffect(() => {
@@ -48,7 +49,7 @@ export const PostList = ({ id, isLogin }: PostListProps) => {
     } else if (isRefetchAllPosts && id) {
       refetchGetPostByUserId();
     }
-    postStore.getState().setIsPostsRefetch(false);
+    postsStore.getState().setIsPostsRefetch(false);
   }, [isRefetchAllPosts]);
 
   const renderPosts = () => {

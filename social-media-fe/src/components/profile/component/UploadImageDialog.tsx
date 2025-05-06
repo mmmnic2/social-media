@@ -6,27 +6,32 @@ import {
   Button,
   Divider,
 } from "@mui/material";
+import { useQueryClient } from "@tanstack/react-query";
 import { Formik, Form } from "formik";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
 import * as Yup from "yup";
 import SocialAvatar from "@/components/common/avatar/SocialAvatar";
 import { useUploadUserAvatar } from "@/hooks/api-hooks/user-hooks/useUser";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 
 interface UploadAvatarDialogProps {
   open: boolean;
   onClose: () => void;
+  onUploadSuccess: () => void;
 }
 
 const UploadAvatarDialog: React.FC<UploadAvatarDialogProps> = ({
   open,
   onClose,
+  onUploadSuccess,
 }) => {
   const [preview, setPreview] = useState<string | null>(null);
 
   const { mutate: uploadAvatarMutate } = useUploadUserAvatar();
+  const queryClient = useQueryClient();
 
-  const userInfor = useSelector((state: any) => state.user);
+  const { userStore } = useAppStores();
+  const currentUser = userStore.getState().user;
 
   const validationSchema = Yup.object().shape({
     avatar: Yup.mixed().required("You must select an image"),
@@ -52,6 +57,11 @@ const UploadAvatarDialog: React.FC<UploadAvatarDialogProps> = ({
               formData.append("image", values.avatar);
               uploadAvatarMutate(formData, {
                 onSuccess: () => {
+                  queryClient.refetchQueries({
+                    queryKey: ["user", currentUser?.id],
+                    exact: true,
+                  });
+                  onUploadSuccess();
                   setSubmitting(false);
                   onClose();
                 },
@@ -71,7 +81,7 @@ const UploadAvatarDialog: React.FC<UploadAvatarDialogProps> = ({
                     <div className="h-[10rem] w-[10rem]">
                       <SocialAvatar
                         imgUrl={preview}
-                        alt={`${userInfor.first_name} image`}
+                        alt={`${currentUser?.firstName} image`}
                         width="100%"
                         height="100%"
                       />
@@ -80,7 +90,7 @@ const UploadAvatarDialog: React.FC<UploadAvatarDialogProps> = ({
                     <div className="h-[10rem] w-[10rem]">
                       <SocialAvatar
                         imgUrl={"#"}
-                        alt={userInfor.first_name}
+                        alt={currentUser?.firstName || "Lan Lan"}
                         width="100%"
                         height="100%"
                       />

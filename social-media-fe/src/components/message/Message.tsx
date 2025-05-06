@@ -5,12 +5,12 @@ import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
 import { useGetChatsByUser } from "@/hooks/api-hooks/chat-hooks/useChat";
-import { setAllChats, setChatSelected } from "@/redux/chat/chat";
-import { chatSelectedSelector } from "@/redux/chat/selectors";
-import { addMessage } from "@/redux/message/message";
 import ChatNotFound from "./component/ChatNotFound";
 import ChatPanel from "./component/ChatPanel";
 import SidebarChat from "./component/SidebarChat";
+import { setAllChats, setChatSelected } from "@/redux/chat/chat";
+import { chatSelectedSelector } from "@/redux/chat/selectors";
+import { addMessage } from "@/redux/message/message";
 const Message = () => {
   const { data: allChats, isLoading } = useGetChatsByUser();
   const currentChat = useSelector(chatSelectedSelector);

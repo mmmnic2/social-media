@@ -1,14 +1,12 @@
 "use client";
 import { createContext, useContext } from "react";
 import { StoreApi } from "zustand";
-import { AuthState } from "../store/authStore";
-import { NotificationState } from "../store/notificationStore";
+import { PostState } from "../store/postStore";
 import { UserState } from "../store/userStore";
 
 export type AppStores = {
   userStore: StoreApi<UserState>;
-  notificationStore: StoreApi<NotificationState>;
-  authStore: StoreApi<AuthState>;
+  postsStore: StoreApi<PostState>;
 };
 
 export const AppStoreContext = createContext<AppStores | null>(null);

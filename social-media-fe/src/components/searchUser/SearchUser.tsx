@@ -11,11 +11,11 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useCreateChat } from "@/hooks/api-hooks/chat-hooks/useChat";
 import { useSearchUser } from "@/hooks/api-hooks/user-hooks/useUser";
-import { setChatSelected } from "@/redux/chat/chat";
 import { User } from "@/types/userTypes";
+import { setChatSelected } from "@/redux/chat/chat";
 const SearchUser = () => {
   const [username, setUsername] = useState("");
-  const { mutate: searchUser, isLoading } = useSearchUser();
+  const { mutate: searchUser } = useSearchUser();
   const [userSearchList, setUserSearchList] = useState([]);
   const [typingTimeout, setTypingTimeout] = useState<ReturnType<
     typeof setTimeout
