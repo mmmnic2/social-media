@@ -27,11 +27,11 @@ public class RealTimeChat {
     /**
      * Gửi tin nhắn đến một user theo từng cuộc trò chuyện.
      * - Người dùng gửi tin nhắn đến "/app/chat/{chatId}"
-     * - Người nhận subscribe "/user/{chatId}/private" để nhận tin nhắn.
+     * - Người nhận subscribe "/topic/messages/{chatId}" để nhận tin nhắn.
      */
     @MessageMapping("/chat/{chatId}")
     public void sendToUser(@Payload MessageResponse message, @DestinationVariable String chatId) {
-        simpMessagingTemplate.convertAndSend("/user/" + chatId + "/private", message);
+        simpMessagingTemplate.convertAndSend( "/topic/messages/" + chatId, message);
     }
 
     /**
