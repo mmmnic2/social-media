@@ -1,12 +1,8 @@
 "use client";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
-import SendSharpIcon from "@mui/icons-material/SendSharp";
-import { Avatar, Card, CardHeader, IconButton } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import SocialAvatar from "@/components/common/avatar/SocialAvatar";
+import { useEffect, useState } from "react";
+import { useStore } from "zustand";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 
 interface UserLoginProps {
   id: number;
@@ -24,22 +20,22 @@ const UserChatCard = ({
   handleSelectUserChat: (chat: any) => void;
   isSelected: boolean;
 }) => {
-  const dispatch = useDispatch();
   const [userChat, setUserChat] = useState<UserLoginProps>();
-  const userLogin = useSelector((state: any) => state.user);
+  const { userStore } = useAppStores();
+  const userLogin = useStore(userStore, (state) => state.user);
 
   useEffect(() => {
     if (chat?.memberList?.length === 1) {
       let parseUserLogin: any = {
-        id: userLogin.id,
-        firstName: userLogin.first_name,
-        lastName: userLogin.last_name,
-        email: userLogin.email,
+        id: userLogin?.id,
+        firstName: userLogin?.firstName,
+        lastName: userLogin?.lastName,
+        email: userLogin?.email,
       };
       setUserChat(parseUserLogin);
     } else {
       setUserChat(
-        chat?.memberList?.find((member: any) => member.id !== userLogin.id),
+        chat?.memberList?.find((member: any) => member.id !== userLogin?.id),
       );
     }
   }, [chat, userLogin]);

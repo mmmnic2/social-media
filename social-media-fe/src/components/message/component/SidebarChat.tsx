@@ -4,26 +4,25 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Button, Menu, MenuItem } from "@mui/material";
 import Link from "next/link";
 import React, { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useStore } from "zustand";
 import AvatarWithInfo from "@/components/common/avatarWithInfo/AvatarWithInfo";
 import SearchUser from "@/components/searchUser/SearchUser";
 import { useLogout } from "@/hooks/api-hooks/auth-hooks/useAuth";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 import UserChatCard from "./UserChatCard";
-import { setChatSelected } from "@/redux/chat/chat";
-import { allChatsSelector, chatSelectedSelector } from "@/redux/chat/selectors";
 
 const SidebarChat = () => {
   const [selectedChatId, setSelectedChatId] = useState(null);
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const currentChat = useSelector(chatSelectedSelector);
+  const { chatStore } = useAppStores();
+  const currentChat = useStore(chatStore, (state) => state.selectedChat);
+  const allChats = useStore(chatStore, (state) => state.allChats);
 
   const { mutate: logoutAction } = useLogout();
 
-  const allChats = useSelector(allChatsSelector);
-  const dispatch = useDispatch();
   const handleSelectUserChat = (chat: any) => {
-    dispatch(setChatSelected(chat));
+    chatStore.getState().setSelectedChat(chat);
   };
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {

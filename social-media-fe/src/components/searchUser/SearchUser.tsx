@@ -8,19 +8,18 @@ import {
   TextField,
 } from "@mui/material";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { useCreateChat } from "@/hooks/api-hooks/chat-hooks/useChat";
 import { useSearchUser } from "@/hooks/api-hooks/user-hooks/useUser";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 import { User } from "@/types/userTypes";
-import { setChatSelected } from "@/redux/chat/chat";
 const SearchUser = () => {
   const [username, setUsername] = useState("");
   const { mutate: searchUser } = useSearchUser();
   const [userSearchList, setUserSearchList] = useState([]);
+  const { chatStore } = useAppStores();
   const [typingTimeout, setTypingTimeout] = useState<ReturnType<
     typeof setTimeout
   > | null>(null);
-  const dispatch = useDispatch();
   const { mutate: createChat } = useCreateChat();
   const handleSearchUser = (e: any) => {
     setUsername(e.target.value);
@@ -45,7 +44,7 @@ const SearchUser = () => {
     const payload = { userId: id };
     createChat(payload, {
       onSuccess: (data) => {
-        dispatch(setChatSelected(data));
+        chatStore.getState().setSelectedChat(data);
       },
       onError: (error) => {
         console.error(error);

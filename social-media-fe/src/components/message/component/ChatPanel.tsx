@@ -4,16 +4,15 @@ import CallIcon from "@mui/icons-material/Call";
 import SendSharpIcon from "@mui/icons-material/SendSharp";
 import VideocamIcon from "@mui/icons-material/Videocam";
 import { Avatar, IconButton } from "@mui/material";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useStore } from "zustand";
 import {
   useCreateMessage,
   useGetMessageByChat,
 } from "@/hooks/api-hooks/message-hooks/useMessage";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 import ChatMessage from "./ChatMessage";
-import { chatSelectedSelector } from "@/redux/chat/selectors";
-import { setAllMessages } from "@/redux/message/message";
 
 interface parseUserLoginProp {
   id: number;
@@ -28,17 +27,18 @@ const ChatPanel = ({
   sendMessageToServer: Function;
 }) => {
   const [userChat, setUserChat] = useState<parseUserLoginProp>();
-  const currentChat = useSelector(chatSelectedSelector);
-  const userLogin = useSelector((state: any) => state.user);
+  const { userStore, chatStore } = useAppStores();
+  const currentChat = useStore(chatStore, (state) => state.selectedChat);
+  const userLogin = useStore(userStore, (state) => state.user);
+  const allMsgs = useStore(chatStore, (state) => state.allMessages);
   const [selectedImage, setSelectedImage] = useState();
   const [imageSrc, setImageSrc] = useState("");
   const [message, setMessage] = useState("");
   const { mutate: handleCreateMessage } = useCreateMessage();
-  const dispatch = useDispatch();
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   //gọi api để lấy allmessage by chatId => lưu vào state
   const {
-    data: allMessage,
+    data: allMessages,
     isLoading,
     isSuccess,
   } = useGetMessageByChat(currentChat?.chatId);
@@ -50,27 +50,20 @@ const ChatPanel = ({
     setImageSrc(createImgSrc);
   };
 
-  // dispatch message vào store sau khi call api
-
-  useEffect(() => {
-    dispatch(setAllMessages(allMessage));
-  }, [allMessage, dispatch]);
-  const allMessages = useSelector((state: any) => state.message.allMessage);
-
   //parse user
   useEffect(() => {
     if (currentChat?.memberList?.length === 1) {
       let parseUserLogin: parseUserLoginProp = {
-        id: userLogin.id,
-        firstName: userLogin.first_name,
-        lastName: userLogin.last_name,
-        email: userLogin.email,
+        id: userLogin?.id || 0,
+        firstName: userLogin?.firstName || "",
+        lastName: userLogin?.lastName || "",
+        email: userLogin?.email || "",
       };
       setUserChat(parseUserLogin);
     } else {
       setUserChat(
         currentChat?.memberList?.find(
-          (member: any) => member.id !== userLogin.id,
+          (member: any) => member.id !== userLogin?.id,
         ),
       );
     }
@@ -97,7 +90,13 @@ const ChatPanel = ({
       chatContainerRef.current.scrollTop =
         chatContainerRef.current.scrollHeight;
     }
-  }, [allMessages]);
+  }, [allMsgs]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      chatStore.getState().setAllMessages(allMessages);
+    }
+  }, [isSuccess]);
 
   // Tạo kết nối socket-client
 
@@ -124,7 +123,7 @@ const ChatPanel = ({
           ref={chatContainerRef}
           className="hideScrollbar overflow-y-scroll h-[82vh] px-2 space-y-2 py-5"
         >
-          {allMessages?.map((mess: any) => (
+          {allMsgs?.map((mess: any) => (
             <ChatMessage key={mess} message={mess} />
           ))}
         </div>
@@ -132,10 +131,12 @@ const ChatPanel = ({
       <div className="sticky bottom-0 border-1">
         {imageSrc && (
           <div className="w-[6rem] h-[6rem]">
-            <img
+            <Image
               className="w-[6rem] h-[6rem]"
               src="https://danviet.mediacdn.vn/upload/1-2015/images/2015-01-26/1434357302-ctkbde1_bnhh.jpg"
               alt="test"
+              width={96}
+              height={96}
             />
           </div>
         )}

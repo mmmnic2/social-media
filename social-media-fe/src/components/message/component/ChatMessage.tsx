@@ -1,11 +1,10 @@
-import { imageConfigDefault } from "next/dist/shared/lib/image-config";
-import Image from "next/image";
-import React from "react";
-import { useSelector } from "react-redux";
+import { useStore } from "zustand";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 
 const ChatMessage = ({ message }: { message: any }) => {
-  const currentUser = useSelector((state: any) => state.user);
-  const isCurrentUserSend = message.userResponse.id === currentUser.id;
+  const { userStore } = useAppStores();
+  const currentUser = useStore(userStore, (state) => state.user);
+  const isCurrentUserSend = message.userResponse.id === currentUser?.id;
   return (
     <div
       className={`flex ${!isCurrentUserSend ? "justify-start" : "justify-end"}`}

@@ -2,40 +2,38 @@
 import { Avatar, Grid, IconButton } from "@mui/material";
 import { Stomp, Client, StompSubscription } from "@stomp/stompjs";
 import { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import SockJS from "sockjs-client";
+import { useStore } from "zustand";
 import { useGetChatsByUser } from "@/hooks/api-hooks/chat-hooks/useChat";
+import { useAppStores } from "@/lib/context/AppStoreContext";
 import ChatNotFound from "./component/ChatNotFound";
 import ChatPanel from "./component/ChatPanel";
 import SidebarChat from "./component/SidebarChat";
-import { setAllChats, setChatSelected } from "@/redux/chat/chat";
-import { chatSelectedSelector } from "@/redux/chat/selectors";
-import { addMessage } from "@/redux/message/message";
 const Message = () => {
-  const { data: allChats, isLoading } = useGetChatsByUser();
-  const currentChat = useSelector(chatSelectedSelector);
-  const dispatch = useDispatch();
+  const { data: allChats, isLoading, isSuccess } = useGetChatsByUser();
+  const { chatStore } = useAppStores();
+  const currentChat = useStore(chatStore, (state) => state.selectedChat);
   useEffect(() => {
-    dispatch(setAllChats(allChats));
-  }, [allChats, dispatch]);
-  const validToken = useSelector((state: any) => state.auth.accessToken);
+    if (isSuccess) {
+      chatStore.getState().setAllChats(allChats);
+    }
+  }, [isSuccess]);
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const [subscription, setSubscription] = useState<StompSubscription | null>(
     null,
   );
   //websocket ở đây
-  const userLogin = useSelector((state: any) => state.user);
   const onConnect = (frame: any) => {
     console.log("websocket connected...", frame);
   };
   const onMessageReceive = useCallback((message: any) => {
     const receivedMessage = JSON.parse(message.body);
-    dispatch(addMessage(receivedMessage));
+    chatStore.getState().setMessage(receivedMessage);
   }, []);
   useEffect(() => {
     if (stompClient && Object.keys(currentChat).length > 0) {
       const newSubscription = stompClient.subscribe(
-        `/topic/messages/${currentChat.chatId}`,
+        `/topic/messages/${currentChat?.chatId}`,
         onMessageReceive,
       );
       setSubscription(newSubscription);
@@ -68,7 +66,7 @@ const Message = () => {
     setStompClient(stomp);
     stomp.connect({}, onConnect, onError);
     return () => {
-      dispatch(setChatSelected({}));
+      chatStore.getState().clearSelectedChat();
       if (stomp) {
         stomp.disconnect();
       }

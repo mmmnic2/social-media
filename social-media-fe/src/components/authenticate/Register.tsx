@@ -52,7 +52,7 @@ const Register = () => {
   const router = useRouter();
   const { showSnackbar } = useSnackbar();
 
-  const { mutate: handleRegister, isLoading } = useRegister();
+  const { mutate: handleRegister, isPending } = useRegister();
 
   const handleFormSubmit = (values: any) => {
     handleRegister(values, {
@@ -88,7 +88,7 @@ const Register = () => {
           form={formFields}
           onSubmit={handleFormSubmit}
           submitLabel="Sign up"
-          isLoading={isLoading}
+          isLoading={isPending}
         />
       </div>
       <div>
