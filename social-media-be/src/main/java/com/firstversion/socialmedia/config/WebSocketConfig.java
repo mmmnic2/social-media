@@ -46,7 +46,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setHandshakeHandler(customHandshakeHandler)  // Xử lý bắt tay custom
                 .addInterceptors(customHandshakeInterceptor)  // Interceptor kiểm tra auth
-                .setAllowedOrigins("http://localhost:3000")  // Cho phép domain từ frontend
+                .setAllowedOrigins("https://social-media-two-ecru.vercel.app/")  // Cho phép domain từ frontend
                 .withSockJS();  // Hỗ trợ SockJS cho trình duyệt không hỗ trợ WebSocket gốc
     }
 

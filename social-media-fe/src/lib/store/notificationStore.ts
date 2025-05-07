@@ -7,7 +7,7 @@ export type NotificationState = {
   clearNotifications: () => void;
 };
 
-export const createUserStore = (initial?: Partial<NotificationState>) =>
+export const createNotificationStore = (initial?: Partial<NotificationState>) =>
   vanillaCreateStore<NotificationState>((set) => ({
     notifications: initial?.notifications ?? [],
     setNotifications: (notifications) => set({ notifications }),
